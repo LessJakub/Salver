@@ -1,0 +1,17 @@
+version: "3.4"
+
+services:
+  node:
+    container_name: angularcontainer
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build: .
+    ports:
+      - 4200:4200
+    volumes:
+      - "./:/app"
+      - "/app/node_modules"
+      #- "./:/var/www/html"
+      #- /var/www/app/node_modules/
+    # working_dir: /var/www/html
+    command: ng serve --host 0.0.0.0 --live-reload=true

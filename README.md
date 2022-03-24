@@ -16,12 +16,12 @@ ng serve
 From main repository directory (where `docker-compose.yaml` file resides):
 ```sh
 # Use this command to run both, backend and frontend:
-docker composer up
+docker compose up
 
 # To selectively run either Client or API, use:
-docker composer up API
+docker compose up API
 # or / and
-docker composer up Client
+docker compose up Client
 
 # Hot-reload is supported on both Windows and macOS. While your docker is running, you can change
 # files inside of Client/ and changes will be reflected almost instantly.

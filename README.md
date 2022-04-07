@@ -1,4 +1,5 @@
-# Software Project
+# Salver
+## Software Project
 
 ## Using .NET to run both Frontend and Backend of the application:
 ```sh

@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,visualstudio,angular,aspnetcore,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,visualstudio,angular,aspnetcore,macos
 
+# MOST IMPORTANT
+appsettings.Development.json
+appsettings.json
+
 ### Angular ###
 ## Angular ##
 # compiled output
@@ -1204,5 +1208,3 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,visualstudio,angular,aspnetcore,macos
-appsettings.Development.json
-appsettings.json

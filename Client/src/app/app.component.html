@@ -1,7 +1,8 @@
 <app-nav-menu></app-nav-menu>
-<div class="bg-gray-50 min-h-full flex flex-col">
+<div class="bg-gray-50 h-screen flex flex-col">
     
-    <div style="height:64px;" class="w-full"></div> <!-- Hard-coded to push content out from below the NAV -->
+    <!-- Deleted this correction for now, because you cna switch to sticky in navbar and it offsets all the content by its own height -->
+    <div class="w-full"></div> <!-- Hard-coded to push content out from below the NAV --> 
 
     <router-outlet></router-outlet> <!-- To make the content provided by router fill avialable space add approprieate host: class to the component -->
     

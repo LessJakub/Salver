@@ -1,9 +1,10 @@
-<body class="bg-gray-50 h-screen">
-    <app-nav-menu></app-nav-menu>
+<app-nav-menu></app-nav-menu>
+<div class="bg-gray-50 min-h-full flex flex-col">
     
-    <div>
-        <router-outlet></router-outlet>
-    </div>
+    <div style="height:64px;" class="w-full"></div> <!-- Hard-coded to push content out from below the NAV -->
+
+    <router-outlet></router-outlet> <!-- To make the content provided by router fill avialable space add approprieate host: class to the component -->
     
     <app-footer></app-footer>
-</body>
+
+</div>

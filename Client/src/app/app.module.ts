@@ -12,6 +12,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FooterComponent } from './footer/footer.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -21,18 +22,15 @@ import { FooterComponent } from './footer/footer.component';
     FetchDataComponent,
     NavbarComponent,
     LandingPageComponent,
-    FooterComponent
+    FooterComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot([
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'landing-page', component: LandingPageComponent },
-    ])
+    AppRoutingModule
   ],
   providers: [Meta],
   bootstrap: [AppComponent]

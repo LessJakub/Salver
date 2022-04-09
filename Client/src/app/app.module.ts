@@ -12,6 +12,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FooterComponent } from './footer/footer.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { LoginOverlayComponent } from './login-overlay/login-overlay.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     FetchDataComponent,
     LandingPageComponent,
     FooterComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoginOverlayComponent
   ],
   imports: [
     BrowserModule,

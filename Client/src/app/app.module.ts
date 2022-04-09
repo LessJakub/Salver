@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { NavbarComponent } from './navbar/navbar.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FooterComponent } from './footer/footer.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -20,7 +19,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     NavMenuComponent,
     CounterComponent,
     FetchDataComponent,
-    NavbarComponent,
     LandingPageComponent,
     FooterComponent,
     PageNotFoundComponent

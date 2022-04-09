@@ -1,11 +1,14 @@
-<app-nav-menu></app-nav-menu>
-<div class="bg-gray-50 h-screen flex flex-col">
-    
-    <!-- Deleted this correction for now, because you cna switch to sticky in navbar and it offsets all the content by its own height -->
-    <div class="w-full"></div> <!-- Hard-coded to push content out from below the NAV --> 
+<div class="bg-gray-50">
 
-    <router-outlet></router-outlet> <!-- To make the content provided by router fill avialable space add approprieate host: class to the component -->
+    <app-nav-menu></app-nav-menu>
+    <div class="bg-gray-50 h-screen flex flex-col">
     
-    <app-footer></app-footer>
+        <!-- Deleted Radek's correction for now, because you can put a margin on the bottom of navbar to push contents // Gracjan -->
+
+        <router-outlet></router-outlet> <!-- To make the content provided by router fill avialable space add approprieate host: class to the component -->
+    
+        <app-footer></app-footer>
+
+    </div>
 
 </div>

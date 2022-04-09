@@ -2,15 +2,18 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-landing-page',
+  host: {'class': 'flex-auto flex justify-center items-start mt-24'}, // ! Styling host container to fill all avialable space
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css'],
-  host: {'class': 'flex-auto flex justify-center items-center'} // ! Styling host container to fill all avialable space
 })
 export class LandingPageComponent implements OnInit {
 
-  constructor() { }
+    mealImageUrl: String
 
-  ngOnInit(): void {
-  }
+    constructor() {
+        this.mealImageUrl = '/assets/images/mealImageLanding.jpg'
+    }
+
+    ngOnInit(): void {}
 
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoginOverlayComponent } from '../login-overlay/login-overlay.component';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,13 +8,13 @@ import { Component } from '@angular/core';
   host: {'class': 'sticky top-0'},
 })
 export class NavMenuComponent {
-  isExpanded = false;
 
-  collapse() {
-    this.isExpanded = false;
+  showLoginOverlay: Boolean
+
+  constructor() {
+    // Set to true to see login overlay
+    this.showLoginOverlay = false 
   }
 
-  toggle() {
-    this.isExpanded = !this.isExpanded;
-  }
+  
 }

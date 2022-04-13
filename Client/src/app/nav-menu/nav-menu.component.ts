@@ -11,10 +11,18 @@ export class NavMenuComponent {
 
   showLoginOverlay: Boolean
 
-  constructor() {
+    constructor() {
     // Set to true to see login overlay
-    this.showLoginOverlay = false 
+        this.showLoginOverlay = false
+    }
+
+    enableLoginOverlay() {
+        this.showLoginOverlay = true
   }
+
+    disableLoginOverlay(eventFlag:boolean) {
+        this.showLoginOverlay = eventFlag;
+    }
 
   
 }

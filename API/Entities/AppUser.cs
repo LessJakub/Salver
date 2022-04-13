@@ -17,7 +17,7 @@ public enum Roles {
 
         public string UserName { get; set; }
 
-        public bool Verified { get; set; }
+        public int Verified { get; set; }
 
         public byte[] PasswordHash { get; set; }
 

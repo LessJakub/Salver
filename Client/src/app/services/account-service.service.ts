@@ -34,4 +34,9 @@ export class AccountServiceService {
         )
     }
 
+    logoutUser() {
+        localStorage.removeItem("user");
+        this.currentUserSource.next(null);
+    }
+
 }

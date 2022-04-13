@@ -13,6 +13,8 @@ export class LoginOverlayComponent implements OnInit {
 
     model: any = {}
 
+    error: string = null;
+
     constructor(public service: AccountServiceService) {}
 
     ngOnInit(): void {}
@@ -24,7 +26,9 @@ export class LoginOverlayComponent implements OnInit {
     loginAction() {
         this.service.loginRequest(this.model).subscribe(Response => {
             console.log("Login action used.");
+            this.closeOverlayAction();
         }, error => {
+            this.error = error.error;
             console.log(error);
         })
     }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginOverlayComponent } from '../login-overlay/login-overlay.component';
+import { AccountServiceService } from '../services/account-service.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -9,9 +10,9 @@ import { LoginOverlayComponent } from '../login-overlay/login-overlay.component'
 })
 export class NavMenuComponent {
 
-  showLoginOverlay: Boolean
+    showLoginOverlay: Boolean
 
-    constructor() {
+    constructor(public accountService: AccountServiceService) {
     // Set to true to see login overlay
         this.showLoginOverlay = false
     }

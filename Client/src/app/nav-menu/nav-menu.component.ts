@@ -19,7 +19,11 @@ export class NavMenuComponent {
 
     enableLoginOverlay() {
         this.showLoginOverlay = true
-  }
+    }
+
+    logoutUser() {
+        this.accountService.logoutUser();
+    }
 
     disableLoginOverlay(eventFlag:boolean) {
         this.showLoginOverlay = eventFlag;

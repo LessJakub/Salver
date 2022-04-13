@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AccountServiceService } from '../services/account-service.service';
+import { User } from '../models/User';
 
 @Component({
   selector: 'app-login-overlay',
@@ -7,9 +9,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginOverlayComponent implements OnInit {
 
-  constructor() { }
+    @Output() closeOverlayEventEmitter = new EventEmitter();
 
-  ngOnInit(): void {
-  }
+    model: any = {}
+
+    error: string = null;
+
+    constructor(public service: AccountServiceService) {}
+
+    ngOnInit(): void {}
+
+    closeOverlayAction() {
+        this.closeOverlayEventEmitter.emit(false);
+    }
+
+    loginAction() {
+        this.service.loginRequest(this.model).subscribe(Response => {
+            console.log("Login action used.");
+            this.closeOverlayAction();
+        }, error => {
+            this.error = error.error;
+            console.log(error);
+        })
+    }
 
 }

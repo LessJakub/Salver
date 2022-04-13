@@ -9,7 +9,7 @@ namespace API.DTOs
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        public int Verified { get; set; }
+        public bool Verified { get; set; }
 
         public int Followers { get; set; }
 

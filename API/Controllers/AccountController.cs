@@ -146,6 +146,40 @@ namespace API.Controllers
             };
         }
 
+        /// <summary>
+        /// Deletes existing user.
+        /// </summary>
+        /// <param name="id">Id of the user</param>
+        /// <remarks></remarks>
+        /// <returns>Status code of action resault</returns>
+        /// <response code="200"> Ok, user was deleted succesfully </response>
+        /// <response code="400"> Bad request, invalid input. </response>
+        /// <response code="401"> Unauthorized, User has different id or is not admin. </response>
+        /// <response code="204"> User with specified id was not found. </response>
+        [Authorize]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            var idCode = AuthorizedById(id);
+            var roleCode = AuthorizedByRole("Admin");
+            if(roleCode == StatusCodes.Status200OK) {   }
+            else if (idCode != StatusCodes.Status200OK) return StatusCode(idCode);
+
+            var user = await _context.Users.FindAsync(id);
+
+            if(user != null)
+            {
+                _context.Remove(user);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return NoContent();
+        }
+
         private async Task<bool> UserExists(string username)
         {
             return await _context.Users.AnyAsync(x => x.UserName == username.ToLower());

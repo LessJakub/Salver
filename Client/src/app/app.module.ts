@@ -13,6 +13,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FooterComponent } from './footer/footer.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginOverlayComponent } from './login-overlay/login-overlay.component';
+import { SearchPageComponent } from './search-page/search-page.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { LoginOverlayComponent } from './login-overlay/login-overlay.component';
     LandingPageComponent,
     FooterComponent,
     PageNotFoundComponent,
-    LoginOverlayComponent
+    LoginOverlayComponent,
+    SearchPageComponent
   ],
   imports: [
     BrowserModule,

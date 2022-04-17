@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-fetch-data',
-  templateUrl: './fetch-data.component.html'
+  templateUrl: './fetch-data.component.html',
+  host: {'class': 'flex-auto flex justify-center items-center'} // ! Styling host container to fill all avialable space
 })
 export class FetchDataComponent {
   public forecasts: WeatherForecast[] = [];

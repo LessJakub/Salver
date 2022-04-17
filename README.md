@@ -1,4 +1,5 @@
-# Software Project
+# Salver
+## Software Project
 
 ## Using .NET to run both Frontend and Backend of the application:
 ```sh
@@ -22,6 +23,12 @@ docker compose up
 docker compose up API
 # or / and
 docker compose up Client
+
+
+# To clear old cache in case of issues:
+docker system prune -a --volumes
+# Proceed with caution!
+# This clears ALL cache. Rebuilding containers will take much more time, all data needs to be re-downloaded.
 
 # Hot-reload is supported on both Windows and macOS. While your docker is running, you can change
 # files inside of Client/ and changes will be reflected almost instantly.

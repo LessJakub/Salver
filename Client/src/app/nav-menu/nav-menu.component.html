@@ -1,19 +1,93 @@
-<nav class="bg-gray-800">
-    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-      <div class="relative flex items-center contents-center justify-between h-16">
+<nav class="top-0 sticky z-50 bg-gray-50 w-screen">
+    <app-login-overlay (closeOverlayEventEmitter)="disableLoginOverlay()" *ngIf="showLoginOverlay"></app-login-overlay>
+    <div class="relative flex items-center contents-center justify-between h-16 bg-gray-50 rounded-b-2xl shadow-md shadow-green-900/50">
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-          <div class="hidden sm:block sm:ml-6">
-            <div class="flex space-x-4">
 
-              <a [routerLink]="['/']" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Activity</a>
-  
-              <a [routerLink]="['/counter']" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Order</a>
-  
-              <a [routerLink]="['/fetch-data']" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+            <div class="grid grid-cols-3 gap-4 w-screen px-16">
 
+                <div class="col-span-2 items-center content-center justify-start flex">
+                    <!-- Logo -->
+                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_1117_339)">
+                        <path d="M13.7283 17.5C13.7283 18.5438 13.3129 19.5435 12.5752 20.281L7.21443 25.6407C7.1244 25.7307 7.03279 25.816 6.93486 25.895C6.70109 26.0892 6.44679 26.2519 6.18144 26.3829C5.63178 26.6561 5.03157 26.7919 4.43294 26.7919C3.4268 26.7919 2.41908 26.4082 1.65145 25.6391C0.116183 24.1042 0.116183 21.6138 1.65145 20.0772L4.22918 17.5L1.65145 14.9212C0.116183 13.3862 0.116183 10.8958 1.65145 9.3593C2.87556 8.13543 4.71093 7.88592 6.18144 8.61708C6.44995 8.74973 6.70583 8.91397 6.94276 9.10979C7.03595 9.18875 7.12756 9.27086 7.21443 9.35772L7.43082 9.57407L12.5752 14.7175C13.3144 15.4565 13.7283 16.4577 13.7283 17.5Z" fill="#057A55"/>
+                        <path d="M13.7282 17.5C13.7282 18.5438 13.3128 19.5435 12.5752 20.281L7.21437 25.6407C7.12434 25.7307 7.03273 25.816 6.9348 25.895C6.70103 26.0892 6.44673 26.2519 6.18138 26.3829C5.80704 26.1982 5.45797 25.9502 5.14681 25.6391C3.61154 24.1042 3.61154 21.6138 5.14681 20.0772L7.72454 17.5L5.14839 14.9212C3.61312 13.3862 3.61312 10.8958 5.14839 9.3593C5.45955 9.0482 5.80862 8.80185 6.18138 8.61708C6.44989 8.74973 6.70577 8.91397 6.9427 9.10979C7.03589 9.18875 7.1275 9.27086 7.21437 9.35772L7.43076 9.57407L12.5752 14.7175C13.3144 15.4565 13.7282 16.4577 13.7282 17.5Z" fill="#057A55"/>
+                        <path d="M7.43069 9.57727C7.25221 9.44146 7.08794 9.28354 6.94263 9.11298C7.03582 9.19194 7.12743 9.27406 7.2143 9.36092L7.43069 9.57727Z" fill="#057A55"/>
+                        <path d="M7.21438 25.6408C7.12435 25.7308 7.03274 25.816 6.93481 25.895C7.08487 25.7166 7.25545 25.5555 7.43867 25.4165L7.21438 25.6408Z" fill="#057A55"/>
+                        <path d="M29.8469 17.5C29.8469 25.1165 23.6506 31.31 16.0343 31.31H9.43831C8.55064 31.31 7.74826 30.9594 7.15595 30.3894C7.14647 30.293 7.14331 30.1951 7.14331 30.0941C7.14331 27.9227 8.90445 26.1603 11.0778 26.1603H18.969C23.7454 26.1603 27.6325 22.2755 27.6325 17.4985C27.6325 12.723 23.7454 8.83662 18.969 8.83662H11.0794C8.9076 8.83662 7.14489 7.07582 7.14489 4.90286C7.14489 4.80337 7.14805 4.70389 7.15753 4.60756C7.74984 4.03747 8.55222 3.68689 9.43989 3.68689H16.0343C23.6506 3.69005 29.8469 9.88362 29.8469 17.5Z" fill="#057A55"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_1117_339">
+                        <rect width="36" height="36" fill="white" transform="translate(0.5 0.972229)"/>
+                        </clipPath>
+                        </defs>
+                    </svg>
+                    <!-- Logo SVG end -->
+
+                    <!-- Buttons -->
+                    <div *ngIf="(accountService.currentUser$ | async) == null">
+                        <a  [routerLink]="['/landing-page']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            About us
+                        </a>
+    
+                        <a [routerLink]="['/counter']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            Team
+                        </a>
+    
+                        <a [routerLink]="['/fetch-data']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            FAQ
+                        </a>
+                    </div>
+
+                    <div *ngIf="(accountService.currentUser$ | async) != null">
+                        <a  [routerLink]="['/landing-page']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            Activity
+                        </a>
+    
+                        <a [routerLink]="['/counter']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            Search
+                        </a>
+    
+                        <a [routerLink]="['/fetch-data']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            Review
+                        </a>
+                    </div>
+                    
+
+                </div>
+
+                <div class="col-span-1 items-center content-center justify-end flex">
+                    <!-- Login button router -->
+                    <button (click)="enableLoginOverlay()" *ngIf="(accountService.currentUser$ | async) == null" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light flex items-center space-x-2 group">
+
+                        <svg class="group" width="21" height="19" viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path   d="M9.5 13.5L5.5 9.5M5.5 9.5L9.5 5.5M5.5 9.5H19.5M14.5 13.5V14.5C14.5 15.2956 14.1839 16.0587 13.6213 16.6213C13.0587 17.1839 12.2956 17.5 11.5 17.5H4.5C3.70435 17.5 2.94129 17.1839 2.37868 16.6213C1.81607 16.0587 1.5 15.2956 1.5 14.5V4.5C1.5 3.70435 1.81607 2.94129 2.37868 2.37868C2.94129 1.81607 3.70435 1.5 4.5 1.5H11.5C12.2956 1.5 13.0587 1.81607 13.6213 2.37868C14.1839 2.94129 14.5 3.70435 14.5 4.5V5.5" 
+                                    stroke="#111827" 
+                                    stroke-width="2" 
+                                    stroke-linecap="round" 
+                                    stroke-linejoin="round"
+                            />
+                        </svg>
+                    
+                        <p class="text-base font-light">
+                            Login / Register
+                        </p>
+                    </button>
+
+                    <button (click)="logoutUser()" *ngIf="(accountService.currentUser$ | async) != null" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light flex items-center space-x-2 group">
+
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 16L21 12M21 12L17 8M21 12H7M13 16V17C13 17.7956 12.6839 18.5587 12.1213 19.1213C11.5587 19.6839 10.7956 20 10 20H6C5.20435 20 4.44129 19.6839 3.87868 19.1213C3.31607 18.5587 3 17.7956 3 17V7C3 6.20435 3.31607 5.44129 3.87868 4.87868C4.44129 4.31607 5.20435 4 6 4H10C10.7956 4 11.5587 4.31607 12.1213 4.87868C12.6839 5.44129 13 6.20435 13 7V8" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                            
+                    
+                        <p class="text-base font-light">
+                            Logout
+                        </p>
+
+                    </button>
+                    <!-- Login router end -->
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </nav>
+</nav>

@@ -11,7 +11,7 @@ namespace API.Extensions
         {       
                 services.AddAuthorization(options =>
                 {
-                    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin", "true"));
+                    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Role", "Admin"));
                 });
 
             return services;

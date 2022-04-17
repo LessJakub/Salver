@@ -13,7 +13,15 @@ export class AccountServiceService {
     baseUrl: string = "http://localhost:8080/api/"
     loginUrl: string = this.baseUrl + "account/login"
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        const localUserString = localStorage.getItem("user");
+        if (localUserString != null) {
+            const localUser = JSON.parse(localUserString);
+            if (localUser != null) {
+                this.currentUserSource.next(localUser);
+            }
+        }
+    }
 
     private currentUserSource = new ReplaySubject<User>()
 

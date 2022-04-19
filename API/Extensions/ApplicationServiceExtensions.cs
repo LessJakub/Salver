@@ -13,7 +13,7 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
 
             return services;

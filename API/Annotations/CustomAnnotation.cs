@@ -14,6 +14,7 @@ namespace API.Annotations
 
         public CustomAnnotation()
         {
+            ErrorMessage = "Not implemented error message";
         }
     
 

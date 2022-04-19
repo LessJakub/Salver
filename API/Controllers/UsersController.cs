@@ -57,6 +57,9 @@ namespace API.Controllers
         public async Task<ActionResult<UserProfileDto>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
+
+            if(user == null) return NoContent();
+
             return new UserProfileDto {
                 Id = user.Id,
                 Username = user.UserName,

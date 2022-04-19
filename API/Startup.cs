@@ -1,25 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text;
-using API.Data;
-using API.Interfaces;
-using API.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using API.Extensions;
-using System.Reflection;
+
 
 namespace API
 {
@@ -37,38 +17,11 @@ namespace API
             services.AddApplicationServices(_config);
             services.AddAuthorizationServices(_config);
             services.AddControllers();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddCors();
             services.AddIdentityServices(_config);
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
-
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
-                options.AddSecurityDefinition("jwt_auth", new OpenApiSecurityScheme {
-                    Name = "Bearer",
-                    BearerFormat = "JWT",
-                    Scheme = "bearer",
-                    Description = "Specify the authorization token.",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http
-                    });
-
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                    { 
-                        new OpenApiSecurityScheme 
-                        { 
-                            Reference = new OpenApiReference 
-                            { 
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "jwt_auth" 
-                            } 
-                        },
-                    new string[] { } 
-                    } 
-                });
-            });
+            services.AddSwaggerService(_config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

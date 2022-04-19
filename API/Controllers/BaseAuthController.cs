@@ -8,6 +8,16 @@ namespace API.Controllers
 {
     public class BaseAuthController : BaseApiController
     {
+        protected int GetRequesterId()
+        {
+            var principal = HttpContext.User;
+            if (principal?.Claims == null) return -1;
+
+            var idClaim = principal.FindFirst("Id");
+            if (idClaim == null) return -1;
+
+            return Int32.Parse(idClaim.Value);
+        }
 
         //Checks if request is made by someone with id
         protected int AuthorizedById(int id)

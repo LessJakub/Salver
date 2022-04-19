@@ -11,11 +11,11 @@ namespace API.Entities
 
         public string Description { get; set; }
 
-        public AppUser AppUser { get; set; }
+        public virtual AppUser AppUser { get; set; }
 
         public int AppUserId { get; set; }
 
-        public Dish Dish { get; set; }
+        public virtual Dish Dish { get; set; }
 
         public int DishId { get; set; }
     }

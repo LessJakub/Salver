@@ -95,7 +95,8 @@ namespace API.Controllers
             return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                UsersRestaurants = await GetRestaurantsOfUser(user)
             };
         }
 
@@ -183,6 +184,21 @@ namespace API.Controllers
         private async Task<bool> UserExists(string username)
         {
             return await _context.Users.AnyAsync(x => x.UserName == username.ToLower());
+        }
+
+        private async Task<List<RestaurantDto>> GetRestaurantsOfUser(AppUser appUser)
+        {
+             var relations = appUser.User_Res_Relation.ToList();
+            List<RestaurantDto> restaurants = new List<RestaurantDto>();
+
+            foreach(var relation in relations)
+            {
+                var restaurant = await _context.Restaurants.FirstOrDefaultAsync(res => res.Id == relation.AppRestaurantId);
+                if(restaurant != null) restaurants.Add(new RestaurantDto(restaurant));
+                //restaurants.Add(new RestaurantDto(await _context.Restaurants.FirstOrDefaultAsync(res => res.Id == relation.AppRestaurantId)));
+            }
+
+            return restaurants;
         }
     }
 }

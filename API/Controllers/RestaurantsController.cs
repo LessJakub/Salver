@@ -24,7 +24,7 @@ namespace API.Controllers
         /// Registers new restaurant.
         /// </summary>
         /// <param name="restaurantRegisterDto">Registration information</param>
-        /// <remarks></remarks>
+        /// <remarks>Requires a logged in user</remarks>
         /// <returns>Public information of the restaurant</returns>
         /// <response code="200"> Ok, new restaurant is created. </response>
         /// <response code="204"> NoContent, id in users token is invalid. </response>
@@ -76,10 +76,10 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// Get public information of restaurant
+        /// Get public information of restaurant with id
         /// </summary>
         /// <param name="id">Id of the restaurant</param>
-        /// <remarks></remarks>
+        /// <remarks>Does not require authorization</remarks>
         /// <returns>Public information of the restaurant as RestaurantDto</returns>
         /// <response code="200"> Ok, restaurant is returned. </response>
         /// <response code="204"> NoContent, there is no restaurant with id. </response>
@@ -101,7 +101,7 @@ namespace API.Controllers
 
         #if DEBUG
         /// <summary>
-        /// Gets all restaurants, TESTING ONLY, CAN BE USED ONLY IN DEBUG
+        /// Get all restaurants, TESTING ONLY, CAN BE USED ONLY IN DEBUG
         /// </summary>
         /// <remarks>ONLY FOR TESTING, DO NOT IMPLEMENT IN FRONTEND</remarks>
         /// <returns>All information of all restaurants as AppRestaurant</returns>
@@ -119,9 +119,12 @@ namespace API.Controllers
         #endif
 
         /// <summary>
-        /// Gets all restaurants
+        /// Get all restaurants
         /// </summary>
-        /// <remarks>This returns list of all restaurants in DB, in future should be replaced with top 10 or something</remarks>
+        /// <remarks>
+        /// Does not require authorization.
+        /// This returns list of all restaurants in DB, in future should be replaced with top 10 or something
+        /// </remarks>
         /// <returns>Public information of all restaurants as RestaurantDto</returns>
         /// <response code="200"> Ok, restaurant is returned. </response>
         /// <response code="400"> Bad request, invalid input. </response>
@@ -205,5 +208,33 @@ namespace API.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Search restaurants with specific name
+        /// </summary>
+        /// <param name="restaurantName">String containing search information</param>
+        /// <remarks>
+        /// Does not require authorization.
+        /// Finds all restaurants containing search information. Not case sensitive. 
+        /// Always returns status code 200 OK but may return empty list. 
+        /// Currentlly accpets only name as parameter</remarks>
+        /// <returns>list of RestaurantDtos</returns>
+        /// <response code="200"> Returns list of restaurants with matching parameters</response>
+        [AllowAnonymous]
+        [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IEnumerable<RestaurantDto>> SearchRestaurant(string restaurantName)
+        {
+            var restaurants = await context.Restaurants.Where(e => e.Name.Contains(restaurantName)).ToListAsync();
+
+            var restaurantsToReturn = new List<RestaurantDto>();
+            foreach(var res in restaurants)
+            {
+                restaurantsToReturn.Add(new RestaurantDto(res));
+            }
+            return restaurantsToReturn;
+        }
+        
     }
 }

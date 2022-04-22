@@ -15,11 +15,20 @@ export class AccountServiceService {
 
     constructor(private http: HttpClient) {
         const localUserString = localStorage.getItem("user");
-        if (localUserString != null) {
-            const localUser = JSON.parse(localUserString);
-            if (localUser != null) {
-                this.currentUserSource.next(localUser);
+        console.log(localUserString)
+        if (localUserString != null && localUserString.length > 0) {
+            try{
+                const localUser = JSON.parse(localUserString);
+                
+                console.log(localUser)
+                if (localUser != null) {
+                    this.currentUserSource.next(localUser);
+                }
             }
+            catch{
+                console.log("error")
+            }
+            
         }
     }
 

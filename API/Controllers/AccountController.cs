@@ -92,11 +92,14 @@ namespace API.Controllers
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
             }
 
+            var restaurants = await GetRestaurantsOfUser(user);
+
             return new UserDto
             {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user),
-                UsersRestaurants = await GetRestaurantsOfUser(user)
+                //UsersRestaurants = (await GetRestaurantsOfUser(user)).Count()
+                IsRestaurantOwner = (restaurants.Count() > 0)
             };
         }
 

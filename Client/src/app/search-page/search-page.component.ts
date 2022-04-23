@@ -16,12 +16,7 @@ export class SearchPageComponent implements OnInit {
     filteredSearchResults: any[];
 
     dishSearchResults: Dish[] = [
-        {name:"Hosomaki", 
-        imageURL:"/assets/images/3W2A0606.webp", 
-        grade:2, 
-        description:"With fresh mango or tuna. 6 pcs",
-        price:15},
-
+        {name:"Hosomaki", imageURL:"/assets/images/3W2A0606.webp", grade:2, description:"With fresh mango or tuna. 6 pcs",price:15},
         {name:"Uramaki",  imageURL:"/assets/images/3W2A0699.webp", grade:3, description:"Avocado uramaki with soy sauce.", price:20},
         {name:"Curry & Shrimps", imageURL:"/assets/images/W2A6423.webp",  grade:5, description:"Green curry with shrimps, vegetables and jasmin rice", price:23},
         {name:"Fried Ice-Cream", imageURL:"/assets/images/W2A6500.webp", grade:5, description:"Fried ice cream with mango pulp", price:17},
@@ -43,7 +38,6 @@ export class SearchPageComponent implements OnInit {
     }
 
     updateFilteredArray() {
-        console.log("I'm in updateFilteredArray")
         if (this.searchForm === null) {
             this.filteredSearchResults = this.dishSearchResults;
         }
@@ -94,15 +88,6 @@ export class SearchPageComponent implements OnInit {
 
                 this.filteredSearchResults = tempArray;
                 
-
-                // this.dishSearchResults.forEach(dish => {
-                //     else {
-                //         if (dish.name.includes(this.searchForm.input)) {
-                //             tempArray.push(dish);
-                //         }
-                //         this.filteredSearchResults = tempArray;
-                //     }
-                // });
             }
         }
     }

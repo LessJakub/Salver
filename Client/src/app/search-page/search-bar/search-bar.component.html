@@ -1,4 +1,4 @@
-<form class="py-4 flex gap-4">
+<form (ngSubmit)="searchSubmitAction()" class="py-4 flex gap-4">
 
     <!-- Search bar text input field -->
     <div class="group relative flex flex-grow">
@@ -8,7 +8,7 @@
         </svg>
 
         <!-- Input -->
-        <input class="w-full text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-12 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700" type="text" aria-label="Search" placeholder="Search...">
+        <input [(ngModel)]="model.input" (ngModelChange)="searchSubmitAction()" name="input" class="w-full text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-12 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700" type="text" aria-label="Search" placeholder="Search...">
     </div>
 
    <!-- Type selector filter -->
@@ -18,7 +18,7 @@
             <path d="M2.15478 1.48816C1.84222 1.80072 1.66663 2.22464 1.66663 2.66667V16L7.49996 13.0833L13.3333 16V2.66667C13.3333 2.22464 13.1577 1.80072 12.8451 1.48816C12.5326 1.17559 12.1087 1 11.6666 1H3.33329C2.89127 1 2.46734 1.17559 2.15478 1.48816Z" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>    
 
-        <select id="grade" class="cursor-pointer block text-sm appearance-none w-full rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-12 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700">
+        <select [(ngModel)]="model.type" (ngModelChange)="searchSubmitAction()" name="type" id="type" class="cursor-pointer block text-sm appearance-none w-full rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-12 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700">
             <option value="" selected disabled>Type</option>
             <option>Dish</option>
             <option>Restaurant</option>
@@ -37,7 +37,7 @@
             </svg>
             
 
-        <select id="grade" class="cursor-pointer block text-sm appearance-none w-full rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-12 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700">
+        <select [(ngModel)]="model.grade" (ngModelChange)="searchSubmitAction()" name="grade" id="grade" class="cursor-pointer block text-sm appearance-none w-full rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-12 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700">
             <option value="" selected disabled>Grade</option>
             <option>5</option>
             <option>4</option>
@@ -57,8 +57,8 @@
             <path d="M12.6667 4.99999V3.33332C12.6667 2.8913 12.4911 2.46737 12.1785 2.15481C11.866 1.84225 11.442 1.66666 11 1.66666H2.66667C2.22464 1.66666 1.80072 1.84225 1.48816 2.15481C1.17559 2.46737 1 2.8913 1 3.33332V8.33332C1 8.77535 1.17559 9.19927 1.48816 9.51184C1.80072 9.8244 2.22464 9.99999 2.66667 9.99999H4.33333M6 13.3333H14.3333C14.7754 13.3333 15.1993 13.1577 15.5118 12.8452C15.8244 12.5326 16 12.1087 16 11.6667V6.66666C16 6.22463 15.8244 5.80071 15.5118 5.48815C15.1993 5.17559 14.7754 4.99999 14.3333 4.99999H6C5.55797 4.99999 5.13405 5.17559 4.82149 5.48815C4.50893 5.80071 4.33333 6.22463 4.33333 6.66666V11.6667C4.33333 12.1087 4.50893 12.5326 4.82149 12.8452C5.13405 13.1577 5.55797 13.3333 6 13.3333ZM11.8333 9.16666C11.8333 9.60868 11.6577 10.0326 11.3452 10.3452C11.0326 10.6577 10.6087 10.8333 10.1667 10.8333C9.72464 10.8333 9.30072 10.6577 8.98816 10.3452C8.67559 10.0326 8.5 9.60868 8.5 9.16666C8.5 8.72463 8.67559 8.30071 8.98816 7.98815C9.30072 7.67559 9.72464 7.49999 10.1667 7.49999C10.6087 7.49999 11.0326 7.67559 11.3452 7.98815C11.6577 8.30071 11.8333 8.72463 11.8333 9.16666Z" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>     
 
-        <select id="grade" class="cursor-pointer block text-sm appearance-none w-full rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-12 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700">
-            <option value="" selected disabled>Price</option>
+        <select [(ngModel)]="model.price" (ngModelChange)="searchSubmitAction()" name="price" id="price" class="cursor-pointer block text-sm appearance-none w-full rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-12 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700">
+            <option selected disabled>Price</option>
             <option>Lowest</option>
             <option>Moderate</option>
             <option>Highest</option>

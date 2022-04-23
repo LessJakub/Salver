@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AccountServiceService } from '../services/account-service.service';
+import { AccountService } from '../services/account-service.service';
 import { User } from '../models/User';
 
 @Component({
@@ -15,7 +15,7 @@ export class LoginOverlayComponent implements OnInit {
 
     error: string = null;
 
-    constructor(public service: AccountServiceService) {}
+    constructor(public service: AccountService) {}
 
     ngOnInit(): void {}
 

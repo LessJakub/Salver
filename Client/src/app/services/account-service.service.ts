@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class AccountServiceService {
+export class AccountService {
 
     baseUrl: string = "http://localhost:8080/api/"
     loginUrl: string = this.baseUrl + "account/login"

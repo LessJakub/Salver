@@ -6,8 +6,6 @@ import { BrowserModule, Meta } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FooterComponent } from './footer/footer.component';
@@ -21,8 +19,6 @@ import { SearchBarComponent } from './search-page/search-bar/search-bar.componen
   declarations: [
     AppComponent,
     NavMenuComponent,
-    CounterComponent,
-    FetchDataComponent,
     LandingPageComponent,
     FooterComponent,
     PageNotFoundComponent,

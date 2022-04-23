@@ -12,7 +12,7 @@ export class LandingPageComponent implements OnInit {
     mealImageUrl: String
 
     constructor() {
-        this.mealImageUrl = '/assets/images/mealImageLanding.jpg'
+        this.mealImageUrl = '/assets/images/mealImageLanding.webp'
     }
 
     ngOnInit(): void {}

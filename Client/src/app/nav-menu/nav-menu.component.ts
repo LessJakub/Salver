@@ -28,6 +28,5 @@ export class NavMenuComponent {
     disableLoginOverlay(eventFlag:boolean) {
         this.showLoginOverlay = eventFlag;
     }
-
   
 }

@@ -14,6 +14,8 @@ import { FooterComponent } from './footer/footer.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginOverlayComponent } from './login-overlay/login-overlay.component';
 import { SearchPageComponent } from './search-page/search-page.component';
+import { SearchTileComponent } from './search-page/search-tile/search-tile.component';
+import { SearchBarComponent } from './search-page/search-bar/search-bar.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { SearchPageComponent } from './search-page/search-page.component';
     FooterComponent,
     PageNotFoundComponent,
     LoginOverlayComponent,
-    SearchPageComponent
+    SearchPageComponent,
+    SearchTileComponent,
+    SearchBarComponent
   ],
   imports: [
     BrowserModule,

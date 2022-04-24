@@ -13,6 +13,8 @@ export class AccountService {
     baseUrl: string = "http://localhost:8080/api/"
     loginUrl: string = this.baseUrl + "account/login"
 
+    private loggedInStatus: boolean = false;
+
     constructor(private http: HttpClient) {
         const localUserString = localStorage.getItem("user");
         console.log(localUserString)
@@ -23,6 +25,7 @@ export class AccountService {
                 console.log(localUser)
                 if (localUser != null) {
                     this.currentUserSource.next(localUser);
+                    this.loggedInStatus = true;
                 }
             }
             catch{
@@ -44,6 +47,7 @@ export class AccountService {
                 if (user) {
                     localStorage.setItem("user", JSON.stringify(user));
                     this.currentUserSource.next(user);
+                    this.loggedInStatus = true;
                 }
                 console.log(user);
             })
@@ -53,6 +57,11 @@ export class AccountService {
     logoutUser() {
         localStorage.removeItem("user");
         this.currentUserSource.next(null);
+        this.loggedInStatus = false;
+    }
+
+    isLoggedIn(): boolean {
+        return this.loggedInStatus;
     }
 
 }

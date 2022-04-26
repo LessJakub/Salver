@@ -9,7 +9,7 @@ import { SearchPageComponent } from './search-page/search-page.component';
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'search-page', component: SearchPageComponent,
-    //canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard]
   },
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route
   { path: '**', component: PageNotFoundComponent}               // wildcard for any other path

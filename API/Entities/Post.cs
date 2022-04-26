@@ -13,12 +13,12 @@ namespace API.Entities
 
         public string Description{ get; set; }
 
-        public virtual AppUser AppUser { get; set; }
+        public virtual AppUser? AppUser { get; set; }
 
-        public int AppUserId { get; set; }
+        public int? AppUserId { get; set; }
 
-        public virtual AppRestaurant AppRestaurant { get; set; }
+        public virtual AppRestaurant? AppRestaurant { get; set; }
 
-        public int AppRestaurantId { get; set; }
+        public int? AppRestaurantId { get; set; }
     }
 }

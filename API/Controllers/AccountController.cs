@@ -18,7 +18,8 @@ namespace API.Controllers
     {
          private readonly DataContext _context;
         private readonly ITokenService _tokenService;
-        public AccountController(DataContext context, ITokenService tokenService)
+
+        public AccountController(DataContext context, ITokenService tokenService) : base(context)
         {
             _tokenService = tokenService;
             _context = context;
@@ -92,14 +93,16 @@ namespace API.Controllers
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid password");
             }
 
-            var restaurants = await GetRestaurantsOfUser(user);
+            //var restaurants = await GetRestaurantsOfUser(user);
+            
+            var restaurants = await GetRestaurantsIdsOfUser(user);
 
             return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user),
+                Token = _tokenService.CreateToken(user, restaurants),
                 //UsersRestaurants = (await GetRestaurantsOfUser(user)).Count()
-                IsRestaurantOwner = (restaurants.Count() > 0)
+                IsRestaurantOwner = (false)
             };
         }
 
@@ -191,13 +194,28 @@ namespace API.Controllers
 
         private async Task<List<RestaurantDto>> GetRestaurantsOfUser(AppUser appUser)
         {
-             var relations = appUser.User_Res_Relation.ToList();
+            var relations = appUser.User_Res_Relation.ToList();
             List<RestaurantDto> restaurants = new List<RestaurantDto>();
 
             foreach(var relation in relations)
             {
                 var restaurant = await _context.Restaurants.FirstOrDefaultAsync(res => res.Id == relation.AppRestaurantId);
                 if(restaurant != null) restaurants.Add(new RestaurantDto(restaurant));
+                //restaurants.Add(new RestaurantDto(await _context.Restaurants.FirstOrDefaultAsync(res => res.Id == relation.AppRestaurantId)));
+            }
+
+            return restaurants;
+        }
+
+        private async Task<List<int>> GetRestaurantsIdsOfUser(AppUser appUser)
+        {
+            var relations = appUser.User_Res_Relation.ToList();
+            List<int> restaurants = new List<int>();
+
+            foreach(var relation in relations)
+            {
+                var restaurant = await _context.Restaurants.FirstOrDefaultAsync(res => res.Id == relation.AppRestaurantId);
+                if(restaurant != null) restaurants.Add(restaurant.Id);
                 //restaurants.Add(new RestaurantDto(await _context.Restaurants.FirstOrDefaultAsync(res => res.Id == relation.AppRestaurantId)));
             }
 

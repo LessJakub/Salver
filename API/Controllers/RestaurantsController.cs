@@ -13,11 +13,8 @@ namespace API.Controllers
 {
     public class RestaurantsController : BaseAuthController
     {
-        private readonly DataContext context;
-
-        public RestaurantsController(DataContext context)
+        public RestaurantsController(DataContext context) : base(context)
         {
-            this.context = context;
         }
 
         /// <summary>

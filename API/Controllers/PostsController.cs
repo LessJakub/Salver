@@ -29,7 +29,7 @@ namespace API.Controllers
         [HttpPost("Restaurants/{restaurantId}/posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PostDto>> CreateNewRestaurantPost(int restaurantId, NewPostDto newPostDto)
+        public async Task<ActionResult<PostDto>> CreateRestaurantPost(int restaurantId, NewPostDto newPostDto)
         {
             var ownCheck = await OwnsRestaurant(restaurantId);
             if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
@@ -65,7 +65,7 @@ namespace API.Controllers
         [HttpPost("Users/{userId}/posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PostDto>> CreateNewUserPost(int userId, NewPostDto newPostDto)
+        public async Task<ActionResult<PostDto>> CreateUserPost(int userId, NewPostDto newPostDto)
         {
             if(userId != GetRequesterId()) return Unauthorized();
             var user = await context.Users.FindAsync(GetRequesterId());
@@ -98,7 +98,7 @@ namespace API.Controllers
         [HttpGet("Restaurants/{restaurantId}/posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<PostDto>>> ReadRestaurantPosts(int restaurantId)
+        public async Task<ActionResult<List<PostDto>>> ReadAllRestaurantPosts(int restaurantId)
         {
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             if(restaurant == null) return BadRequest();
@@ -121,7 +121,7 @@ namespace API.Controllers
         [HttpGet("Users/{userId}/posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<PostDto>>> ReadUserPosts(int userId)
+        public async Task<ActionResult<List<PostDto>>> ReadAllUserPosts(int userId)
         {
             var user = await context.Users.FindAsync(userId);
             if(user == null) return BadRequest();

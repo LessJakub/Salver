@@ -17,7 +17,7 @@ namespace API.DTOs
             Id = appRestaurant.Id;
             Name = appRestaurant.Name;
             Description = appRestaurant.Description;
-            Address = appRestaurant.Description;
+            Address = appRestaurant.Address;
             Price = appRestaurant.Price;
         }
 

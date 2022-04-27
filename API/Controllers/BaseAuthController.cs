@@ -68,26 +68,31 @@ namespace API.Controllers
             return ids;
         }
 
-        protected async Task<int> OwnsRestaurant(int restaurantId)
+        protected async Task<(int, string)> OwnsRestaurant(int restaurantId)
         {
             var principal = HttpContext.User;
-            if (principal?.Claims == null) return StatusCodes.Status400BadRequest;
+            if (principal?.Claims == null) 
+                return (StatusCodes.Status400BadRequest, "User does not have any claims");
             
             var resIdsClaims = GetRestaurantsId();
             
-            if(resIdsClaims == null || !resIdsClaims.Contains(restaurantId)) return StatusCodes.Status401Unauthorized;
+            if(resIdsClaims == null || !resIdsClaims.Contains(restaurantId)) 
+                return (StatusCodes.Status401Unauthorized, $"User token does not claim to own restaurant with {restaurantId} id");
 
             var usrId = GetRequesterId();
-            if(usrId < 0) return StatusCodes.Status400BadRequest;
+            if(usrId < 0) 
+                return (StatusCodes.Status400BadRequest, $"Usert with {usrId} id does not exist");
 
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            if(restaurant == null) return StatusCodes.Status400BadRequest;
+            if(restaurant == null) 
+                return (StatusCodes.Status400BadRequest, $"Restaurant with {restaurantId} does not exist");
 
             var usrResRel = restaurant.User_Res_Relation.Where(resOwn => resOwn.AppUserId == usrId);
 
-            if(usrResRel == null) return StatusCodes.Status204NoContent;
+            if(usrResRel == null) 
+                return (StatusCodes.Status204NoContent, $"User with {usrId} does not have relation with restaurant with {restaurantId} id");
 
-            return StatusCodes.Status200OK;
+            return (StatusCodes.Status200OK, "OK");
         }
     }
 }

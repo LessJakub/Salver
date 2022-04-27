@@ -32,7 +32,7 @@ namespace API.Controllers
         public async Task<ActionResult<PostDto>> CreateRestaurantPost(int restaurantId, NewPostDto newPostDto)
         {
             var ownCheck = await OwnsRestaurant(restaurantId);
-            if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
+            if(ownCheck.Item1 != StatusCodes.Status200OK) return StatusCode(ownCheck.Item1, ownCheck.Item2);
 
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             
@@ -67,9 +67,12 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PostDto>> CreateUserPost(int userId, NewPostDto newPostDto)
         {
-            if(userId != GetRequesterId()) return Unauthorized();
-            var user = await context.Users.FindAsync(GetRequesterId());
-            if(user == null) return Unauthorized();
+            if(userId != GetRequesterId()) return Unauthorized("Only owner of account can create posts");
+
+            var claimedId = GetRequesterId();
+            var user = await context.Users.FindAsync();
+            
+            if(user == null) return Unauthorized($"User with {claimedId} id does not exist");
 
 
             var post = new Post{
@@ -101,7 +104,7 @@ namespace API.Controllers
         public async Task<ActionResult<List<PostDto>>> ReadAllRestaurantPosts(int restaurantId)
         {
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            if(restaurant == null) return BadRequest();
+            if(restaurant == null) return BadRequest($"Restaurant with {restaurantId} id does not exist");
 
             var resPosts = new List<PostDto>();
             foreach(var post in restaurant.Posts.ToList()) resPosts.Add(new PostDto(post));
@@ -124,7 +127,7 @@ namespace API.Controllers
         public async Task<ActionResult<List<PostDto>>> ReadAllUserPosts(int userId)
         {
             var user = await context.Users.FindAsync(userId);
-            if(user == null) return BadRequest();
+            if(user == null) return BadRequest($"User with {userId} id does not exist");
 
             var usrPosts = new List<PostDto>();
             foreach(var post in user.Posts.ToList()) usrPosts.Add(new PostDto(post));
@@ -149,11 +152,11 @@ namespace API.Controllers
         public async Task<ActionResult<PostDto>> UpdateRestauranstPost(int restaurantId, int postId, NewPostDto newPostDto)
         {
             var ownCheck = await OwnsRestaurant(restaurantId);
-            if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
+            if(ownCheck.Item1 != StatusCodes.Status200OK) return StatusCode(ownCheck.Item1,ownCheck.Item2);
             
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             var post = restaurant.Posts.FirstOrDefault(p => p.Id == postId);
-            if(post == null) return BadRequest();
+            if(post == null) return BadRequest($"Post with {postId} id does not exist");
 
             post.Description = newPostDto.Description;
 
@@ -178,12 +181,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PostDto>> UpdateUserPost(int userId, int postId, NewPostDto newPostDto)
         {
-            if(userId != GetRequesterId()) return Unauthorized();
+            var claimedId = GetRequesterId();
+            if(userId != claimedId) return Unauthorized($"Claimed {claimedId} id is not the same as {userId}");
 
             var user = await context.Users.FindAsync(userId);
 
             var post = user.Posts.FirstOrDefault(p => p.Id == postId);
-            if(post == null) return BadRequest();
+            if(post == null) return BadRequest($"Post with {postId} id does not exist");
 
             post.Description = newPostDto.Description;
 
@@ -208,11 +212,11 @@ namespace API.Controllers
         public async Task<ActionResult> DeleteRestaurantPost(int restaurantId, int postId)
         {
             var ownCheck = await OwnsRestaurant(restaurantId);
-            if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
+            if(ownCheck.Item1 != StatusCodes.Status200OK) return StatusCode(ownCheck.Item1, ownCheck.Item2);
             
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             var post = restaurant.Posts.FirstOrDefault(p => p.Id == postId);
-            if(post == null) return NoContent();
+            if(post == null) return BadRequest($"Post with {postId} does not exist");
 
             context.Remove(post);
 
@@ -238,10 +242,10 @@ namespace API.Controllers
         {
             if(userId != GetRequesterId()) return Unauthorized();
             var user = await context.Users.FindAsync(userId);
-            if(user == null) return BadRequest();
+            if(user == null) return BadRequest($"User with {userId} id does not exist");
 
             var post = user.Posts.FirstOrDefault(p => p.Id == postId);
-            if(post == null) return NoContent();
+            if(post == null) return BadRequest($"Post with {postId} id does not exist");
             context.Remove(post);
             await context.SaveChangesAsync();
 

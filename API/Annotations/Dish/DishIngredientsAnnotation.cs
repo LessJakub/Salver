@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace API.Annotations
 {
-    public class PostDescriptionAnnotation : CustomAnnotation
+    public class DishIngredientsAnnotation : CustomAnnotation
     {
-        public PostDescriptionAnnotation(int minLength = 0, int maxLength = 250)
+        public DishIngredientsAnnotation(int minLength=0, int maxLength=100)
         {
-             ErrorMessage = $"Password must have between {minLength}-{maxLength} characters";
+            ErrorMessage = $"Ingredients must have between {minLength}-{maxLength} characters";
 
             _attributes = new ValidationAttribute[]
             {

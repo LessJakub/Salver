@@ -14,12 +14,14 @@ namespace API.DTOs
 
         public DishDto(Dish dish)
         {
+            Id = dish.Id;
             Name = dish.Name;
             Description = dish.Description;
             Ingredients = dish.Ingredients;
             AppRestaurantId = dish.AppRestaurantId;
         }
 
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public string Description { get; set; }

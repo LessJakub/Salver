@@ -5,11 +5,15 @@ import { LoggedInGuard } from './guards/logged-in.guard';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SearchPageComponent } from './search-page/search-page.component';
+import { UserActivityComponent } from './user-activity/user-activity.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'search-page', component: SearchPageComponent,
-    canActivate: [LoggedInGuard]
+    //canActivate: [LoggedInGuard]
+  },
+  { path: 'activity', component: UserActivityComponent,
+    //canActivate: [LoggedInGuard]
   },
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route
   { path: '**', component: PageNotFoundComponent}               // wildcard for any other path

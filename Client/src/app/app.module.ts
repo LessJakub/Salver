@@ -14,6 +14,7 @@ import { LoginOverlayComponent } from './login-overlay/login-overlay.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { SearchTileComponent } from './search-page/search-tile/search-tile.component';
 import { SearchBarComponent } from './search-page/search-bar/search-bar.component';
+import { UserActivityComponent } from './user-activity/user-activity.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { SearchBarComponent } from './search-page/search-bar/search-bar.componen
     LoginOverlayComponent,
     SearchPageComponent,
     SearchTileComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    UserActivityComponent
   ],
   imports: [
     BrowserModule,

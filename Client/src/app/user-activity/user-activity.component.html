@@ -1,0 +1,27 @@
+<!-- Activity wall -->
+<div class="basis-3/4 flex flex-col h-full">
+    <div class="h-24 w-full flex items-center justify-center">
+        <button type="button" class="bg-green-800 px-7 py-3 rounded-xl text-gray-50 font-medium hover:bg-green-900">Where are you eating today?</button>
+    </div>
+    <div class="overflow-y-auto overflow-x-clip grow w-full relative">
+        <div class="absolute top-0 left-0 flex flex-col items-stretch mx-36 space-y-10">
+            <div *ngFor="let post of fetchedPosts" class="rounded-2xl shadow-xl flex">
+                <img src={{post.imageURL}} class="w-2/5 object-contain rounded-tl-2xl rounded-bl-2xl">
+                <div class="flex flex-col w-full h-full mx-3 my-4">
+                    <div class="mb-3">
+                        <h3 class="text-xl">{{ post.user }}</h3>
+                        <p> {{ prettyTimeFromDate(post.date) }}</p>
+                    </div>
+                    <p class="text-gray-500"> {{ post.taggedRestaurant }}</p>
+                    <p>{{ post.description }}</p> <!-- abbreviate too long desc./set max length like twitter-->
+                </div>
+            </div>
+        </div>
+    </div>  
+
+</div>
+
+<!-- Reccomendations -->
+<div class="bg-red-600 basis-1/4 h-full">
+
+</div>

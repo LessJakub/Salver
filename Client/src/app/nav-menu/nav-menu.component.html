@@ -42,7 +42,7 @@
 
                     <!-- User is logged in, thus we replace contents of nav-bar to match new functionalities. -->
                     <div *ngIf="(accountService.currentUser$ | async) != null">
-                        <a  [routerLink]="['/landing-page']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                        <a  [routerLink]="['/activity']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
                             Activity
                         </a>
     

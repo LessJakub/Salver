@@ -12,17 +12,17 @@ namespace API.Entities
 
         public float Price { get; set; }
 
-        public ICollection<Restaurant_Owner> User_Res_Relation { get; set; }
+        public virtual ICollection<Restaurant_Owner> User_Res_Relation  { get; set; }
 
-        public ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
 
-        public ICollection<Restaurant_Review> Res_Review { get; set; }
+        public virtual ICollection<Restaurant_Review> Res_Review { get; set; }
 
-        public ICollection<Follower> Followers { get; set; }
+        public virtual ICollection<Follower> Followers { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
 
-        public ICollection<Dish> Dishes { get; set; }
+        public virtual ICollection<Dish> Dishes { get; set; }
 
         
     }

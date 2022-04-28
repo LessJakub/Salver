@@ -6,24 +6,28 @@ import { BrowserModule, Meta } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { FooterComponent } from './footer/footer.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginOverlayComponent } from './login-overlay/login-overlay.component';
+import { SearchPageComponent } from './search-page/search-page.component';
+import { SearchTileComponent } from './search-page/search-tile/search-tile.component';
+import { SearchBarComponent } from './search-page/search-bar/search-bar.component';
+import { UserActivityComponent } from './user-activity/user-activity.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    CounterComponent,
-    FetchDataComponent,
     LandingPageComponent,
     FooterComponent,
     PageNotFoundComponent,
-    LoginOverlayComponent
+    LoginOverlayComponent,
+    SearchPageComponent,
+    SearchTileComponent,
+    SearchBarComponent,
+    UserActivityComponent
   ],
   imports: [
     BrowserModule,

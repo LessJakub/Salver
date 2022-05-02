@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LoginOverlayComponent } from '../login-overlay/login-overlay.component';
+import { LoginOverlayComponent } from '../overlays/login-overlay/login-overlay.component';
 import { AccountService } from '../services/account-service.service';
 
 @Component({

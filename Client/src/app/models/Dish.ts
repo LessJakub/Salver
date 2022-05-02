@@ -4,4 +4,5 @@ export interface Dish {
     grade: number;
     description: string;
     price: number;
+    restaurant: string;
 }

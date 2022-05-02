@@ -16,6 +16,8 @@ import { SearchTileComponent } from './search-page/search-tile/search-tile.compo
 import { SearchBarComponent } from './search-page/search-bar/search-bar.component';
 import { UserActivityComponent } from './user-activity/user-activity.component';
 import { DishOverlayComponent } from './overlays/dish-overlay/dish-overlay.component';
+import { GradeComponentComponent } from './overlays/dish-overlay/grade-component/grade-component.component';
+import { ReviewPostComponent } from './overlays/dish-overlay/review-post/review-post.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { DishOverlayComponent } from './overlays/dish-overlay/dish-overlay.compo
     SearchTileComponent,
     SearchBarComponent,
     UserActivityComponent,
-    DishOverlayComponent
+    DishOverlayComponent,
+    GradeComponentComponent,
+    ReviewPostComponent
   ],
   imports: [
     BrowserModule,

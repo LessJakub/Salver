@@ -1,6 +1,6 @@
 export interface Dish {
     name: string;
-    imageURL: string;
+    imageURL: string[];
     grade: number;
     description: string;
     price: number;

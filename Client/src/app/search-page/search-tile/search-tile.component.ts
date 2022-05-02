@@ -6,12 +6,12 @@ import { DishOverlayComponent } from 'src/app/overlays/dish-overlay/dish-overlay
   selector: 'app-search-tile',
   template: `
 
-    <app-dish-overlay *ngIf="(showOverlay) == true" [model]="model"></app-dish-overlay>
+    <app-dish-overlay *ngIf="(showOverlay) == true" [model]="model" (closeOverlayEventEmitter)="disableLoginOverlay()"></app-dish-overlay>
 
-    <div class="flex w-fit h-fit justify-center items-center content-center flex-col cursor-pointer group">
+    <div (click)="invertOverlayFlag()" class="flex w-fit h-fit justify-center items-center content-center flex-col cursor-pointer group">
 
         <div class="flex h-60 w-60">
-            <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition" src={{model.imageURL}}>
+            <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition" src={{model.imageURL[0]}}>
             <div class="grid grid-cols-1 gap-2 h-full justify-center content-center px-0.5">
                 <ng-container *ngFor="let _ of [].constructor(model.grade); let i = index">
                     <div class="w-5 h-5 bg-green-700 rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition"></div>
@@ -34,11 +34,19 @@ export class SearchTileComponent {
 
     @Input() model: Dish;
 
-    showOverlay: boolean = true;
+    showOverlay: boolean = false;
 
     currencySymbol: string = "$"
 
     constructor() {}
+
+    invertOverlayFlag() {
+        this.showOverlay = !this.showOverlay;
+    }
+
+    disableLoginOverlay(eventFlag:boolean) {
+        this.showOverlay = eventFlag;
+    }
 
 
 }

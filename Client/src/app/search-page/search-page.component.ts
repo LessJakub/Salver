@@ -18,7 +18,11 @@ export class SearchPageComponent implements OnInit {
     dishSearchResults: Dish[] = [
         {name:"Hosomaki", imageURL:["/assets/images/3W2A0606@0.5x.webp", "/assets/images/3W2A0606@0.5x.webp"], grade:2, description:"With fresh mango or tuna. 6 pcs",price:15, restaurant: "Japan Sun"},
         {name:"Uramaki",  imageURL:["/assets/images/3W2A0699@0.5x.webp", "/assets/images/3W2A0699@0.5x.webp"], grade:3, description:"Avocado uramaki with soy sauce.", price:20, restaurant: "Japan Sun"},
-        {name:"Curry & Shrimps", imageURL:["/assets/images/W2A6423@0.5x.webp", "/assets/images/W2A6423@0.5x.webp"],  grade:5, description:"Green curry with shrimps, vegetables and jasmin rice", price:23, restaurant: "Japan Sun"},
+        
+        { name:"Curry & Shrimps", imageURL:["/assets/images/W2A6423@0.5x.webp", "/assets/images/W2A6423@0.5x.webp"],  grade:5, 
+        description:"Green curry with shrimps, vegetables and jasmin rice. Decorated with edible flowers and coriander. Ideal dish for shrimp-lovers but not only. This is a dummy text which i had to add because im not very creative and i had no idea what to write in the description apart from the ingredients list", 
+        price:23, restaurant: "Japan Sun" },
+        
         {name:"Fried Ice-Cream", imageURL:["/assets/images/W2A6500@0.5x.webp", "/assets/images/W2A6500@0.5x.webp"], grade:5, description:"Fried ice cream with mango pulp", price:17,restaurant: "Japan Sun"},
         // {name:"Fusion Rolls", imageURL:["/assets/images/W2A6389@0.5x.webp"], grade:4, description:"Salmon marinated in togarashi, avocado, mango sauce, micro greens", price:24, restaurant: "Japan Sun"},
         // {name:"Sashimi", imageURL:["/assets/images/3W2A0746@0.5x.webp"], grade:3, description:"Salmon, tuna, butterfish, 12 pcs", price:35, restaurant: "Japan Sun"},

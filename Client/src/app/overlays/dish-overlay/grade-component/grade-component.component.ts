@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
   selector: 'app-grade-component',
   template: `
 
-    <ng-container *ngIf="!isInline; else templateInline">
+    <!-- <ng-container *ngIf="!isInline; else templateInline">
       <div class="w-full h-full space-y-1">
         <p *ngIf="(significant == false)" class="text-base font-thin text-gray-900 uppercase truncate">{{this.name}}</p>
         <p *ngIf="(significant == true)" class="text-base font-thin  uppercase text-gray-900 truncate">{{this.name}}</p>
@@ -26,8 +26,23 @@ import { Component, Input, OnInit } from '@angular/core';
           </ng-container>
         </div>
         </div>
-    </ng-template>
+    </ng-template> -->
+    <div class="w-full h-full flex">
 
+        <!-- Text half -->
+        <div class="w-1/2 h-full">
+            <p *ngIf="(significant == false)" class="text-base font-thin text-gray-900 uppercase truncate">{{this.name}}</p>
+            <p *ngIf="(significant == true)" class="text-base font-thin  uppercase text-gray-900 truncate">{{this.name}}</p>
+        </div>
+
+        <!-- Dots half -->
+        <div class="w-1/2 h-full flex gap-1 justify-end">
+            <ng-container *ngFor="let _ of [].constructor(this.grade); let i = index">
+                <div class="w-5 h-5 bg-green-700 rounded-full"></div>
+            </ng-container>
+        </div>
+
+    </div>
   `})
 export class GradeComponentComponent implements OnInit {
 

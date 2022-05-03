@@ -1,5 +1,9 @@
-<div class="fixed top-0 left-0 h-screen w-screen flex items-center justify-center py-4 backdrop-blur-sm bg-green-900/30 z-50">
-    <div class="aspect-square h-[95%] bg-gray-50 rounded-2xl shadow-md shadow-green-900 border-1 border-green-900">
+<div class="fixed top-0 left-0 h-screen w-screen flex items-center justify-center py-4 z-50">
+    
+    <!-- BG absolute child which is used to detect actions happening behind the main square overlay. -->
+    <div (click)="closeOverlayAction()" class="absolute w-full h-full z-10 bg-green-900/30 cursor-pointer backdrop-blur-sm hover:backdrop-blur-none transition-all"></div>
+    
+    <div class="aspect-square h-[95%] bg-gray-50 rounded-2xl shadow-md shadow-green-900 border-1 border-green-900 z-20">
 
         <div class="p-8 2xl:p-16 w-full h-full">
 
@@ -30,22 +34,22 @@
                             </div>
                         </div>
 
-                        <div class="w-full h-1/2 overflow-y-scroll">
+                        <div class="w-full h-1/2 overflow-hidden">
 
                             <div class="w-full h-1/4">
-                                <app-grade-component [grade]="5" [name]="'Taste'"></app-grade-component>
+                                <app-grade-component [grade]="model.grade[0]" [name]="'Taste'"></app-grade-component>
                             </div>
                                  
                             <div class="w-full h-1/4">
-                                <app-grade-component [grade]="3" [name]="'Price'"></app-grade-component>
+                                <app-grade-component [grade]="model.grade[1]" [name]="'Price'"></app-grade-component>
                             </div>
             
                             <div class="w-full h-1/4">
-                                <app-grade-component [grade]="4" [name]="'Service'"></app-grade-component>
+                                <app-grade-component [grade]="model.grade[2]" [name]="'Service'"></app-grade-component>
                             </div>
                             
                             <div class="w-full h-1/4">
-                                <app-grade-component [grade]="4" [name]="'Total Score'" [significant]="true"></app-grade-component>
+                                <app-grade-component [grade]="model.grade[3]" [name]="'Total Score'" [significant]="true"></app-grade-component>
                             </div>
           
                         </div>

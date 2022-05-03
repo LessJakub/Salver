@@ -18,6 +18,7 @@ import { UserActivityComponent } from './user-activity/user-activity.component';
 import { DishOverlayComponent } from './overlays/dish-overlay/dish-overlay.component';
 import { GradeComponentComponent } from './overlays/dish-overlay/grade-component/grade-component.component';
 import { ReviewPostComponent } from './overlays/dish-overlay/review-post/review-post.component';
+import { TabSwitcherComponent } from './utilities/tab-switcher/tab-switcher.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ReviewPostComponent } from './overlays/dish-overlay/review-post/review-
     UserActivityComponent,
     DishOverlayComponent,
     GradeComponentComponent,
-    ReviewPostComponent
+    ReviewPostComponent,
+    TabSwitcherComponent
   ],
   imports: [
     BrowserModule,

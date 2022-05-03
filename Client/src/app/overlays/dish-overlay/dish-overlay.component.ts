@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Dish } from 'src/app/models/Dish';
+import { TabSwitcherComponent } from 'src/app/utilities/tab-switcher/tab-switcher.component';
 
 @Component({
   selector: 'app-dish-overlay',
@@ -12,12 +13,19 @@ export class DishOverlayComponent implements OnInit {
     @Input() model: Dish;
 
     orderCount: number = 0;
+    selectedTabID: number = 0;
+
+    tabs: string[] = ["Overview", "Reviews"];
 
     constructor() {}
     ngOnInit(): void {}
 
     incrementCount() {
         this.orderCount += 1;
+    }
+
+    selectNewTab(selectedID: number) {
+        this.selectedTabID = selectedID;
     }
 
     decrementCount() {

@@ -67,7 +67,7 @@ export class SearchPageComponent implements OnInit {
                         }
                     }
                     else {
-                        if (dish.grade == this.searchForm.grade) {
+                        if (dish.grade[3] == this.searchForm.grade) {
                             if (this.searchForm.input == "" || this.searchForm.input == null) {
                                 tempArray.push(dish);
                             }

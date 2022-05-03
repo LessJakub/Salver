@@ -6,7 +6,7 @@ import { AccountService } from '../services/account-service.service';
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css'],
-  host: {'class': 'sticky top-0'},
+  host: {'class': 'sticky top-0 z-50'},
 })
 export class NavMenuComponent {
 

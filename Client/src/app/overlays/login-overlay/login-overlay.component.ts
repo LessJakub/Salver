@@ -1,12 +1,11 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AccountService } from '../services/account-service.service';
-import { User } from '../models/User';
+import { AccountService } from '../../services/account-service.service';
+import { User } from '../../models/User';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login-overlay',
-  templateUrl: './login-overlay.component.html',
-  styleUrls: ['./login-overlay.component.css']
+  templateUrl: './login-overlay.component.html'
 })
 export class LoginOverlayComponent implements OnInit {
 

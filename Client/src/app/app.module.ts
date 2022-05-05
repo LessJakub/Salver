@@ -19,6 +19,7 @@ import { DishOverlayComponent } from './overlays/dish-overlay/dish-overlay.compo
 import { GradeComponentComponent } from './overlays/dish-overlay/grade-component/grade-component.component';
 import { ReviewPostComponent } from './overlays/dish-overlay/review-post/review-post.component';
 import { TabSwitcherComponent } from './utilities/tab-switcher/tab-switcher.component';
+import { PostComponent } from './elements/post/post.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { TabSwitcherComponent } from './utilities/tab-switcher/tab-switcher.comp
     DishOverlayComponent,
     GradeComponentComponent,
     ReviewPostComponent,
-    TabSwitcherComponent
+    TabSwitcherComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,

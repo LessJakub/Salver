@@ -1,0 +1,40 @@
+<!-- Side area -->
+<div class="basis-1/4 min-w-[25rem] h-full shadow-2xl overflow-y-auto relative">
+    <div class="h-full pt-4 flex flex-col items-center justify-between space-y-5 absolute top-0 left-0">
+
+        <h2 class="text-3xl font-semibold">{{restaurant.name}}</h2>
+
+        <div class="w-full h-56 flex justify-center items-center">
+            <img src={{restaurant.images[0]}} class="h-full object-contain rounded-2xl">
+        </div>
+
+        <p class="text-center mx-4">{{restaurant.description}}</p>
+
+        <p class="text-center mx-4">{{restaurant.address}}</p>
+
+        <p class="text-center mx-4">{{restaurant.priceRange}}</p>
+
+        <div class="w-full">
+            <div *ngFor="let elem of restaurant.grades" class="w-full px-14 mb-2">
+                <app-grade-component [grade]="elem.grade" [name]="elem.category"></app-grade-component>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Main area -->
+<div class="grow h-full flex flex-col pt-4">
+
+    <div class="w-1/2">
+        <app-tab-switcher [tabNames]="['Menu', 'Posts', 'Activity']"></app-tab-switcher>
+    </div>
+
+    <div class="overflow-y-auto relative w-full grow">
+        <div class="flex flex-col items-center space-y-5 absolute top-0 left-0">
+            <div *ngFor="let dish of fetchedDishes">
+                <app-search-tile [model]="dish"></app-search-tile>
+            </div>
+        </div>
+    </div>
+</div>

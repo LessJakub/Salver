@@ -19,6 +19,9 @@ export class UserActivityComponent implements OnInit {
   ngOnInit(): void {
     this.fetchedPosts = [
       {date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{category: "Taste", grade: 5}, {category: "Serving", grade: 5}, {category: "Atmosphere", grade: 5}]},
+      {date: new Date(2022, 4, 11), likes: 8, imageURL: "/assets/images/3W2A0956@0.5x.webp", description: "Wow, this is such a nice place with fantastic food. If you're looking for great sushi and very friendly sushimasters then this is the spot! " + 
+      "I've been to many sushi bars but this one is going to really make me visit over and over again! 100% reccomend! By the way check out my account for other reccomendations of the best restaurants round town!", taggedRestaurant: "SushiDoo", user: "Billie Thongroght",
+      grades: [{category: "Taste", grade: 5}, {category: "Atmosphere", grade: 5}, {category: "Service", grade: 5}, {category: "Price", grade: 4}, {category: "Serving", grade: 5}]},
       {date: new Date(2022, 4, 16), likes: 2, imageURL: "/assets/images/W2A6423@0.5x.webp", description: "Very tasty!", taggedRestaurant: "SushiDoo", user: "Eli Bentalc", grades: [{category: "Taste", grade: 5}, {category: "Price", grade: 3}]},
       {date: new Date(2022, 4, 17), likes: 134, imageURL: "/assets/images/3W2A0925@0.5x.webp", description: "A bit bland", taggedRestaurant: "SushiDoo", user: "Margaret Nam", grades: [{category: "Taste", grade: 3}]},
       {date: new Date(2022, 4, 11), likes: 8, imageURL: "/assets/images/3W2A0956@0.5x.webp", description: "Wow, this is such a nice place with fantastic food. If you're looking for great sushi and very friendly sushimasters then this is the spot! " + 

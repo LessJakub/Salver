@@ -41,6 +41,7 @@ export class TabSwitcherComponent implements OnInit {
             this.default = 0;
         }
         this.selectedID = this.default;
+        this.tabSelectEvent.emit(this.selectedID);
     }
 
     select(id: number) {

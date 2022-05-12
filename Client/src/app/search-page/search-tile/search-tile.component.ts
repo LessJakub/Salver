@@ -19,7 +19,7 @@ import { DishOverlayComponent } from 'src/app/overlays/dish-overlay/dish-overlay
             </div>
         </div>        
     
-        <div class="p-2 items-center content-center justify-center text-center w-60">
+        <div *ngIf="showDescription == true" class="p-2 items-center content-center justify-center text-center w-60">
             <div class="w-full justify-between flex gap-2">
                 <p class="text-2xl font-bold truncate">{{model.name}}</p>
                 <p class="text-2xl font-bold">{{model.price}}{{currencySymbol}}</p>
@@ -33,6 +33,7 @@ import { DishOverlayComponent } from 'src/app/overlays/dish-overlay/dish-overlay
 export class SearchTileComponent {
 
     @Input() model: Dish;
+    @Input() showDescription: Boolean = true;
 
     showOverlay: boolean = false;
 

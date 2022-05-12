@@ -21,6 +21,7 @@ import { ReviewPostComponent } from './overlays/dish-overlay/review-post/review-
 import { TabSwitcherComponent } from './utilities/tab-switcher/tab-switcher.component';
 import { PostComponent } from './elements/post/post.component';
 import { RestaurantPageComponent } from './restaurant-page/restaurant-page.component';
+import { MenuPostComponent } from './elements/menu-post/menu-post.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { RestaurantPageComponent } from './restaurant-page/restaurant-page.compo
     ReviewPostComponent,
     TabSwitcherComponent,
     PostComponent,
-    RestaurantPageComponent
+    RestaurantPageComponent,
+    MenuPostComponent
   ],
   imports: [
     BrowserModule,

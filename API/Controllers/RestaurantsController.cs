@@ -95,6 +95,75 @@ namespace API.Controllers
             return new RestaurantDto(restaurant);
         }
 
+        /// <summary>
+        /// Get public information of restaurant with id
+        /// </summary>
+        /// <param name="id">Id of the restaurant</param>
+        /// <remarks>Does not require authorization</remarks>
+        /// <returns>Public information of the restaurant as RestaurantDto</returns>
+        /// <response code="200"> Ok, restaurant is returned. </response>
+        /// <response code="204"> NoContent, there is no restaurant with id. </response>
+        /// <response code="400"> Bad request, invalid input. </response>
+        [AllowAnonymous]
+        [HttpGet("{id}/follow")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> FollowRestaurant(int id)
+        {
+            var restaurant = await context.Restaurants.FindAsync(id);
+            if(restaurant == null) return NoContent();
+
+            var reqId = GetRequesterId();
+            if(id == -1) return BadRequest($"You must be signed in to follow someone");
+
+            //Can be optimized
+            //Look for follow with AppUser != null && AppRestaurant == null
+            var follow = new Follower {
+              FollowerId = reqId,
+              AppUser = null,
+              AppUserId = 0,
+              AppRestaurant = restaurant,
+              AppRestaurantId = id
+            };
+
+            context.Add(follow);
+            await context.SaveChangesAsync();
+            
+            return Ok();
+        }
+
+        /// <summary>
+        /// Get public information of restaurant with id
+        /// </summary>
+        /// <param name="id">Id of the restaurant</param>
+        /// <remarks>Does not require authorization</remarks>
+        /// <returns>Public information of the restaurant as RestaurantDto</returns>
+        /// <response code="200"> Ok, restaurant is returned. </response>
+        /// <response code="204"> NoContent, there is no restaurant with id. </response>
+        /// <response code="400"> Bad request, invalid input. </response>
+        [AllowAnonymous]
+        [HttpDelete("{id}/unfollow")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UnfollowRestaurant(int id)
+        {
+            var reqId = GetRequesterId();
+            if(id == -1) return BadRequest($"You must be signed in to unfollow someone");
+
+            var user = await context.Users.FindAsync(reqId);
+            if(user is null) return NoContent();
+
+            var follow = user.Followers.FirstOrDefault(f => f.AppRestaurantId == id);
+            if(follow is null) return BadRequest($"You are not following restaurant with id {id}");
+
+            context.Remove(follow);
+            await context.SaveChangesAsync();
+            
+            return Ok();
+        }
+
 
         #if DEBUG
         /// <summary>
@@ -223,6 +292,11 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IEnumerable<RestaurantDto>> SearchRestaurant(string restaurantName)
         {
+            if(String.IsNullOrEmpty(restaurantName)){
+                return await this.GetRestaurants();
+            }
+
+
             var restaurants = await context.Restaurants.Where(e => e.Name.Contains(restaurantName)).ToListAsync();
 
             var restaurantsToReturn = new List<RestaurantDto>();

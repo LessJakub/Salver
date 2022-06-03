@@ -151,7 +151,7 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// Search restaurants with specific name
+        /// Search dish with specific name
         /// </summary>
         /// <param name="dishName">String containing search information</param>
         /// <remarks>
@@ -167,6 +167,19 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IEnumerable<DishDto>> SearchDish(string dishName)
         {
+            if(String.IsNullOrEmpty(dishName))
+            {
+                var dishesAll= new List<DishDto>();
+                foreach(var dish in context.Dishes)
+                {
+                    dishesAll.Add(new DishDto(dish));
+                    if(dishesAll.Count() >= 10) break;
+                }
+                
+                return dishesAll;
+            }
+
+
             var dishes = await context.Dishes.Where(e => e.Name.Contains(dishName)).ToListAsync();
 
             var restaurantsToReturn = new List<DishDto>();

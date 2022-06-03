@@ -9,14 +9,13 @@ namespace API.Controllers
 {
 
     [ApiController]
-    public class UsersController : BaseApiController
+    public class UsersController : BaseAuthController
     {
-        private readonly DataContext _context;
-        public UsersController(DataContext context)
+        public UsersController(DataContext context) : base(context)
         {
-            _context = context;
         }
-        
+
+
         /// <summary>
         /// Gets all users
         /// </summary>
@@ -34,7 +33,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await context.Users.ToListAsync();
         }
 
         // Finding user by Id i.e. with api/users/3
@@ -56,7 +55,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<UserProfileDto>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await context.Users.FindAsync(id);
 
             if(user == null) return NoContent();
 
@@ -66,6 +65,82 @@ namespace API.Controllers
                 Verified = user.Verified,
                 Followers = 0 //Should be implemented properly after follow table is implemented
             };
+        }
+
+
+        // Finding user by Id i.e. with api/users/3
+        /// <summary>
+        /// Gets public information of user with specified id
+        /// </summary>
+        /// <param name="id"> Id of the user</param>
+        /// <remarks>Not completed, followers are always equal 0</remarks>
+        /// <returns>UserProfileDto</returns>
+        /// <response code="200">Ok</response>
+        /// <response code="204">No content (User with id does not exist)</response>
+        /// <response code="400">Bard request, invalid input </response>
+        /// <response code="401">Unauthorized, wrong credentials </response>
+        [HttpPost("{id}/follow")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult> FollowUser(int id)
+        {
+            var user = await context.Users.FindAsync(id);
+            if(user == null) return NoContent();
+
+            var reqId = GetRequesterId();
+            if(id == -1) return BadRequest($"You must be signed in to follow someone");
+
+            var follow = new Follower {
+              FollowerId = reqId,
+              AppUser = user,
+              AppUserId = id,
+              AppRestaurant = null,
+              AppRestaurantId = 0
+            };
+
+            context.Add(follow);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        // Finding user by Id i.e. with api/users/3
+        /// <summary>
+        /// Gets public information of user with specified id
+        /// </summary>
+        /// <param name="id"> Id of the user</param>
+        /// <remarks>Not completed, followers are always equal 0</remarks>
+        /// <returns>UserProfileDto</returns>
+        /// <response code="200">Ok</response>
+        /// <response code="204">No content (User with id does not exist)</response>
+        /// <response code="400">Bard request, invalid input </response>
+        /// <response code="401">Unauthorized, wrong credentials </response>
+        [HttpDelete("{id}/unfollow")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult> UnfollowUser(int id)
+        {
+
+            var reqId = GetRequesterId();
+            if(id == -1) return BadRequest($"You must be signed in to unfollow someone");
+
+            var user = await context.Users.FindAsync(reqId);
+            if(user == null) return NoContent();
+            
+
+            var follow = user.Followers.FirstOrDefault(f => f.AppUserId == id);
+            if(follow == null) return BadRequest($"You are not following user with id {id}");
+
+            context.Remove(follow);
+            await context.SaveChangesAsync();
+            
+            return Ok();
         }
 
         /// <summary>
@@ -85,7 +160,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IEnumerable<UserProfileDto>> SearchUser(string userName)
         {
-            var users = await _context.Users.Where(user => user.UserName.Contains(userName)).ToListAsync();
+            var users = await context.Users.Where(user => user.UserName.Contains(userName)).ToListAsync();
 
             var usersToReturn = new List<UserProfileDto>();
             foreach(var user in users)

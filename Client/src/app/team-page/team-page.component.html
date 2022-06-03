@@ -1,0 +1,30 @@
+<div class="w-full h-full">
+
+    <div class="flex flex-col w-full pt-10 space-y-2 h-1/6 content-center justify-center items-center">
+        <p class="font-bold text-5xl text-green-900">
+            Our Team
+        </p>
+        <p class="font-normal text-3xl text-gray-900">
+            Briliant minds behind Salver.
+        </p>
+    </div>
+
+    <div class="w-full h-5/6">
+        <div class="flex flex-wrap space-x-2 overflow-hidden content-center items-center justify-center w-full h-full">
+            <ng-container *ngFor="let member of shuffled">
+
+                <div class="flex flex-col w-1/6 aspect-square content-center justify-center items-center">
+                    <div class="border-2 rounded-full w-1/2 aspect-square flex bg-gradient-to-t from-green-800 to-white-300 border-gray-600 shadow-md">
+                    </div>
+                    <p class="pt-2 font-normal text-md">
+                        {{member.name}}
+                    </p>
+                    <p class="font-thin text-md">
+                        {{member.role}}
+                    </p>
+                </div>
+        
+            </ng-container>
+        </div>
+    </div>
+</div>

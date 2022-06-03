@@ -24,6 +24,7 @@ import { RestaurantPageComponent } from './restaurant-page/restaurant-page.compo
 import { MenuPostComponent } from './elements/menu-post/menu-post.component';
 import { TeamPageComponent } from './team-page/team-page.component';
 import { FAQComponent } from './faq/faq.component';
+import { RestaurantTileComponent } from './search-page/restaurant-tile/restaurant-tile.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { FAQComponent } from './faq/faq.component';
     MenuPostComponent,
     TeamPageComponent,
     FAQComponent,
+    RestaurantTileComponent,
   ],
   imports: [
     BrowserModule,

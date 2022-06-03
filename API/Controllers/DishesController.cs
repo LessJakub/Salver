@@ -165,7 +165,7 @@ namespace API.Controllers
         [HttpGet("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IEnumerable<DishDto>> SearchRestaurant(string dishName)
+        public async Task<IEnumerable<DishDto>> SearchDish(string dishName)
         {
             var dishes = await context.Dishes.Where(e => e.Name.Contains(dishName)).ToListAsync();
 

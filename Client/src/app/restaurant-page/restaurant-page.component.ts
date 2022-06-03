@@ -26,6 +26,9 @@ export class RestaurantPageComponent implements OnInit {
 
   ngOnInit(): void {
         this.restaurant =  {
+        id: 0,
+        price: 0,
+        rating: 0,
         name: "SushiDoo",
         images: ["/assets/images/mealImageLanding.webp"],
         address: "Mickiewicza 10, Warsaw, Poland",

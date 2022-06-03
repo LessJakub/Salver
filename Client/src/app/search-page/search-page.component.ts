@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { filter } from 'rxjs/operators';
 import { Dish } from '../models/Dish';
+import { SearchService } from '../services/search.service';
 import { SearchTileComponent } from './search-tile/search-tile.component';
 
 @Component({
@@ -30,13 +31,15 @@ export class SearchPageComponent implements OnInit {
         {name:"Tom Yam Kung ", imageURL:["/assets/images/3W2A0925@0.5x.webp"], grade:[5, 3, 4, 4], description:"Thai soup with shrimps, coconut milk and vegetables", price:26, restaurant: "Japan Sun"},
     ]
 
-    constructor() {}
+    constructor(private searchService: SearchService) {}
 
     ngOnInit(): void {
         this.updateFilteredArray();
     }
 
     updateSearchForm(newForm: any) {
+        this.searchService.searchRestaurant(newForm)
+
         this.searchForm = newForm;
         this.updateFilteredArray();
     }
@@ -47,7 +50,9 @@ export class SearchPageComponent implements OnInit {
         }
         else {
             if (this.searchForm.type === "Restaurant") {
-                this.filteredSearchResults = null;
+                console.log(this.searchService.restaurants)
+                this.filteredSearchResults = this.searchService.restaurants;
+                
             }
             else {
                 let tempArray: Dish[] = [];

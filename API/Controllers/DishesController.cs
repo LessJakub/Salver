@@ -7,6 +7,7 @@ using API.DTOs;
 using API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -145,6 +146,35 @@ namespace API.Controllers
             await context.SaveChangesAsync();
 
             return Ok();
+        }
+
+
+
+        /// <summary>
+        /// Search restaurants with specific name
+        /// </summary>
+        /// <param name="dishName">String containing search information</param>
+        /// <remarks>
+        /// Does not require authorization.
+        /// Finds all restaurants containing search information. Not case sensitive. 
+        /// Always returns status code 200 OK but may return empty list. 
+        /// Currentlly accpets only name as parameter</remarks>
+        /// <returns>list of RestaurantDtos</returns>
+        /// <response code="200"> Returns list of restaurants with matching parameters</response>
+        [AllowAnonymous]
+        [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IEnumerable<DishDto>> SearchRestaurant(string dishName)
+        {
+            var dishes = await context.Dishes.Where(e => e.Name.Contains(dishName)).ToListAsync();
+
+            var restaurantsToReturn = new List<DishDto>();
+            foreach(var dish in dishes)
+            {
+                restaurantsToReturn.Add(new DishDto(dish));
+            }
+            return restaurantsToReturn;
         }
     }
 }

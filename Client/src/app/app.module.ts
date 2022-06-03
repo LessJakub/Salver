@@ -23,6 +23,7 @@ import { PostComponent } from './elements/post/post.component';
 import { RestaurantPageComponent } from './restaurant-page/restaurant-page.component';
 import { MenuPostComponent } from './elements/menu-post/menu-post.component';
 import { TeamPageComponent } from './team-page/team-page.component';
+import { FAQComponent } from './faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { TeamPageComponent } from './team-page/team-page.component';
     RestaurantPageComponent,
     MenuPostComponent,
     TeamPageComponent,
+    FAQComponent,
   ],
   imports: [
     BrowserModule,

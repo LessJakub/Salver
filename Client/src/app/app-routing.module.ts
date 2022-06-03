@@ -4,6 +4,7 @@ import { LoggedInGuard } from './guards/logged-in.guard';
 
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { TeamPageComponent } from './team-page/team-page.component';
+import { FAQComponent } from './faq/faq.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RestaurantPageComponent } from './restaurant-page/restaurant-page.component';
 import { SearchPageComponent } from './search-page/search-page.component';
@@ -12,6 +13,7 @@ import { UserActivityComponent } from './user-activity/user-activity.component';
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'team', component: TeamPageComponent },
+  { path: 'faq', component: FAQComponent },
 
   { path: 'search-page', component: SearchPageComponent,
     // canActivate: [LoggedInGuard]

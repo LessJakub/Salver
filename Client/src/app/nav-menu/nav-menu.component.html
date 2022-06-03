@@ -1,9 +1,9 @@
-<nav class="top-0 sticky z-50 bg-gray-50 w-screen">
+<nav class="bg-gray-50 w-full">
     <app-login-overlay (closeOverlayEventEmitter)="disableLoginOverlay()" *ngIf="showLoginOverlay"></app-login-overlay>
     <div class="relative flex items-center contents-center justify-between h-16 bg-gray-50 rounded-b-2xl shadow-md shadow-green-900/50">
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
 
-            <div class="grid grid-cols-3 gap-4 w-screen px-16">
+            <div class="grid grid-cols-3 gap-4 w-full px-16">
 
                 <div class="col-span-2 items-center content-center justify-start flex">
                     <!-- Logo -->
@@ -42,7 +42,7 @@
 
                     <!-- User is logged in, thus we replace contents of nav-bar to match new functionalities. -->
                     <div *ngIf="(accountService.currentUser$ | async) != null">
-                        <a  [routerLink]="['/landing-page']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                        <a  [routerLink]="['/activity']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
                             Activity
                         </a>
     

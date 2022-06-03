@@ -26,5 +26,6 @@ namespace API.DTOs
         public string Description { get; set; }
         public string Address { get; set; }
         public float Price { get; set; }
+        public float Rating { get; set; } = 0.0f;
     }
 }

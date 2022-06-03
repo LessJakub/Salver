@@ -29,5 +29,6 @@ namespace API.DTOs
         public string Ingredients { get; set; }
 
         public int AppRestaurantId { get; set; }
+        public float Rating { get; set; } = 0.0f;
     }
 }

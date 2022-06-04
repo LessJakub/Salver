@@ -5,6 +5,8 @@ import { Post } from '../models/post';
 import { MenuPostComponent } from '../elements/menu-post/menu-post.component';
 import { ActivatedRoute } from '@angular/router';
 import { SearchService } from '../services/search.service';
+import { UploadService } from '../services/upload.service';
+import { DishDTO } from '../models/DishDTO';
 
 @Component({
   selector: 'app-restaurant-page',
@@ -13,32 +15,70 @@ import { SearchService } from '../services/search.service';
 })
 export class RestaurantPageComponent implements OnInit {
 
-  restaurant: Restaurant | null;
-  fetchedDishes: Dish[];
-  fetchedPosts : Post[] | null;
+    restaurantID: number = null;
+    restaurant: Restaurant | null;
+    profileImageURL: string;
 
-  images: ["/assets/images/mealImageLanding.webp"];
+    fetchedDishes: DishDTO[] = null;
+  
+  // Dummy
+    fetchedDishes2: Dish[];
+    fetchedPosts : Post[] | null;
 
-  constructor(private activatedRoute: ActivatedRoute, private searchService: SearchService) { }
+    constructor(private activatedRoute: ActivatedRoute, 
+                private searchService: SearchService, 
+                private uploadService: UploadService) {}
+
+    updateUrlWithDefault() {
+        this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
+    }
 
     selectedTabID: number = 0;
 
     selectNewTab(selectedID: number) {
         this.selectedTabID = selectedID;
+
+        switch (this.selectedTabID) {
+            case 0:
+                this.getDishes();
+                return;
+            case 1:
+                this.getPosts();
+                return;
+            case 2:
+                this.getActivity();
+                return;
+        }
     }
 
-    private async getRestaurantDetails() {
-        var restaurantID: number = this.activatedRoute.snapshot.params['id'];
+    private async getDetails() {
+        // Obtain restaurant from DB based on ID.
+        await this.searchService.searchRestaurantByID(this.restaurantID);
 
-        await this.searchService.searchRestaurantByID(restaurantID);
+        // Assign data obtained from services to component.
         this.restaurant = this.searchService.restaurantByID;
-        console.log(this.searchService.restaurantByID);
-        console.log(this.restaurant)
+        this.profileImageURL = this.uploadService.restaurantImageURL(this.restaurantID);
+    }
+
+    private async getDishes() {
+        console.log("Restaurant - Dishes Getter");
+        this.fetchedDishes = await this.searchService.searchDishesByID(this.restaurantID);
+    }
+
+    private async getPosts() {
+        console.log("Restaurant - Posts Getter");
+    }
+
+    private async getActivity() {
+        console.log("Restaurant - Activity Getter")
     }
 
     ngOnInit(): void {
+        // Obtain restaurant ID from ActivatedRouter.
+        this.restaurantID = this.activatedRoute.snapshot.params['id'];
 
-        this.getRestaurantDetails();
+        this.getDetails();
+        this.getDishes();
 
         this.fetchedPosts = [
             {date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{category: "Taste", grade: 5}, {category: "Serving", grade: 5}, {category: "Atmosphere", grade: 5}]},
@@ -52,7 +92,7 @@ export class RestaurantPageComponent implements OnInit {
             grades: [{category: "Taste", grade: 5}, {category: "Atmosphere", grade: 5}, {category: "Service", grade: 5}, {category: "Price", grade: 4}, {category: "Serving", grade: 5}]}
         ]
 
-        this.fetchedDishes = [
+        this.fetchedDishes2 = [
             {name:"Hosomaki", imageURL:["/assets/images/3W2A0606@0.5x.webp", "/assets/images/3W2A0606@0.5x.webp"], grade:[4, 2, 3, 3], description:"With fresh mango or tuna. 6 pcs",price:15, restaurant: "Japan Sun"},
             {name:"Uramaki",  imageURL:["/assets/images/3W2A0699@0.5x.webp", "/assets/images/3W2A0699@0.5x.webp"], grade:[5, 3, 5, 4], description:"Avocado uramaki with soy sauce.", price:20, restaurant: "Japan Sun"},
             

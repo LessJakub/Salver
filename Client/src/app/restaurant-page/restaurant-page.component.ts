@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { SearchService } from '../services/search.service';
 import { UploadService } from '../services/upload.service';
 import { DishDTO } from '../models/DishDTO';
+import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-restaurant-page',
@@ -27,7 +29,8 @@ export class RestaurantPageComponent implements OnInit {
 
     constructor(private activatedRoute: ActivatedRoute, 
                 private searchService: SearchService, 
-                private uploadService: UploadService) {}
+                private uploadService: UploadService,
+                private router: Router) {}
 
     updateUrlWithDefault() {
         this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
@@ -53,10 +56,16 @@ export class RestaurantPageComponent implements OnInit {
 
     private async getDetails() {
         // Obtain restaurant from DB based on ID.
-        await this.searchService.searchRestaurantByID(this.restaurantID);
+        await this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
+            this.restaurant = restaurant;
+        })
+
+        if (this.restaurant == null) {
+            console.log("No restaurant found for ID:" + this.restaurantID)
+            this.router.navigate(['*']);
+        }
 
         // Assign data obtained from services to component.
-        this.restaurant = this.searchService.restaurantByID;
         this.profileImageURL = this.uploadService.restaurantImageURL(this.restaurantID);
     }
 

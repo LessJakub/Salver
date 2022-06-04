@@ -11,8 +11,8 @@ import { map } from 'rxjs/operators';
 export class AccountService {
 
     // Obtain true hostname URL (fixes issue where we need to connect to API on non-local host)
-    baseUrl: string = "http://" + location.hostname;
-    loginUrl: string = this.baseUrl + ":8080/api/account/login"
+    private baseUrl: string = "http://" + location.hostname;
+    private loginUrl: string = this.baseUrl + ":8080/api/account/login"
 
     private loggedInStatus: boolean = false;
 

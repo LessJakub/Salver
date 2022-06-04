@@ -68,17 +68,17 @@ namespace API.Controllers
         }
 
 
-        // Finding user by Id i.e. with api/users/3
+
         /// <summary>
-        /// Gets public information of user with specified id
+        /// 
         /// </summary>
-        /// <param name="id"> Id of the user</param>
-        /// <remarks>Not completed, followers are always equal 0</remarks>
-        /// <returns>UserProfileDto</returns>
-        /// <response code="200">Ok</response>
-        /// <response code="204">No content (User with id does not exist)</response>
-        /// <response code="400">Bard request, invalid input </response>
-        /// <response code="401">Unauthorized, wrong credentials </response>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        /// <response code="401"></response>
         [HttpPost("{id}/follow")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -107,17 +107,17 @@ namespace API.Controllers
             return Ok();
         }
 
-        // Finding user by Id i.e. with api/users/3
+        // 
         /// <summary>
-        /// Gets public information of user with specified id
+        /// 
         /// </summary>
-        /// <param name="id"> Id of the user</param>
-        /// <remarks>Not completed, followers are always equal 0</remarks>
-        /// <returns>UserProfileDto</returns>
-        /// <response code="200">Ok</response>
-        /// <response code="204">No content (User with id does not exist)</response>
-        /// <response code="400">Bard request, invalid input </response>
-        /// <response code="401">Unauthorized, wrong credentials </response>
+        /// <param name="id"> </param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        /// <response code="401"></response>
         [HttpDelete("{id}/unfollow")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]

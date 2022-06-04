@@ -96,14 +96,14 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get public information of restaurant with id
+        /// 
         /// </summary>
-        /// <param name="id">Id of the restaurant</param>
-        /// <remarks>Does not require authorization</remarks>
-        /// <returns>Public information of the restaurant as RestaurantDto</returns>
-        /// <response code="200"> Ok, restaurant is returned. </response>
-        /// <response code="204"> NoContent, there is no restaurant with id. </response>
-        /// <response code="400"> Bad request, invalid input. </response>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
         [AllowAnonymous]
         [HttpGet("{id}/follow")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -134,14 +134,14 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Get public information of restaurant with id
+        /// 
         /// </summary>
-        /// <param name="id">Id of the restaurant</param>
-        /// <remarks>Does not require authorization</remarks>
-        /// <returns>Public information of the restaurant as RestaurantDto</returns>
-        /// <response code="200"> Ok, restaurant is returned. </response>
-        /// <response code="204"> NoContent, there is no restaurant with id. </response>
-        /// <response code="400"> Bad request, invalid input. </response>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"> </response>
+        /// <response code="204">  </response>
+        /// <response code="400">  </response>
         [AllowAnonymous]
         [HttpDelete("{id}/unfollow")]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -29,6 +29,9 @@ namespace API.DTOs
         public string Ingredients { get; set; }
 
         public int AppRestaurantId { get; set; }
-        public float Rating { get; set; } = 0.0f;
+        public int Price { get; set; }
+        public float TaseGrade { get; set; } = 0.0f;
+        public float PriceGrade { get; set; } = 0.0f;
+        public float ServiceGrade { get; set; } = 0.0f;
     }
 }

@@ -179,7 +179,6 @@ namespace API.Controllers
                 return dishesAll;
             }
 
-
             var dishes = await context.Dishes.Where(e => e.Name.Contains(dishName)).ToListAsync();
 
             var restaurantsToReturn = new List<DishDto>();

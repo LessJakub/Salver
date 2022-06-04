@@ -116,7 +116,7 @@ export class SearchPageComponent implements OnInit {
                         }
                     }
                 }
-            } 
+            }
         });
 
         if (this.searchForm.price == "Lowest") {

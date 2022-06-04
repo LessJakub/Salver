@@ -13,9 +13,9 @@
                 <div class="w-1/2 h-full rounded-2xl overflow-hidden flex overflow-x-scroll snap-x snap-mandatory">
                     
                     <!-- Image carousel -->
-                    <ng-container *ngFor="let url of model.imageURL">
-                        <img class="min-w-full object-cover resize snap-start snap-always" src={{url}}>   
-                    </ng-container>
+                    <!-- <ng-container *ngFor="let url of 1"> -->
+                        <img class="min-w-full object-cover resize snap-start snap-always" src="/assets/images/3W2A0606@0.5x.webp">   
+                    <!-- </ng-container> -->
 
                 </div>
 
@@ -30,26 +30,26 @@
                             </div>
 
                             <div class="w-full h-1/2 content-center text-right">
-                                <p class="text-xl font-thin break-words text-green-900">{{model.restaurant}}</p>
+                                <p class="text-xl font-thin break-words text-green-900">Japan Sun</p>
                             </div>
                         </div>
 
                         <div class="w-full h-1/2 overflow-hidden">
 
                             <div class="w-full h-1/4">
-                                <app-grade-component [grade]="model.grade[0]" [name]="'Taste'"></app-grade-component>
+                                <app-grade-component [grade]="5" [name]="'Taste'"></app-grade-component>
                             </div>
                                  
                             <div class="w-full h-1/4">
-                                <app-grade-component [grade]="model.grade[1]" [name]="'Price'"></app-grade-component>
+                                <app-grade-component [grade]="5" [name]="'Price'"></app-grade-component>
                             </div>
             
                             <div class="w-full h-1/4">
-                                <app-grade-component [grade]="model.grade[2]" [name]="'Service'"></app-grade-component>
+                                <app-grade-component [grade]="5" [name]="'Service'"></app-grade-component>
                             </div>
                             
                             <div class="w-full h-1/4">
-                                <app-grade-component [grade]="model.grade[3]" [name]="'Total Score'" [significant]="true"></app-grade-component>
+                                <app-grade-component [grade]="5" [name]="'Total Score'" [significant]="true"></app-grade-component>
                             </div>
           
                         </div>

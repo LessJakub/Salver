@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Dish } from 'src/app/models/Dish';
+import { DishDTO } from 'src/app/models/DishDTO';
 import { TabSwitcherComponent } from 'src/app/utilities/tab-switcher/tab-switcher.component';
 
 @Component({
@@ -10,7 +11,7 @@ export class DishOverlayComponent implements OnInit {
 
     @Output() closeOverlayEventEmitter = new EventEmitter();
 
-    @Input() model: Dish;
+    @Input() model: DishDTO;
 
     orderCount: number = 0;
     selectedTabID: number = 0;

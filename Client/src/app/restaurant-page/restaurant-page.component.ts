@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
 import { Restaurant } from '../models/restaurant';
 import { Dish } from '../models/Dish';
 import { Post } from '../models/post';
 import { MenuPostComponent } from '../elements/menu-post/menu-post.component';
+import { ActivatedRoute } from '@angular/router';
+import { SearchService } from '../services/search.service';
 
 @Component({
   selector: 'app-restaurant-page',
@@ -16,7 +17,9 @@ export class RestaurantPageComponent implements OnInit {
   fetchedDishes: Dish[];
   fetchedPosts : Post[] | null;
 
-  constructor() { }
+  images: ["/assets/images/mealImageLanding.webp"];
+
+  constructor(private activatedRoute: ActivatedRoute, private searchService: SearchService) { }
 
     selectedTabID: number = 0;
 
@@ -24,19 +27,35 @@ export class RestaurantPageComponent implements OnInit {
         this.selectedTabID = selectedID;
     }
 
-  ngOnInit(): void {
-        this.restaurant =  {
-        id: 0,
-        price: 0,
-        rating: 0,
-        name: "SushiDoo",
-        images: ["/assets/images/mealImageLanding.webp"],
-        address: "Mickiewicza 10, Warsaw, Poland",
-        description: "Come all craving for delicious sushi! Prepared by chefs with deep understanding and passion of the exotic dish, served in beautiful " + 
-        "form. Delight in the intricate tastes and velvet textures in a space meticulously curated by top designers.",
-        priceRange: "10$ - 150$",
-        grades: [{category: "The tastes", grade: 5}, {category: "The space", grade: 5}, {category: "The staff", grade: 4}]
-        }
+    private async getRestaurantDetails() {
+        var restaurantID: number = this.activatedRoute.snapshot.params['id'];
+
+        await this.searchService.searchRestaurantByID(restaurantID);
+        this.restaurant = this.searchService.restaurantByID;
+        console.log(this.searchService.restaurantByID);
+        console.log(this.restaurant)
+    }
+
+    ngOnInit(): void {
+
+        this.getRestaurantDetails();
+        console.log(this.restaurant)
+
+        // if (this.restaurant == null) {
+        //     this.restaurant =  {
+        //         id: 0,
+        //         price: 0,
+        //         rating: 0,
+        //         name: "SushiDoo",
+        //         images: ["/assets/images/mealImageLanding.webp"],
+        //         address: "Mickiewicza 10, Warsaw, Poland",
+        //         description: "Come all craving for delicious sushi! Prepared by chefs with deep understanding and passion of the exotic dish, served in beautiful " + 
+        //         "form. Delight in the intricate tastes and velvet textures in a space meticulously curated by top designers.",
+        //         priceRange: "10$ - 150$",
+        //         grades: [{category: "The tastes", grade: 5}, {category: "The space", grade: 5}, {category: "The staff", grade: 4}]
+        //         }
+        // }
+
 
         this.fetchedPosts = [
             {date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{category: "Taste", grade: 5}, {category: "Serving", grade: 5}, {category: "Atmosphere", grade: 5}]},

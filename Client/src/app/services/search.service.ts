@@ -13,11 +13,17 @@ export class SearchService {
 
   baseUrl: string = "http://" + location.hostname;
   restaurantSearchUrl: string = this.baseUrl + ":8080/api/Restaurants/search"
+  restaurantDetailURL: string = this.baseUrl + ":8080/api/Restaurants/"
+
   dishSearchUrl: string = this.baseUrl + ":8080/api/Dishes/search"
   restaurants: Restaurant[] = []
   dishes: DishDTO[] = []
   constructor(private http: HttpClient) { }
 
+    restaurantByID: Restaurant;
+    async searchRestaurantByID(id: number) {
+        this.restaurantByID =  await this.http.get<Restaurant>(this.restaurantDetailURL + id).toPromise();
+    }
 
   async searchRestaurant(model: SearchForm) {
 

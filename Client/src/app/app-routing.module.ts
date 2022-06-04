@@ -9,11 +9,14 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { RestaurantPageComponent } from './restaurant-page/restaurant-page.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { UserActivityComponent } from './user-activity/user-activity.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
   { path: 'team', component: TeamPageComponent },
   { path: 'faq', component: FAQComponent },
+
+  { path: 'upload', component: FileUploadComponent },
 
   { path: 'search-page', component: SearchPageComponent,
     // canActivate: [LoggedInGuard]

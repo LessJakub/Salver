@@ -39,23 +39,6 @@ export class RestaurantPageComponent implements OnInit {
     ngOnInit(): void {
 
         this.getRestaurantDetails();
-        console.log(this.restaurant)
-
-        // if (this.restaurant == null) {
-        //     this.restaurant =  {
-        //         id: 0,
-        //         price: 0,
-        //         rating: 0,
-        //         name: "SushiDoo",
-        //         images: ["/assets/images/mealImageLanding.webp"],
-        //         address: "Mickiewicza 10, Warsaw, Poland",
-        //         description: "Come all craving for delicious sushi! Prepared by chefs with deep understanding and passion of the exotic dish, served in beautiful " + 
-        //         "form. Delight in the intricate tastes and velvet textures in a space meticulously curated by top designers.",
-        //         priceRange: "10$ - 150$",
-        //         grades: [{category: "The tastes", grade: 5}, {category: "The space", grade: 5}, {category: "The staff", grade: 4}]
-        //         }
-        // }
-
 
         this.fetchedPosts = [
             {date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{category: "Taste", grade: 5}, {category: "Serving", grade: 5}, {category: "Atmosphere", grade: 5}]},

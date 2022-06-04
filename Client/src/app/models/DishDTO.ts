@@ -1,4 +1,5 @@
 export interface DishDTO {
+    id: number;
     name: string;
     description: string;
     ingredients: string;

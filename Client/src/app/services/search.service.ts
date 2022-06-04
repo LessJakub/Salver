@@ -46,7 +46,6 @@ export class SearchService {
     }
     else {
         if (model.input == null || model.input.length == 0) {
-            console.log("I'm here")
             this.dishes =  await this.http.get<DishDTO[]>(this.dishSearchUrl).toPromise();
         }
         else {

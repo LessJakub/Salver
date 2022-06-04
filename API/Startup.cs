@@ -1,5 +1,7 @@
 using API.Extensions;
-
+using Azure.Storage.Blobs;
+using API.Services;
+using API.Interfaces;
 
 namespace API
 {
@@ -22,6 +24,9 @@ namespace API
             services.AddCors();
             services.AddIdentityServices(_config);
             services.AddSwaggerService(_config);
+
+            services.AddScoped(x => new BlobServiceClient(_config.GetValue<string>("AzureBlobStorage")));
+            services.AddScoped<IBlobService, BlobService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

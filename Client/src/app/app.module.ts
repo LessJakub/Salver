@@ -25,6 +25,7 @@ import { MenuPostComponent } from './elements/menu-post/menu-post.component';
 import { TeamPageComponent } from './team-page/team-page.component';
 import { FAQComponent } from './faq/faq.component';
 import { RestaurantTileComponent } from './search-page/restaurant-tile/restaurant-tile.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { RestaurantTileComponent } from './search-page/restaurant-tile/restauran
     TeamPageComponent,
     FAQComponent,
     RestaurantTileComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule,

@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 'activity', component: UserActivityComponent,
     //canActivate: [LoggedInGuard]
   },
-  { path: 'restaurant', component: RestaurantPageComponent,
+  { path: 'restaurant/:id', component: RestaurantPageComponent,
     //canActivate: [LoggedInGuard]
   },
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route

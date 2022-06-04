@@ -24,7 +24,7 @@ import { Post } from 'src/app/models/post';
               <p> {{ prettyTimeFromDate(model.date) }}</p>
             </div>
 
-            <a [routerLink]="['/restaurant']" class="text-green-600 font-medium mb-3 hover:animate-pulse"> {{ model.taggedRestaurant }}</a>
+            <a [routerLink]="['/restaurant/', 1]" class="text-green-600 font-medium mb-3 hover:animate-pulse"> {{ model.taggedRestaurant }}</a>
             <p #thisElem *ngIf="!expanded" (click)="toggleExpansion(thisElem)" class="grow overflow-hidden relative after:absolute after:bottom-0 after:left-0 after:h-10 after:w-full after:bg-gradient-to-t after:from-white">
               {{ model.description }} <!-- Too long desc just overflow and are hidden, there is a fade out effect on the bottom of the desc. text area -->
             </p>

@@ -6,10 +6,10 @@ import { Restaurant } from 'src/app/models/restaurant';
     selector: 'app-restaurant-tile',
     template: `
   
-      <div class="flex w-fit h-fit justify-center items-center content-center flex-col cursor-pointer group">
+      <a [routerLink]="['/restaurant/', model.id]" class="flex w-fit h-fit justify-center items-center content-center flex-col cursor-pointer group">
   
           <div class="flex h-60 w-60">
-              <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition" src="/assets/images/restaurant.png">
+              <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition" src="https://salver.blob.core.windows.net/userprof/0.jpg">
               <div class="grid grid-cols-1 gap-2 h-full justify-center content-center px-0.5">
                   <ng-container *ngFor="let _ of [].constructor(5); let i = index">
                       <div class="w-5 h-5 bg-green-700 rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition"></div>
@@ -25,7 +25,7 @@ import { Restaurant } from 'src/app/models/restaurant';
               <p class="text-md font-normal truncate">{{model.description}}</p>
           </div>
   
-      </div>
+</a>
   
     `})
 export class RestaurantTileComponent {

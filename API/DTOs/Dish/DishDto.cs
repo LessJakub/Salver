@@ -30,7 +30,7 @@ namespace API.DTOs
 
         public int AppRestaurantId { get; set; }
         public int Price { get; set; }
-        public float TaseGrade { get; set; } = 0.0f;
+        public float TasteGrade { get; set; } = 0.0f;
         public float PriceGrade { get; set; } = 0.0f;
         public float ServiceGrade { get; set; } = 0.0f;
     }

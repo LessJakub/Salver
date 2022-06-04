@@ -1,6 +1,6 @@
 export interface SearchForm {
     input: string;
     type: string;
-    grade: number;
+    grade: string;
     price: string;
 }

@@ -6,6 +6,7 @@ import { SearchService } from '../services/search.service';
 import { SearchTileComponent } from './search-tile/search-tile.component';
 import { RestaurantTileComponent } from './restaurant-tile/restaurant-tile.component';
 import { SearchForm } from '../models/SearchForm';
+import { DishDTO } from '../models/DishDTO';
 
 @Component({
   selector: 'app-search-page',
@@ -43,13 +44,12 @@ export class SearchPageComponent implements OnInit {
 
     updateSearchForm(newForm: SearchForm) {
         this.searchForm = newForm;
-        console.log(this.searchForm)
         this.updateFilteredArray();
     }
 
     updateFilteredArray() {
         if (this.searchForm == null) {
-            this.filteredSearchResults = this.dishSearchResults;
+            this.filterDishes();
             this.searchResultsType = "Dish";
         }
         else {
@@ -72,12 +72,14 @@ export class SearchPageComponent implements OnInit {
 
         let tempRestaurants: Restaurant[] = this.searchService.restaurants;
 
-        if (this.searchForm.price == "Lowest") {
-            tempRestaurants.sort((res1, res2) => res1.price - res2.price);
-        }
-
-        else if (this.searchForm.price == "Highest") {
-            tempRestaurants.sort((res1, res2) => res1.price - res2.price);
+        if (this.searchForm.price != null) {
+            if (this.searchForm.price == "Lowest") {
+                tempRestaurants.sort((res1, res2) => res1.price - res2.price);
+            }
+    
+            else if (this.searchForm.price == "Highest") {
+                tempRestaurants.sort((res1, res2) => res1.price - res2.price);
+            }
         }
 
         this.filteredSearchResults = tempRestaurants;
@@ -85,45 +87,20 @@ export class SearchPageComponent implements OnInit {
 
 
     // Filtering dishes
-    private filterDishes() {
-        let tempArray: Dish[] = [];
+    private async filterDishes() {
 
-        this.dishSearchResults.forEach(dish => {
-            if (this.searchForm.grade == null) {
-                if (this.searchForm.input == "" || this.searchForm.input == null) {
-                    tempArray.push(dish);
-                }
-                else {
-                    let lcName = dish.name.toLowerCase();
-                    let lcInput = this.searchForm.input.toLowerCase();
+        // Obtain restaurants from search service, returned restaurants are filtered with name (if not empty / null)
+        await this.searchService.searchDishes(this.searchForm)
 
-                    if (lcName.includes(lcInput)) {
-                        tempArray.push(dish);
-                    }
-                }
+        let tempArray: DishDTO[] = this.searchService.dishes;
+
+        if (this.searchForm != null && this.searchForm.price != null) {
+            if (this.searchForm.price == "Lowest") {
+                tempArray.sort((dish1, dish2) => dish1.price - dish2.price);
             }
-            else {
-                if (dish.grade[3] == this.searchForm.grade) {
-                    if (this.searchForm.input == "" || this.searchForm.input == null) {
-                        tempArray.push(dish);
-                    }
-                    else {
-                        let lcName = dish.name.toLowerCase();
-                        let lcInput = this.searchForm.input.toLowerCase();
-
-                        if (lcName.includes(lcInput)) {
-                            tempArray.push(dish);
-                        }
-                    }
-                }
+            else if (this.searchForm.price == "Highest") {
+                tempArray.sort((dish1, dish2) => dish2.price - dish1.price);
             }
-        });
-
-        if (this.searchForm.price == "Lowest") {
-            tempArray.sort((dish1, dish2) => dish1.price - dish2.price);
-        }
-        else if (this.searchForm.price == "Highest") {
-            tempArray.sort((dish1, dish2) => dish2.price - dish1.price);
         }
 
         this.filteredSearchResults = tempArray;

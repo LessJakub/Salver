@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Dish } from '../models/Dish';
+import { DishDTO } from '../models/DishDTO';
 import { Restaurant } from '../models/restaurant';
 import { SearchForm } from '../models/SearchForm';
 
@@ -14,32 +15,37 @@ export class SearchService {
   restaurantSearchUrl: string = this.baseUrl + ":8080/api/Restaurants/search"
   dishSearchUrl: string = this.baseUrl + ":8080/api/Dishes/search"
   restaurants: Restaurant[] = []
-  dishes: Dish
+  dishes: DishDTO[] = []
   constructor(private http: HttpClient) { }
 
 
-  async searchRestaurant(model: SearchForm)
-  {
+  async searchRestaurant(model: SearchForm) {
 
+    if (model == null) {
+        this.restaurants =  await this.http.get<Restaurant[]>(this.restaurantSearchUrl).toPromise();
+    }
     if (model.input == null || model.input.length == 0) {
         this.restaurants =  await this.http.get<Restaurant[]>(this.restaurantSearchUrl).toPromise();
     }
     else {
         this.restaurants =  await this.http.get<Restaurant[]>(this.restaurantSearchUrl + "?restaurantName=" + model.input).toPromise();
     }
-    
   }
 
 
-  async searchMeals(model: SearchForm)
-  {
+  async searchDishes(model: SearchForm) {
 
-    if (model.input == null || model.input.length == 0) {
-        this.restaurants =  await this.http.get<Restaurant[]>(this.dishSearchUrl).toPromise();
+    if (model == null) {
+        this.dishes =  await this.http.get<DishDTO[]>(this.dishSearchUrl).toPromise();
     }
     else {
-        this.restaurants =  await this.http.get<Restaurant[]>(this.dishSearchUrl + "?restaurantName=" + model.input).toPromise();
+        if (model.input == null || model.input.length == 0) {
+            console.log("I'm here")
+            this.dishes =  await this.http.get<DishDTO[]>(this.dishSearchUrl).toPromise();
+        }
+        else {
+            this.dishes =  await this.http.get<DishDTO[]>(this.dishSearchUrl + "?dishName=" + model.input).toPromise();
+        }
     }
-    
   }
 }

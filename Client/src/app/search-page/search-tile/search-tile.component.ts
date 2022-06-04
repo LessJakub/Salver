@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Dish } from 'src/app/models/Dish';
+import { DishDTO } from 'src/app/models/DishDTO';
 import { DishOverlayComponent } from 'src/app/overlays/dish-overlay/dish-overlay.component';
 
 @Component({
@@ -11,9 +12,9 @@ import { DishOverlayComponent } from 'src/app/overlays/dish-overlay/dish-overlay
     <div (click)="invertOverlayFlag()" class="flex w-fit h-fit justify-center items-center content-center flex-col cursor-pointer group">
 
         <div class="flex h-60 w-60">
-            <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition" src={{model.imageURL[0]}}>
+            <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition" src="/assets/images/3W2A0606@0.5x.webp">
             <div class="grid grid-cols-1 gap-2 h-full justify-center content-center px-0.5">
-                <ng-container *ngFor="let _ of [].constructor(model.grade[3]); let i = index">
+                <ng-container *ngFor="let _ of [].constructor(5); let i = index">
                     <div class="w-5 h-5 bg-green-700 rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition"></div>
                 </ng-container>
             </div>
@@ -32,7 +33,7 @@ import { DishOverlayComponent } from 'src/app/overlays/dish-overlay/dish-overlay
   `})
 export class SearchTileComponent {
 
-    @Input() model: Dish;
+    @Input() model: DishDTO;
     @Input() showDescription: Boolean = true;
 
     showOverlay: boolean = false;

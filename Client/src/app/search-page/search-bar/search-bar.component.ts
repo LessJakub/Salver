@@ -10,10 +10,10 @@ export class SearchBarComponent implements OnInit {
     @Output() modelEvent = new EventEmitter<SearchForm>();
 
     model: SearchForm = {
-        input: null,
-        type: null,
-        grade: null,
-        price: null,
+        input: "",
+        type: "",
+        grade: "",
+        price: "",
     }
 
     constructor() { }

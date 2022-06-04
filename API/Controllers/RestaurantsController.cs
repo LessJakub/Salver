@@ -266,7 +266,9 @@ namespace API.Controllers
             if(restaurant == null) return NoContent();
 
             var owner = restaurant.User_Res_Relation.FirstOrDefault(relation => relation.AppUserId == GetRequesterId());
-            if(owner == null) return Unauthorized();
+
+            var adminCheckStatusCode = AuthorizedByRole(Roles.Admin.ToString());
+            if(owner == null && adminCheckStatusCode != StatusCodes.Status200OK) return Unauthorized("User is not an admin or does not own the restaurant");
 
             context.Remove(restaurant);
 

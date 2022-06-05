@@ -111,18 +111,20 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> FollowRestaurant(int id)
         {
-            var restaurant = await context.Restaurants.FindAsync(id);
+            var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
             if(restaurant == null) return NoContent();
 
             var reqId = GetRequesterId();
             if(id == -1) return BadRequest($"You must be signed in to follow someone");
 
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == reqId);
+
             //Can be optimized
             //Look for follow with AppUser != null && AppRestaurant == null
             var follow = new Follower {
               FollowerId = reqId,
-              AppUser = null,
-              AppUserId = 0,
+              AppUser = user,
+              AppUserId = reqId,
               AppRestaurant = restaurant,
               AppRestaurantId = id
             };

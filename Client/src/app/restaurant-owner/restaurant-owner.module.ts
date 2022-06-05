@@ -6,13 +6,13 @@ import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [
-    OverviewComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    SharedModule,
-  ]
+    declarations: [
+        OverviewComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        SharedModule,
+    ]
 })
 export class RestaurantOwnerModule { }

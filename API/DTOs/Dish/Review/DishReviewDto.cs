@@ -15,7 +15,9 @@ namespace API.DTOs
         public DishReviewDto(Dish_Review dish_rev)
         {
             Id = dish_rev.Id;
-            //Rating = dish_rev.Rating;
+            TasteRating = dish_rev.TasteRating;
+            PriceRating = dish_rev.PriceRating;
+            ServiceRating = dish_rev.ServiceRating;
             Description = dish_rev.Description;
             UserId = dish_rev.AppUserId;
             DishId = dish_rev.DishId;

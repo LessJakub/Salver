@@ -173,19 +173,19 @@ namespace API.Controllers
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
-        [HttpPost("Restaurants/{restaurantId}/dishes/{dishId}")]
+        [HttpPost("dishes/{dishId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<DishReviewDto>> CreateDishReview(int restaurantId, int dishId,  NewDishReviewDto newReviewDto)
+        public async Task<ActionResult<DishReviewDto>> CreateDishReview(int dishId,  NewDishReviewDto newReviewDto)
         {
             var userId = GetRequesterId();
             var user = await context.Users.FindAsync(userId);
             if(user == null) return Unauthorized("User does not exist");
 
-            var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
+            //var restaurant = await context.Restaurants.FindAsync(restaurantId);
+            //if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
 
-            var dish = restaurant.Dishes.FirstOrDefault(d => d.Id == dishId);
+            var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
             
             var review = new Dish_Review{
@@ -222,15 +222,12 @@ namespace API.Controllers
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [AllowAnonymous]
-        [HttpGet("Restaurants/{restaurantId}/dishes/{dishId}")]
+        [HttpGet("dishes/{dishId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<DishReviewDto>>> ReadAllDishReviews(int restaurantId, int dishId)
+        public async Task<ActionResult<List<DishReviewDto>>> ReadAllDishReviews(int dishId)
         {
-            var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
-
-            var dish = restaurant.Dishes.FirstOrDefault(d => d.Id == dishId);
+            var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
 
             var dishReviews = new List<DishReviewDto>();
@@ -251,17 +248,17 @@ namespace API.Controllers
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
-        [HttpPut("Restaurants/{restaurantId}/dishes/{dishId}")]
+        [HttpPut("dishes/{dishId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<DishReviewDto>> UpdateDishReview(int restaurantId, int dishId, int reviewId, NewDishReviewDto newReviewDto)
+        public async Task<ActionResult<DishReviewDto>> UpdateDishReview(int dishId, int reviewId, NewDishReviewDto newReviewDto)
         {
             //var ownCheck = await OwnsRestaurant(restaurantId);
             //if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
-            var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
+            //var restaurant = await context.Restaurants.FindAsync(restaurantId);
+            //if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
 
-            var dish = restaurant.Dishes.FirstOrDefault(d => d.Id == dishId);
+            var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
 
             var rev = dish.Dish_Review.FirstOrDefault(r => r.Id == reviewId);
@@ -293,18 +290,18 @@ namespace API.Controllers
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
-        [HttpDelete("Restaurants/{restaurantId}/dishes/{dishId}")]
+        [HttpDelete("dishes/{dishId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> DeleteDishReview(int restaurantId, int dishId, int reviewId)
+        public async Task<ActionResult> DeleteDishReview(int dishId, int reviewId)
         {
             //var ownCheck = await OwnsRestaurant(restaurantId);
             //if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
             
-            var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
+            //var restaurant = await context.Restaurants.FindAsync(restaurantId);
+            //if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
 
-            var dish = restaurant.Dishes.FirstOrDefault(d => d.Id == dishId);
+            var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
 
             var rev = dish.Dish_Review.FirstOrDefault(r => r.Id == reviewId);
@@ -335,7 +332,7 @@ namespace API.Controllers
 
         }
 
-        public void CalculateDishScores(Dish dish)
+        private void CalculateDishScores(Dish dish)
         {
 
             float priceRating = 0.0f;

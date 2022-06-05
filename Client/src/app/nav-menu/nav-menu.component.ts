@@ -5,7 +5,6 @@ import { AccountService } from '../shared/services/account.service';
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css'],
   host: {'class': 'sticky top-0 z-50'},
 })
 export class NavMenuComponent {

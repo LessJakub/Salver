@@ -2,24 +2,27 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoggedInGuard } from './guards/logged-in.guard';
 
-import { LandingPageComponent } from './landing-page/landing-page.component';
 import { TeamPageComponent } from './team-page/team-page.component';
-import { FAQComponent } from './faq/faq.component';
 import { RestaurantPageComponent } from './restaurant-page/restaurant-page.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { UserActivityComponent } from './user-activity/user-activity.component';
-import { FileUploadComponent } from './file-upload/file-upload.component';
 import { OverviewComponent } from './restaurant-owner/components/overview/overview.component';
 import { ErrorPageComponent } from './shared/components/error-page/error-page.component';
+
+import { FaqPageComponent } from './shared/components/faq-page/faq-page.component';
+import { LandingPageComponent } from './shared/components/landing-page/landing-page.component';
+import { DebugUploadPageComponent } from './shared/components/debug-upload-page/debug-upload-page.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
 
   { path: 'overview', component: OverviewComponent},
   { path: 'team', component: TeamPageComponent },
-  { path: 'faq', component: FAQComponent },
+  { path: 'faq', component: FaqPageComponent },
 
-  { path: 'upload', component: FileUploadComponent },
+  { path: 'upload', component: DebugUploadPageComponent,
+    canActivate: [LoggedInGuard] 
+  },
 
   { path: 'search-page', component: SearchPageComponent,
     // canActivate: [LoggedInGuard]

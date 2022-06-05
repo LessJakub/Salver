@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { UploadService } from 'src/app/services/upload.service';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
+import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class DishOverlayComponent implements OnInit {
     tabs: string[] = ["Overview", "Reviews"];
 
     constructor(private searchService: SearchService,
-        private uploadService: UploadService) { }
+        private uploadService: BlobUploadService) { }
 
     updateUrlWithDefault() {
         this.modelImageURL = this.uploadService.defaultDishImageURL();

@@ -9,6 +9,11 @@ import { DishOverlayComponent } from './components/overlays/dish-overlay/dish-ov
 import { GradeTileComponent } from './components/utilities/grade-tile/grade-tile.component';
 import { ReviewPostComponent } from './components/posts/review-post/review-post.component';
 import { TabSwitcherComponent } from './components/utilities/tab-switcher/tab-switcher.component';
+import { FaqPageComponent } from './components/faq-page/faq-page.component';
+import { DebugUploadPageComponent } from './components/debug-upload-page/debug-upload-page.component';
+import { FormsModule } from '@angular/forms';
+import { FooterComponent } from './components/footer/footer.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
 
 
 @NgModule({
@@ -20,10 +25,15 @@ import { TabSwitcherComponent } from './components/utilities/tab-switcher/tab-sw
     GradeTileComponent,
     ReviewPostComponent,
     TabSwitcherComponent,
+    FaqPageComponent,
+    DebugUploadPageComponent,
+    FooterComponent,
+    LandingPageComponent,
   ],
   imports: [
     CommonModule,
-    SharedRoutingModule
+    SharedRoutingModule,
+    FormsModule,
   ],
   exports: [
     RestaurantTileComponent,
@@ -31,6 +41,9 @@ import { TabSwitcherComponent } from './components/utilities/tab-switcher/tab-sw
     GradeTileComponent,
     ReviewPostComponent,
     TabSwitcherComponent,
+    DebugUploadPageComponent,
+    FooterComponent,
+    LandingPageComponent,
   ]
 })
 export class SharedModule { }

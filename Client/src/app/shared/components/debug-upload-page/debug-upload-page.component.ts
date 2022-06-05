@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { UploadService } from '../services/upload.service';
+import { BlobUploadService } from '../../services/blob-upload.service';
 
 @Component({
-  selector: 'app-file-upload',
-  template: `
+    selector: 'app-debug-upload-page',
+    template: `
 <div class="w-full h-full flex">
     <div class="flex flex-col space-y-10 w-1/2 h-full items-center justify-center content-center px-10 py-5 overflow-y-scroll">
         <div class="w-full h-fit ">
@@ -49,18 +49,18 @@ import { UploadService } from '../services/upload.service';
 </div>
     
   `,
-  host: {'class': 'flex-auto flex justify-center items-center'} // ! Styling host container to fill all avialable space
+    host: { 'class': 'flex-auto flex justify-center items-center' } // ! Styling host container to fill all avialable space
 })
-export class FileUploadComponent implements OnInit {
+export class DebugUploadPageComponent implements OnInit {
 
     filename = '';
     blobContainer: any = "";
     imageSource = '';
     wrongContainer: boolean = false;
 
-    constructor(private uploadService: UploadService) {}
-    
-    ngOnInit(): void {}
+    constructor(private uploadService: BlobUploadService) { }
+
+    ngOnInit(): void { }
 
     setFilename(files) {
         if (files[0]) {
@@ -80,7 +80,7 @@ export class FileUploadComponent implements OnInit {
                 formData.append(files[0].name, files[0]);
                 formData.append("blobContainer", this.blobContainer);
             }
-    
+
             this.uploadService
                 .upload(formData)
                 .subscribe(({ path }) => (this.imageSource = path));

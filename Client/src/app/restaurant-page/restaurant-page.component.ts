@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Dish } from '../models/Dish';
 import { Post } from '../models/post';
-import { UploadService } from '../services/upload.service';
 import { DishDTO } from '../shared/models/DishDTO';
 import { RestaurantDTO } from '../shared/models/RestaurantDTO';
+import { BlobUploadService } from '../shared/services/blob-upload.service';
 import { SearchService } from '../shared/services/search.service';
 
 @Component({
@@ -29,7 +29,7 @@ export class RestaurantPageComponent implements OnInit {
 
     constructor(private activatedRoute: ActivatedRoute, 
                 private searchService: SearchService, 
-                private uploadService: UploadService,
+                private uploadService: BlobUploadService,
                 private router: Router) {}
 
     updateUrlWithDefault() {

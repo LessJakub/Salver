@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class UploadService {
+export class BlobUploadService {
     
     constructor(private http: HttpClient) {}
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { UploadService } from 'src/app/services/upload.service';
 import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
+import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 
 @Component({
     selector: 'app-restaurant-tile',
@@ -27,6 +27,7 @@ import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
         </a>
   `,
 })
+
 export class RestaurantTileComponent implements OnInit {
 
     modelImageURL: string;
@@ -35,7 +36,7 @@ export class RestaurantTileComponent implements OnInit {
         this.modelImageURL = this.uploadService.defaultRestaurantImageURL();
     }
 
-    constructor(private uploadService: UploadService) { }
+    constructor(private uploadService: BlobUploadService) { }
 
     ngOnInit(): void {
         this.modelImageURL = this.uploadService.restaurantImageURL(this.model.id);

@@ -121,12 +121,12 @@ namespace API.Controllers
 
             //Can be optimized
             //Look for follow with AppUser != null && AppRestaurant == null
-            var follow = new Follower {
-              FollowerId = reqId,
-              AppUser = user,
-              AppUserId = reqId,
-              AppRestaurant = restaurant,
-              AppRestaurantId = id
+            var follow = new RestaurantFollower {
+              //FollowerId = reqId,
+              //AppUser = user,
+              //AppUserId = reqId,
+              //AppRestaurant = restaurant,
+              //AppRestaurantId = id
             };
 
             context.Add(follow);
@@ -157,7 +157,7 @@ namespace API.Controllers
             var user = await context.Users.FindAsync(reqId);
             if(user is null) return NoContent();
 
-            var follow = user.Followers.FirstOrDefault(f => f.AppRestaurantId == id);
+            var follow = user.Followers.FirstOrDefault(f => f.FollowedId == id);
             if(follow is null) return BadRequest($"You are not following restaurant with id {id}");
 
             context.Remove(follow);

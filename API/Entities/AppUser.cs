@@ -31,7 +31,7 @@ public enum Roles {
 
         public virtual ICollection<Order> Orders { get; set; }
 
-        public virtual ICollection<Follower> Followers { get; set; }
+        public virtual ICollection<RestaurantFollower> Followers { get; set; }
 
         public virtual ICollection<Restaurant_Review> Res_Review { get; set; }
     }

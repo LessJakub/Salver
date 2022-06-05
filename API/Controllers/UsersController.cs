@@ -90,7 +90,7 @@ namespace API.Controllers
             var user = await context.Users.FindAsync(userId);
             if(user == null) return BadRequest($"There is no user with id {userId}");
 
-            var restaurant = user.Followers.FirstOrDefault(f => f.AppRestaurantId == id);
+            var restaurant = user.Followers.FirstOrDefault(f => f.FollowedId == id);
             if(restaurant is null) return false;
             return true;
         }
@@ -121,12 +121,12 @@ namespace API.Controllers
             var reqId = GetRequesterId();
             if(id == -1) return BadRequest($"You must be signed in to follow someone");
 
-            var follow = new Follower {
-              FollowerId = reqId,
-              AppUser = user,
-              AppUserId = id,
-              AppRestaurant = null,
-              AppRestaurantId = 0
+            var follow = new RestaurantFollower {
+              //FollowerId = reqId,
+              //AppUser = user,
+              //AppUserId = id,
+              //AppRestaurant = null,
+              //AppRestaurantId = 0
             };
 
             context.Add(follow);
@@ -162,7 +162,7 @@ namespace API.Controllers
             if(user == null) return NoContent();
             
 
-            var follow = user.Followers.FirstOrDefault(f => f.AppUserId == id);
+            var follow = user.Followers.FirstOrDefault(f => f.FollowedId == id);
             if(follow == null) return BadRequest($"You are not following user with id {id}");
 
             context.Remove(follow);

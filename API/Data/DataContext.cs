@@ -13,6 +13,16 @@ namespace API.Data
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserFollower>(entity => {
+                entity.HasOne(hf => hf.Followed)
+                .WithMany(h => h.FollowedUsers)
+                .HasForeignKey(hf => hf.FollowedId)
+                .OnDelete(DeleteBehavior.Restrict);
+                });
+        }
         
         public DbSet<AppUser> Users { get; set; }
 

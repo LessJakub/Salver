@@ -17,14 +17,14 @@ namespace API.DTOs
             Id = user.Id;
             Username = user.UserName;
             Verified = user.Verified;
-            Followers = user.Followers.Count();
+            //Followers = user.UserFollowers.Count();
         }
 
         public int Id { get; set; }
         public string Username { get; set; }
         public bool Verified { get; set; }
 
-        public int Followers { get; set; }
+        public int Followers { get; set; } = 0;
 
     }
 }

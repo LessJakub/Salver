@@ -12,7 +12,8 @@ namespace API.Entities
         public int Id { get; set; }
 
         public int FollowerId { get; set; }
-
+        
+        
         public virtual AppUser Follower { get; set; }
 
         public virtual AppUser Followed { get; set; }

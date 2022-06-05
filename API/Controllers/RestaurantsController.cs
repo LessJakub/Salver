@@ -107,26 +107,26 @@ namespace API.Controllers
         [AllowAnonymous]
         [HttpGet("{id}/follow")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> FollowRestaurant(int id)
         {
             var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
-            if(restaurant == null) return NoContent();
+            if(restaurant is null) return BadRequest($"Restaurant with id {id} does not exist");
 
             var reqId = GetRequesterId();
-            if(id == -1) return BadRequest($"You must be signed in to follow someone");
+            if(reqId == -1) return BadRequest($"You must be signed in to follow someone");
 
             var user = await context.Users.FirstOrDefaultAsync(u => u.Id == reqId);
+            if(user is null) return BadRequest($"User with id {reqId} does not exist");
 
-            //Can be optimized
-            //Look for follow with AppUser != null && AppRestaurant == null
+            var prevFollow = user.FollowedRestaurants.FirstOrDefault(p => p.FollowedId == id);
+            if(prevFollow is not null) return BadRequest($"User with id{reqId} already follows restaurant with id {id}");
+
             var follow = new RestaurantFollower {
-              //FollowerId = reqId,
-              //AppUser = user,
-              //AppUserId = reqId,
-              //AppRestaurant = restaurant,
-              //AppRestaurantId = id
+                FollowerId = reqId,
+                Follower = user,
+                Followed = restaurant,
+                FollowedId = id
             };
 
             context.Add(follow);
@@ -157,7 +157,7 @@ namespace API.Controllers
             var user = await context.Users.FindAsync(reqId);
             if(user is null) return NoContent();
 
-            var follow = user.Followers.FirstOrDefault(f => f.FollowedId == id);
+            var follow = user.FollowedRestaurants.FirstOrDefault(f => f.FollowedId == id);
             if(follow is null) return BadRequest($"You are not following restaurant with id {id}");
 
             context.Remove(follow);

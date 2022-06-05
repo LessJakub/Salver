@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,7 +32,9 @@ public enum Roles {
 
         public virtual ICollection<Order> Orders { get; set; }
 
-        public virtual ICollection<RestaurantFollower> Followers { get; set; }
+        public virtual ICollection<RestaurantFollower> FollowedRestaurants { get; set; }
+        
+        public virtual ICollection<UserFollower> FollowedUsers { get; set; }
 
         public virtual ICollection<Restaurant_Review> Res_Review { get; set; }
     }

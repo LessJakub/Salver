@@ -16,13 +16,14 @@ namespace API.DTOs
         {
             Id = rev.Id;
             Description = rev.Description;
-            Rating = rev.Rating;
+            //Rating = rev.Rating;
             UserId = rev.AppUserId;
         }
 
         public int Id { get; set; }
         public string Description { get; set; }
-        public int Rating { get; set; }
+        public int AtmosphereRating { get; set; }
+        public int ServiceRating { get; set; }
         public int UserId { get; set; }
     }
 }

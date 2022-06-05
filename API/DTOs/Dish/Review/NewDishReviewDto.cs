@@ -9,7 +9,14 @@ namespace API.DTOs
     public class NewDishReviewDto
     {
         [RatingAnnotation]
-        public int Rating { get; set; }
+         public int TasteRating { get; set; }
+
+        [RatingAnnotation]
+        public int PriceRating { get; set; }
+
+        [RatingAnnotation]
+        public int ServiceRating { get; set; }
+
 
         [RatingDescriptionAnnotation]
         public string Description { get; set; }

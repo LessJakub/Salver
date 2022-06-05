@@ -13,6 +13,8 @@ namespace API.Entities
 
         public string Ingredients { get; set; }
 
+        public float Price { get; set; }
+
         public virtual AppRestaurant AppRestaurant { get; set; }
 
         public int AppRestaurantId { get; set; }

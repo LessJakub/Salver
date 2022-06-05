@@ -102,7 +102,7 @@ namespace API.Controllers
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user, restaurants),
                 //UsersRestaurants = (await GetRestaurantsOfUser(user)).Count()
-                IsRestaurantOwner = (restaurants.Count() > 0)?(true):(false) 
+                IsRestaurantOwner = (restaurants.Count() > 0)?(restaurants[0]):(0) 
             };
         }
 

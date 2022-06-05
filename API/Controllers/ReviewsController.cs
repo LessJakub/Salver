@@ -43,7 +43,7 @@ namespace API.Controllers
             if(rev != null) return BadRequest("You've already reviewed this restaurant");
             
             var review = new Restaurant_Review{
-                Rating = newReviewDto.Rating,
+                //Rating = newReviewDto.Rating,
                 Description = newReviewDto.Description,
                 AppRestaurantId = restaurantId,
                 AppRestaurant = restaurant,
@@ -109,7 +109,7 @@ namespace API.Controllers
             var userId = GetRequesterId();
             if(rev.AppUserId != userId) return Unauthorized("You don't have permissions to edit this post"); 
 
-            rev.Rating = newReviewDto.Rating;
+            //rev.Rating = newReviewDto.Rating;
             rev.Description = newReviewDto.Description;
 
             await context.SaveChangesAsync();
@@ -178,7 +178,7 @@ namespace API.Controllers
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
             
             var review = new Dish_Review{
-                Rating = newReviewDto.Rating,
+                //Rating = newReviewDto.Rating,
                 Description = newReviewDto.Description,
                 Dish = dish,
                 DishId = dishId,
@@ -252,7 +252,7 @@ namespace API.Controllers
             var userId = GetRequesterId();
             if(rev.AppUserId != userId) return Unauthorized("You don't have permissions to edit this post"); 
 
-            rev.Rating = newReviewDto.Rating;
+            //rev.Rating = newReviewDto.Rating;
             rev.Description = newReviewDto.Description;
 
             await context.SaveChangesAsync();

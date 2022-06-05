@@ -9,6 +9,6 @@ namespace API.DTOs
         public string Token { get; set; }
         
         //public ICollection<RestaurantDto> UsersRestaurants { get; set; } = new List<RestaurantDto>();
-        public bool IsRestaurantOwner { get; set; } = false;
+        public int IsRestaurantOwner { get; set; } = 0;
     }
 }

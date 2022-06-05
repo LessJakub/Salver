@@ -25,9 +25,9 @@
     </div>
 
     <!-- Reccomendation list-->
-    <ng-container *ngFor="let rec of reccomendations">
+    <ng-container *ngFor="let rec of this.recommendations">
                 
-        <app-search-tile [model]="rec"></app-search-tile>
+        <app-search-tile class="mb-2" [model]="rec"></app-search-tile>
         
     </ng-container>
 </div>

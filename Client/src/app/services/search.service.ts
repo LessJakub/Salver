@@ -21,6 +21,9 @@ export class SearchService {
 
     /// Function returns Restaurant details for given restaurant ID.
     async searchRestaurantByID(id: number) {
+        if (id == null || id == NaN) {
+            return null;
+        }
         return await this.http.get<Restaurant>(this.restaurantDetailURL + id).toPromise();
     }
 

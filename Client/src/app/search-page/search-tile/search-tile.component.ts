@@ -12,10 +12,10 @@ import { DishOverlayComponent } from 'src/app/overlays/dish-overlay/dish-overlay
     <div (click)="invertOverlayFlag()" class="flex w-fit h-fit justify-center items-center content-center flex-col cursor-pointer group">
 
         <div class="flex h-60 w-60">
-            <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition" [src]="this.modelImageURL" (error)="updateUrlWithDefault()">
+            <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:saturate-200 transition" [src]="this.modelImageURL" (error)="updateUrlWithDefault()">
             <div class="grid grid-cols-1 gap-2 h-full justify-center content-center px-0.5">
                 <ng-container *ngFor="let _ of [].constructor(5); let i = index">
-                    <div class="w-5 h-5 bg-green-700 rounded-full group-hover:drop-shadow-lg group-hover:saturate-200 transition"></div>
+                    <div class="w-5 h-5 bg-green-700 rounded-full group-hover:saturate-200 transition"></div>
                 </ng-container>
             </div>
         </div>        

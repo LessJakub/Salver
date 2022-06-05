@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Restaurant } from '../models/restaurant';
 import { Dish } from '../models/Dish';
 import { Post } from '../models/post';
-import { MenuPostComponent } from '../elements/menu-post/menu-post.component';
 import { ActivatedRoute } from '@angular/router';
 import { SearchService } from '../services/search.service';
 import { UploadService } from '../services/upload.service';
 import { DishDTO } from '../models/DishDTO';
-import { Router, RouterLink } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-restaurant-page',
@@ -22,6 +20,9 @@ export class RestaurantPageComponent implements OnInit {
     profileImageURL: string;
 
     fetchedDishes: DishDTO[] = null;
+
+    isFollowing: boolean = false;
+    followButtonText = this.isFollowing ? "Unfollow" : "Follow";
   
   // Dummy
     fetchedDishes2: Dish[];
@@ -37,6 +38,20 @@ export class RestaurantPageComponent implements OnInit {
     }
 
     selectedTabID: number = 0;
+
+    followButtonAction() {
+        if (this.isFollowing) {
+            // Perform unfollow action when ready
+            
+            this.isFollowing = false;
+            this.followButtonText = "Follow"
+        }
+        else {
+            // Perform follow action when ready
+            this.isFollowing = true;
+            this.followButtonText = "Unfollow"
+        }
+    }
 
     selectNewTab(selectedID: number) {
         this.selectedTabID = selectedID;
@@ -85,6 +100,10 @@ export class RestaurantPageComponent implements OnInit {
     ngOnInit(): void {
         // Obtain restaurant ID from ActivatedRouter.
         this.restaurantID = this.activatedRoute.snapshot.params['id'];
+
+        if (this.restaurantID == NaN) {
+            this.router.navigate(['*']);
+        }
 
         this.getDetails();
         this.getDishes();

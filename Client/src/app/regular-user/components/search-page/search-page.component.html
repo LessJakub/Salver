@@ -1,0 +1,21 @@
+<div class="w-full h-full px-16 pb-5 bg-gray-50">
+
+    <div class="flex w-full h-fit content-center justify-center items-center">
+        <app-search-bar (modelEvent)="updateSearchForm($event)"></app-search-bar>
+    </div>
+
+    <!-- Search content -->
+    <div class="w-full h-fit items-center">
+        <div class="w-full h-full flex flex-grow">
+            <div class="w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 justify-items-center">
+                <ng-container *ngFor="let result of filteredSearchResults">
+                    <app-dish-tile [model]="result" *ngIf="(this.searchResultsType) === 'Dish'"></app-dish-tile>
+    
+                    <app-restaurant-tile [model]="result" *ngIf="(this.searchResultsType) === 'Restaurant'">
+                    </app-restaurant-tile>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+</div>

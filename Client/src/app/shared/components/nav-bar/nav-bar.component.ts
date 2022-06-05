@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { LoginOverlayComponent } from '../overlays/login-overlay/login-overlay.component';
-import { AccountService } from '../shared/services/account.service';
+import { AccountService } from '../../services/account.service';
 
 @Component({
-  selector: 'app-nav-menu',
-  templateUrl: './nav-menu.component.html',
+  selector: 'app-nav-bar',
+  templateUrl: './nav-bar.component.html',
   host: {'class': 'sticky top-0 z-50'},
 })
-export class NavMenuComponent {
+
+export class NavBarComponent {
 
     showLoginOverlay: Boolean
 
@@ -29,3 +29,4 @@ export class NavMenuComponent {
     }
   
 }
+

@@ -2,16 +2,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoggedInGuard } from './guards/logged-in.guard';
 
-import { TeamPageComponent } from './team-page/team-page.component';
-import { RestaurantPageComponent } from './restaurant-page/restaurant-page.component';
-import { SearchPageComponent } from './search-page/search-page.component';
-import { UserActivityComponent } from './user-activity/user-activity.component';
 import { OverviewComponent } from './restaurant-owner/components/overview/overview.component';
 import { ErrorPageComponent } from './shared/components/error-page/error-page.component';
 
+// Imports from Shared module
 import { FaqPageComponent } from './shared/components/faq-page/faq-page.component';
+import { TeamPageComponent } from './shared/components/team-page/team-page.component';
 import { LandingPageComponent } from './shared/components/landing-page/landing-page.component';
+import { RestaurantPageComponent } from './shared/components/restaurant-page/restaurant-page.component';
 import { DebugUploadPageComponent } from './shared/components/debug-upload-page/debug-upload-page.component';
+
+// Imports from User module
+import { SearchPageComponent } from './regular-user/components/search-page/search-page.component';
+import { ActivityPageComponent } from './regular-user/components/activity-page/activity-page.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
@@ -23,11 +26,10 @@ const routes: Routes = [
   { path: 'upload', component: DebugUploadPageComponent,
     canActivate: [LoggedInGuard] 
   },
-
   { path: 'search-page', component: SearchPageComponent,
     // canActivate: [LoggedInGuard]
   },
-  { path: 'activity', component: UserActivityComponent,
+  { path: 'activity', component: ActivityPageComponent,
     //canActivate: [LoggedInGuard]
   },
   { path: 'restaurant/:id', component: RestaurantPageComponent,

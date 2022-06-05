@@ -5,7 +5,6 @@ import { AccountService } from './shared/services/account.service';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
     host: { 'class': 'flex flex-col grow' }
 })
 

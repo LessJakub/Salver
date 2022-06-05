@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Post } from '../models/post';
-import { DishDTO } from '../shared/models/DishDTO';
-import { SearchService } from '../shared/services/search.service';
+import { Post } from 'src/app/models/post';
+import { DishDTO } from 'src/app/shared/models/DishDTO';
+import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
-    selector: 'app-user-activity',
-    templateUrl: './user-activity.component.html',
-    host: { 'class': 'flex flex-initial items-center h-full w-full' }, // ! Styling host container to fill all avialable space
+    selector: 'app-activity-page',
+    templateUrl: './activity-page.component.html',
 })
-export class UserActivityComponent implements OnInit {
+export class ActivityPageComponent implements OnInit {
 
     constructor(private searchService: SearchService) { }
 
@@ -34,12 +32,12 @@ export class UserActivityComponent implements OnInit {
         if (shuffledRecs != null && shuffledRecs[0]) {
             shuffledRecs.forEach((dish: DishDTO) => {
                 if (dish.appRestaurantId != NaN)
-                if (usedIDs.includes(dish.appRestaurantId) == false) {
-                    this.recommendations.push(dish);
-                    usedIDs.push(dish.appRestaurantId);
-                }
+                    if (usedIDs.includes(dish.appRestaurantId) == false) {
+                        this.recommendations.push(dish);
+                        usedIDs.push(dish.appRestaurantId);
+                    }
             })
-        }        
+        }
     }
 
     ngOnInit(): void {
@@ -70,4 +68,5 @@ export class UserActivityComponent implements OnInit {
         //     {name:"Tom Yam Kung ", imageURL:["/assets/images/3W2A0925@0.5x.webp"], grade:[5, 3, 4, 4], description:"Thai soup with shrimps, coconut milk and vegetables", price:26, restaurant: "Japan Sun"},
         // ]
     }
+
 }

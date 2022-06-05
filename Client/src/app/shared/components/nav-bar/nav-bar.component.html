@@ -60,7 +60,7 @@
                     </div>
 
                     <div *ngIf="(accountService.currentUser$ | async) != null && accountService.restaurantOwner">
-                        <a  [routerLink]="['/overview']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                        <a [routerLink]="['/overview']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
                             Overview
                         </a>
     

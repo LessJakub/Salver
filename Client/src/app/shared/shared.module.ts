@@ -14,6 +14,11 @@ import { DebugUploadPageComponent } from './components/debug-upload-page/debug-u
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from './components/footer/footer.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { LoginOverlayComponent } from './components/overlays/login-overlay/login-overlay.component';
+import { TeamPageComponent } from './components/team-page/team-page.component';
+import { MenuPostComponent } from './components/posts/menu-post/menu-post.component';
+import { RestaurantPageComponent } from './components/restaurant-page/restaurant-page.component';
 
 
 @NgModule({
@@ -29,6 +34,11 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
     DebugUploadPageComponent,
     FooterComponent,
     LandingPageComponent,
+    NavBarComponent,
+    LoginOverlayComponent,
+    TeamPageComponent,
+    MenuPostComponent,
+    RestaurantPageComponent,
   ],
   imports: [
     CommonModule,
@@ -44,6 +54,10 @@ import { LandingPageComponent } from './components/landing-page/landing-page.com
     DebugUploadPageComponent,
     FooterComponent,
     LandingPageComponent,
+    NavBarComponent,
+    LoginOverlayComponent,
+    MenuPostComponent,
+    RestaurantPageComponent,
   ]
 })
 export class SharedModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Person } from '../models/Person';
+import { TeamMember } from '../../models/TeamMember';
 
 @Component({
   selector: 'app-team-page',
@@ -9,7 +9,7 @@ import { Person } from '../models/Person';
 })
 export class TeamPageComponent implements OnInit {
 
-    teamMembers: Person[] = [
+    teamMembers: TeamMember[] = [
         // DB
         {name: "Mateusz Mnich", role: "Database"},
         {name: "Mateusz Kokot", role: "Database / Backend"},
@@ -22,7 +22,7 @@ export class TeamPageComponent implements OnInit {
         {name: "Gracjan Jeżewski", role: "Frontend"},
     ]
 
-    shuffled: Person[] = []
+    shuffled: TeamMember[] = []
     
   constructor() { }
 

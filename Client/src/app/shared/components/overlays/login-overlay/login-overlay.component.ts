@@ -3,9 +3,10 @@ import { Router, RouterLink } from '@angular/router';
 import { AccountService } from 'src/app/shared/services/account.service';
 
 @Component({
-  selector: 'app-login-overlay',
-  templateUrl: './login-overlay.component.html'
+    selector: 'app-login-overlay',
+    templateUrl: './login-overlay.component.html'
 })
+
 export class LoginOverlayComponent implements OnInit {
 
     @Output() closeOverlayEventEmitter = new EventEmitter();
@@ -14,9 +15,9 @@ export class LoginOverlayComponent implements OnInit {
 
     error: string = null;
 
-    constructor(public service: AccountService, private router: Router) {}
+    constructor(public service: AccountService, private router: Router) { }
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
     closeOverlayAction() {
         this.closeOverlayEventEmitter.emit(false);
@@ -33,8 +34,8 @@ export class LoginOverlayComponent implements OnInit {
             else {
                 this.router.navigate(['activity']);
             }
-            
-            
+
+
         }, error => {
             this.error = error.error;
             console.log(error);
@@ -42,3 +43,4 @@ export class LoginOverlayComponent implements OnInit {
     }
 
 }
+

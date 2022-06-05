@@ -1,4 +1,4 @@
-export interface Person {
+export interface TeamMember {
     name: string;
     role: string;
 }

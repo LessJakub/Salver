@@ -1,13 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Dish } from 'src/app/models/Dish';
-import { SearchTileComponent } from 'src/app/search-page/search-tile/search-tile.component';
 
 @Component({
-  selector: 'app-menu-post',
-  template: `
+    selector: 'app-menu-post',
+    template: `
     <div class="flex w-full h-full bg-gray-50 border-2 p-4 border-green-900 rounded-2xl overflow-hidden">
         <div class="flex flex-grow w-fit h-full">
-            <app-search-tile [model]="model" [showDescription]="false"></app-search-tile>
+            <app-dish-tile [model]="model" [showDescription]="false"></app-dish-tile>
         </div>
 
         <div class="flex flex-col flex-grow w-2/4 m-8 overflow-hidden ml-16">
@@ -58,25 +57,26 @@ import { SearchTileComponent } from 'src/app/search-page/search-tile/search-tile
     </div>
   `,
 })
+
 export class MenuPostComponent implements OnInit {
 
-  constructor() { }
+    constructor() { }
 
-  @Input() model: Dish;
+    @Input() model: Dish;
 
-  orderCount: number = 0;
+    orderCount: number = 0;
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+    }
 
-  incrementCount() {
-      this.orderCount += 1;
-  }
+    incrementCount() {
+        this.orderCount += 1;
+    }
 
-  decrementCount() {
-    this.orderCount -= 1;
-}
+    decrementCount() {
+        this.orderCount -= 1;
+    }
 
-takeOrder() {}
+    takeOrder() { }
 
 }

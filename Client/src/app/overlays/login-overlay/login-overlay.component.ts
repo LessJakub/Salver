@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { User } from '../../models/User';
 import { Router, RouterLink } from '@angular/router';
 import { AccountService } from 'src/app/shared/services/account.service';
 

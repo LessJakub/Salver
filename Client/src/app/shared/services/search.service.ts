@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DishDTO } from 'src/app/models/DishDTO';
-import { Restaurant } from 'src/app/models/restaurant';
 import { SearchForm } from 'src/app/models/SearchForm';
+import { DishDTO } from '../models/DishDTO';
+import { RestaurantDTO } from '../models/RestaurantDTO';
 
 
 @Injectable({
@@ -16,39 +16,61 @@ export class SearchService {
 
     private dishSearchByIDURL: string = this.baseUrl + ":8080/api/Dishes/Restaurants/"
     private dishSearchUrl: string = this.baseUrl + ":8080/api/Dishes/search"
-    restaurants: Restaurant[] = []
+    restaurants: RestaurantDTO[] = []
     dishes: DishDTO[] = []
     constructor(private http: HttpClient) { }
 
-    /// Function returns Restaurant details for given restaurant ID.
+
+    /**
+     * Returns RestaurantDTO object identified by given ID.
+     * @param id Restaurant ID
+     * @returns RestaurantDTO object, null if not found.
+     */
     async searchRestaurantByID(id: number) {
         if (id == null || id == NaN) {
             return null;
         }
-        return await this.http.get<Restaurant>(this.restaurantDetailURL + id).toPromise();
+        return await this.http.get<RestaurantDTO>(this.restaurantDetailURL + id).toPromise();
     }
 
+    /**
+     * Returns name of restaurant for given ID.
+     * @param id Restaurant ID
+     * @returns Name of restaurant (string)
+     */
     async getRestaurantNameByID(id: number) {
-        var restaurant: Restaurant;
-        restaurant = await this.http.get<Restaurant>(this.restaurantDetailURL + id).toPromise();
+        var restaurant: RestaurantDTO;
+        restaurant = await this.http.get<RestaurantDTO>(this.restaurantDetailURL + id).toPromise();
 
         return restaurant.name;
     }
 
+    /**
+     * Performs searching for restaurants which match form input string in name.
+     * If input string is empty, all restaurants are returned.
+     * After fetching, data is available under `restaurant` property.
+     * @param model Form model with input string
+     */
     async searchRestaurant(model: SearchForm) {
 
         if (model == null) {
-            this.restaurants = await this.http.get<Restaurant[]>(this.restaurantSearchUrl).toPromise();
+            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl).toPromise();
         }
         if (model.input == null || model.input.length == 0) {
-            this.restaurants = await this.http.get<Restaurant[]>(this.restaurantSearchUrl).toPromise();
+            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl).toPromise();
         }
         else {
-            this.restaurants = await this.http.get<Restaurant[]>(this.restaurantSearchUrl + "?restaurantName=" + model.input).toPromise();
+            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl + "?restaurantName=" + model.input).toPromise();
         }
     }
 
 
+    /**
+     * Performs searching of dishes which match form input string in name.
+     * If input string is empty, all dishes are returned.
+     * After fetching, data is available under `dishes` property.
+     * @param model Form model with input string
+     */
     async searchDishes(model: SearchForm) {
 
         if (model == null) {
@@ -64,6 +86,11 @@ export class SearchService {
         }
     }
 
+    /**
+     * Search dishes for restaurant identified by ID passed.
+     * @param id Restaurant ID
+     * @returns Promise<Dish[]> containing dishes for given restaurant 
+     */
     async searchDishesByID(id: number) {
         if (id == null) {
             console.log("Search - No dishes found. Return empty array.")

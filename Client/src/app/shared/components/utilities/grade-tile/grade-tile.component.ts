@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-grade-component',
-  template: `
+    selector: 'app-grade-tile',
+    template: `
 
     <!-- <ng-container *ngIf="!isInline; else templateInline">
       <div class="w-full h-full space-y-1">
@@ -43,8 +43,10 @@ import { Component, Input, OnInit } from '@angular/core';
         </div>
 
     </div>
-  `})
-export class GradeComponentComponent implements OnInit {
+  `
+})
+
+export class GradeTileComponent implements OnInit {
 
     @Input() name: string = "Default";
     @Input() grade: number = 5;
@@ -53,6 +55,6 @@ export class GradeComponentComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
 }

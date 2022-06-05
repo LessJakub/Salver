@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BaseRouteReuseStrategy } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from 'src/app/models/User';
+import { User } from '../models/UserDTO';
 
 @Injectable({
   providedIn: 'root'

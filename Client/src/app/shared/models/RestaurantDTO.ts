@@ -1,6 +1,6 @@
-import { GradeElement } from "./gradeElement";
+import { GradeElement } from "src/app/models/gradeElement";
 
-export interface Restaurant {
+export interface RestaurantDTO {
     id: number,
     name: string,
     description: string,

@@ -5,12 +5,12 @@ import { LoggedInGuard } from './guards/logged-in.guard';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { TeamPageComponent } from './team-page/team-page.component';
 import { FAQComponent } from './faq/faq.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RestaurantPageComponent } from './restaurant-page/restaurant-page.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { UserActivityComponent } from './user-activity/user-activity.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { OverviewComponent } from './restaurant-owner/components/overview/overview.component';
+import { ErrorPageComponent } from './shared/components/error-page/error-page.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
@@ -31,7 +31,7 @@ const routes: Routes = [
     //canActivate: [LoggedInGuard]
   },
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route
-  { path: '**', component: PageNotFoundComponent}               // wildcard for any other path
+  { path: '**', component: ErrorPageComponent}               // wildcard for any other path
 ];
 
 @NgModule({

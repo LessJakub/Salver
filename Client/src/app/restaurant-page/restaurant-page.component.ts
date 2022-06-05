@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Restaurant } from '../models/restaurant';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Dish } from '../models/Dish';
 import { Post } from '../models/post';
-import { ActivatedRoute } from '@angular/router';
 import { UploadService } from '../services/upload.service';
-import { DishDTO } from '../models/DishDTO';
-import { Router } from '@angular/router';
+import { DishDTO } from '../shared/models/DishDTO';
+import { RestaurantDTO } from '../shared/models/RestaurantDTO';
 import { SearchService } from '../shared/services/search.service';
 
 @Component({
@@ -16,7 +15,7 @@ import { SearchService } from '../shared/services/search.service';
 export class RestaurantPageComponent implements OnInit {
 
     restaurantID: number = null;
-    restaurant: Restaurant | null;
+    restaurant: RestaurantDTO | null;
     profileImageURL: string;
 
     fetchedDishes: DishDTO[] = null;

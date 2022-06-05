@@ -1,18 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { filter } from 'rxjs/operators';
 import { Dish } from '../models/Dish';
-import { Restaurant } from '../models/restaurant';
-import { SearchTileComponent } from './search-tile/search-tile.component';
-import { RestaurantTileComponent } from './restaurant-tile/restaurant-tile.component';
 import { SearchForm } from '../models/SearchForm';
-import { DishDTO } from '../models/DishDTO';
 import { SearchService } from '../shared/services/search.service';
+import { DishDTO } from '../shared/models/DishDTO';
+import { RestaurantDTO } from '../shared/models/RestaurantDTO';
 
 @Component({
   selector: 'app-search-page',
   host: {'class': 'grow flex items-center'},
   templateUrl: './search-page.component.html',
-  styleUrls: ['./search-page.component.css']
 })
 export class SearchPageComponent implements OnInit {
 
@@ -70,7 +66,7 @@ export class SearchPageComponent implements OnInit {
         // Obtain restaurants from search service, returned restaurants are filtered with name (if not empty / null)
         await this.searchService.searchRestaurant(this.searchForm)
 
-        let tempRestaurants: Restaurant[] = this.searchService.restaurants;
+        let tempRestaurants: RestaurantDTO[] = this.searchService.restaurants;
 
         if (this.searchForm.price != null) {
             if (this.searchForm.price == "Lowest") {

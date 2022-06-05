@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Dish } from 'src/app/models/Dish';
-import { Restaurant } from 'src/app/models/restaurant';
+import { Component, OnInit, Input } from '@angular/core';
 import { UploadService } from 'src/app/services/upload.service';
+import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
 
 @Component({
     selector: 'app-restaurant-tile',
@@ -25,11 +24,11 @@ import { UploadService } from 'src/app/services/upload.service';
               </div>
               <p class="text-md font-normal truncate">{{model.description}}</p>
           </div>
-</a>
-  
-    `})
+        </a>
+  `,
+})
 export class RestaurantTileComponent implements OnInit {
-    
+
     modelImageURL: string;
 
     updateUrlWithDefault() {
@@ -42,7 +41,8 @@ export class RestaurantTileComponent implements OnInit {
         this.modelImageURL = this.uploadService.restaurantImageURL(this.model.id);
     }
 
-    @Input() model: Restaurant;
+    @Input() model: RestaurantDTO;
     @Input() showDescription: Boolean = true;
+
 
 }

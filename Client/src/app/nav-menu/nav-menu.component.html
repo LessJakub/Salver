@@ -41,7 +41,7 @@
                     </div>
 
                     <!-- User is logged in, thus we replace contents of nav-bar to match new functionalities. -->
-                    <div *ngIf="(accountService.currentUser$ | async) != null">
+                    <div *ngIf="(accountService.currentUser$ | async) != null && !accountService.restaurantOwner">
                         <a  [routerLink]="['/activity']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
                             Activity
                         </a>
@@ -52,6 +52,24 @@
     
                         <a [routerLink]="['/fetch-data']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
                             Review
+                        </a>
+
+                        <a [routerLink]="['/upload']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            Upload
+                        </a>
+                    </div>
+
+                    <div *ngIf="(accountService.currentUser$ | async) != null && accountService.restaurantOwner">
+                        <a  [routerLink]="['/overview']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            Overview
+                        </a>
+    
+                        <a [routerLink]="['/search-page']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            Activity
+                        </a>
+    
+                        <a [routerLink]="['/orders']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
+                            Orders
                         </a>
 
                         <a [routerLink]="['/upload']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">

@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Dish } from 'src/app/models/Dish';
 import { DishDTO } from 'src/app/models/DishDTO';
 import { Restaurant } from 'src/app/models/restaurant';
-import { SearchService } from 'src/app/services/search.service';
 import { UploadService } from 'src/app/services/upload.service';
+import { SearchService } from 'src/app/shared/services/search.service';
 import { TabSwitcherComponent } from 'src/app/utilities/tab-switcher/tab-switcher.component';
 
 @Component({

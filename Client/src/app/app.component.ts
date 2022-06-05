@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Meta, MetaDefinition } from '@angular/platform-browser';
-import { AccountService } from './services/account-service.service';
+import { AccountService } from './shared/services/account.service';
 
 @Component({
     selector: 'app-root',

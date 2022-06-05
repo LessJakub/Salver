@@ -10,9 +10,12 @@ import { RestaurantPageComponent } from './restaurant-page/restaurant-page.compo
 import { SearchPageComponent } from './search-page/search-page.component';
 import { UserActivityComponent } from './user-activity/user-activity.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { OverviewComponent } from './restaurant-owner/components/overview/overview.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
+
+  { path: 'overview', component: OverviewComponent},
   { path: 'team', component: TeamPageComponent },
   { path: 'faq', component: FAQComponent },
 

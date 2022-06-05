@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRouteReuseStrategy } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
-import { User } from '../models/User';
 import { map } from 'rxjs/operators';
+import { User } from 'src/app/models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,7 @@ export class AccountService {
     private loginUrl: string = this.baseUrl + ":8080/api/account/login"
 
     private loggedInStatus: boolean = false;
+    restaurantOwner: boolean = false;
 
     constructor(private http: HttpClient) {
 
@@ -28,6 +29,7 @@ export class AccountService {
                 if (localUser != null) {
                     this.currentUserSource.next(localUser);
                     this.loggedInStatus = true;
+                    this.restaurantOwner = localUser.isRestaurantOwner;
                 }
             }
             catch{
@@ -50,6 +52,7 @@ export class AccountService {
                     localStorage.setItem("user", JSON.stringify(user));
                     this.currentUserSource.next(user);
                     this.loggedInStatus = true;
+                    this.restaurantOwner = user.isRestaurantOwner;
                 }
                 console.log(user);
             })

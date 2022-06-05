@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { filter } from 'rxjs/operators';
 import { Dish } from '../models/Dish';
 import { Restaurant } from '../models/restaurant';
-import { SearchService } from '../services/search.service';
 import { SearchTileComponent } from './search-tile/search-tile.component';
 import { RestaurantTileComponent } from './restaurant-tile/restaurant-tile.component';
 import { SearchForm } from '../models/SearchForm';
 import { DishDTO } from '../models/DishDTO';
+import { SearchService } from '../shared/services/search.service';
 
 @Component({
   selector: 'app-search-page',

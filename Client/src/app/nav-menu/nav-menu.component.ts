@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginOverlayComponent } from '../overlays/login-overlay/login-overlay.component';
-import { AccountService } from '../services/account-service.service';
+import { AccountService } from '../shared/services/account.service';
 
 @Component({
   selector: 'app-nav-menu',

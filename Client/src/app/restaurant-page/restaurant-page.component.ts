@@ -3,10 +3,10 @@ import { Restaurant } from '../models/restaurant';
 import { Dish } from '../models/Dish';
 import { Post } from '../models/post';
 import { ActivatedRoute } from '@angular/router';
-import { SearchService } from '../services/search.service';
 import { UploadService } from '../services/upload.service';
 import { DishDTO } from '../models/DishDTO';
 import { Router } from '@angular/router';
+import { SearchService } from '../shared/services/search.service';
 
 @Component({
   selector: 'app-restaurant-page',

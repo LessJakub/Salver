@@ -1,0 +1,68 @@
+<!-- Side area -->
+<div class="basis-1/4 min-w-[25rem] h-full shadow-2xl overflow-y-auto relative">
+    <div class="h-full pt-4 flex flex-col items-center justify-between space-y-5 absolute top-0 left-0">
+
+        <h2 class="text-3xl font-semibold">name</h2>
+
+        <div class="w-full h-56 flex justify-center items-center">
+            <img src="url" class="h-full object-cover aspect-square rounded-2xl">
+        </div>
+
+        <button class="w-1/2 py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">test button</button>
+
+        <p class="text-center font-light mx-4">description</p>
+
+        <p class="text-center font-light mx-4">address</p>
+
+        <p class="text-center font-semibold mx-4">Price range: Unavailable</p>
+
+        <!-- <div class="w-full">
+            <div *ngFor="let elem of restaurant.grades" class="w-full px-14 mb-2">
+                <app-grade-component [grade]="elem.grade" [name]="elem.category"></app-grade-component>
+            </div>
+        </div> -->
+
+    </div>
+</div>
+
+<!-- Main area -->
+<div class="grow h-full flex flex-col pt-4">
+
+    <div class="flex w-full h-[10%] content-center justify-center items-center">
+        <div class="w-1/2 h-full">
+            <!-- <app-tab-switcher (tabSelectEvent)="selectNewTab($event)" [default]="0" [tabNames]="['Menu', 'Posts', 'Activity']"></app-tab-switcher> -->
+        </div>
+    </div>
+
+    <div class="overflow-y-auto relative w-full grow">
+        <!-- Menu -->
+        <div *ngIf="(this.selectedTabID) == 0" class="w-full flex flex-col space-y-5 absolute top-0 left-0 justify-center content-center items-center align-middle">
+            <!-- If there are dishes to show, display dishes list -->
+            <div class ="flex w-full h-full items-center content-center justify-center" *ngFor="let dish of this.fetchedDishes">
+                <div class="w-5/6 h-fit">
+                    <app-menu-post [model]="dish"></app-menu-post>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity -->
+        <div *ngIf="(this.selectedTabID) == 2" class="w-full flex flex-col items-center justify-center space-y-5 absolute top-0 left-0">
+            <div class ="w-full h-full" *ngFor="let activity of fetchedPosts">
+                <app-post [model]="activity"></app-post>
+            </div>
+        </div>
+
+        <!-- Posts -->
+        <div *ngIf="(this.selectedTabID) == 1" class="w-full flex flex-col space-y-5 absolute top-0 left-0 justify-center content-center items-center align-middle">
+                <div class="w-5/6 h-72">
+                    <app-review-post></app-review-post>
+                </div>
+                <div class="w-5/6 h-72">
+                    <app-review-post></app-review-post>
+                </div>
+                <div class="w-5/6 h-72">
+                    <app-review-post></app-review-post>
+                </div>
+        </div>
+    </div>
+</div>

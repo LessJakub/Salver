@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DishDTO } from '../models/DishDTO';
-import { Restaurant } from '../models/restaurant';
-import { SearchForm } from '../models/SearchForm';
+import { DishDTO } from 'src/app/models/DishDTO';
+import { Restaurant } from 'src/app/models/restaurant';
+import { SearchForm } from 'src/app/models/SearchForm';
+
 
 @Injectable({
     providedIn: 'root'

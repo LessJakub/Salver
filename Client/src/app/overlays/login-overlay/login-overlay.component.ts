@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AccountService } from '../../services/account-service.service';
 import { User } from '../../models/User';
 import { Router, RouterLink } from '@angular/router';
+import { AccountService } from 'src/app/shared/services/account.service';
 
 @Component({
   selector: 'app-login-overlay',
@@ -27,7 +27,14 @@ export class LoginOverlayComponent implements OnInit {
         this.service.loginRequest(this.model).subscribe(Response => {
             console.log("Login action used.");
             this.closeOverlayAction();
-            this.router.navigate(['activity']);
+
+            if (this.service.restaurantOwner) {
+                this.router.navigate(['overview']);
+            }
+            else {
+                this.router.navigate(['activity']);
+            }
+            
             
         }, error => {
             this.error = error.error;

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Post } from '../models/post';
 import { DishDTO } from '../models/DishDTO';
-import { SearchService } from '../services/search.service';
+import { SearchService } from '../shared/services/search.service';
 
 @Component({
     selector: 'app-user-activity',

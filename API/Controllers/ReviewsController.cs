@@ -43,15 +43,20 @@ namespace API.Controllers
             if(rev != null) return BadRequest("You've already reviewed this restaurant");
             
             var review = new Restaurant_Review{
-                //Rating = newReviewDto.Rating,
+                AtmosphereRating = newReviewDto.AtmosphereRating,
+                ServiceRating = newReviewDto.ServiceRating,
                 Description = newReviewDto.Description,
                 AppRestaurantId = restaurantId,
                 AppRestaurant = restaurant,
                 AppUserId = userId,
                 AppUser = user
             };
+            
 
             context.Add(review);
+
+            CalculateRestaurantScores(restaurant);
+
             await context.SaveChangesAsync();
 
             return new ReviewDto(review);
@@ -111,6 +116,10 @@ namespace API.Controllers
 
             //rev.Rating = newReviewDto.Rating;
             rev.Description = newReviewDto.Description;
+            rev.AtmosphereRating = newReviewDto.AtmosphereRating;
+            rev.ServiceRating = newReviewDto.ServiceRating;
+
+            CalculateRestaurantScores(restaurant);
 
             await context.SaveChangesAsync();
 
@@ -142,6 +151,8 @@ namespace API.Controllers
             if(rev == null) return BadRequest("Review with given id does not exist");
 
             context.Remove(rev);
+
+            CalculateRestaurantScores(restaurant);
 
             await context.SaveChangesAsync();
 
@@ -178,7 +189,9 @@ namespace API.Controllers
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
             
             var review = new Dish_Review{
-                //Rating = newReviewDto.Rating,
+                TasteRating = newReviewDto.TasteRating,
+                PriceRating = newReviewDto.PriceRating,
+                ServiceRating = newReviewDto.ServiceRating,
                 Description = newReviewDto.Description,
                 Dish = dish,
                 DishId = dishId,
@@ -186,7 +199,12 @@ namespace API.Controllers
                 AppUser = user
             };
 
+
+
             context.Add(review);
+
+            CalculateDishScores(dish);
+
             await context.SaveChangesAsync();
 
             return new DishReviewDto(review);
@@ -252,8 +270,12 @@ namespace API.Controllers
             var userId = GetRequesterId();
             if(rev.AppUserId != userId) return Unauthorized("You don't have permissions to edit this post"); 
 
-            //rev.Rating = newReviewDto.Rating;
+            rev.PriceRating = newReviewDto.PriceRating;
+            rev.ServiceRating = newReviewDto.ServiceRating;
+            rev.TasteRating = newReviewDto.TasteRating;
             rev.Description = newReviewDto.Description;
+
+            CalculateDishScores(dish);
 
             await context.SaveChangesAsync();
 
@@ -292,10 +314,43 @@ namespace API.Controllers
             if(rev.AppUserId != userId) return Unauthorized("You don't have permissions to edit this post"); 
 
             context.Remove(rev);
-
+            CalculateDishScores(dish);
             await context.SaveChangesAsync();
 
             return Ok();
+        }
+
+
+        private void CalculateRestaurantScores(AppRestaurant restaurant)
+        {
+            float serviceRating = 0.0f;
+            float atmosphereRating = 0.0f;
+            foreach(var r in restaurant.Res_Review.ToList())
+            {
+                serviceRating += r.AtmosphereRating;
+                atmosphereRating += r.ServiceRating;
+            }
+            restaurant.ServiceRating = serviceRating/restaurant.Res_Review.Count();
+            restaurant.AtmosphereRating = atmosphereRating/restaurant.Res_Review.Count();
+
+        }
+
+        public void CalculateDishScores(Dish dish)
+        {
+
+            float priceRating = 0.0f;
+            float serviceRating = 0.0f;
+            float tasteRating = 0.0f;
+            foreach(var r in dish.Dish_Review.ToList())
+            {
+                priceRating += r.PriceRating;
+                serviceRating += r.ServiceRating;
+                tasteRating += r.TasteRating;
+            }
+
+            dish.PriceRating = priceRating/dish.Dish_Review.Count();
+            dish.ServiceRating = serviceRating/dish.Dish_Review.Count();
+            dish.TasteRating = tasteRating/dish.Dish_Review.Count();
         }
     }
 }

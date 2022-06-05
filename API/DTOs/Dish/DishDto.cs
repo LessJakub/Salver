@@ -19,6 +19,10 @@ namespace API.DTOs
             Description = dish.Description;
             Ingredients = dish.Ingredients;
             AppRestaurantId = dish.AppRestaurantId;
+            TasteGrade = dish.TasteRating;
+            PriceGrade = dish.PriceRating;
+            ServiceGrade = dish.ServiceRating;
+            TotalGrade = (dish.TasteRating + dish.PriceRating + dish.ServiceRating)/3.0f;
         }
 
         public int Id { get; set; }

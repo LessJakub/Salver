@@ -16,5 +16,7 @@ namespace API.DTOs
 
         [DishIngredientsAnnotation]
         public string Ingredients { get; set; }
+
+        public float Price { get; set; }
     }
 }

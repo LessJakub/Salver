@@ -49,7 +49,8 @@ namespace API.Controllers
                 Ingredients = newDishDto.Ingredients,
                 Description = newDishDto.Description,
                 AppRestaurantId = restaurantId,
-                AppRestaurant = restaurant
+                AppRestaurant = restaurant,
+                Price = newDishDto.Price
             };
 
             context.Add(dish);
@@ -111,6 +112,7 @@ namespace API.Controllers
             dish.Name = newDishDto.Name;
             dish.Ingredients = newDishDto.Ingredients;
             dish.Description = newDishDto.Description;
+            dish.Price = newDishDto.Price;
 
             await context.SaveChangesAsync();
 
@@ -181,12 +183,12 @@ namespace API.Controllers
 
             var dishes = await context.Dishes.Where(e => e.Name.Contains(dishName)).ToListAsync();
 
-            var restaurantsToReturn = new List<DishDto>();
+            var dishesToReturn = new List<DishDto>();
             foreach(var dish in dishes)
             {
-                restaurantsToReturn.Add(new DishDto(dish));
+                dishesToReturn.Add(new DishDto(dish));
             }
-            return restaurantsToReturn;
+            return dishesToReturn;
         }
     }
 }

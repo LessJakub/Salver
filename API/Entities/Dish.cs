@@ -22,6 +22,9 @@ namespace API.Entities
         public virtual ICollection<DishInOrder> DishesInOrder { get; set; }
 
         public virtual ICollection<Dish_Review> Dish_Review { get; set; }
-        
+
+        public float TasteRating { get; set; }
+        public float PriceRating { get; set; }
+        public float ServiceRating { get; set; }
     }
 }

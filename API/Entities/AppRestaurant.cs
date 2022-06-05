@@ -24,6 +24,7 @@ namespace API.Entities
 
         public virtual ICollection<Dish> Dishes { get; set; }
 
-        
+        public float AtmosphereRating{ get; set; }
+        public float ServiceRating { get; set; }
     }
 }

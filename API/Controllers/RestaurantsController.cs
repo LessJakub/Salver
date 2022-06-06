@@ -92,6 +92,8 @@ namespace API.Controllers
 
             if(restaurant == null) return NoContent();
 
+            
+
             return new RestaurantDto(restaurant);
         }
 
@@ -120,7 +122,7 @@ namespace API.Controllers
             if(user is null) return BadRequest($"User with id {reqId} does not exist");
 
             var prevFollow = user.FollowedRestaurants.FirstOrDefault(p => p.FollowedId == id);
-            if(prevFollow is not null) return BadRequest($"User with id{reqId} already follows restaurant with id {id}");
+            if(prevFollow is not null) return BadRequest($"User with id {reqId} already follows restaurant with id {id}");
 
             var follow = new RestaurantFollower {
                 FollowerId = reqId,
@@ -165,6 +167,36 @@ namespace API.Controllers
             
             return Ok();
         }
+
+         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"> </response>
+        /// <response code="204">  </response>
+        /// <response code="400">  </response>
+        [AllowAnonymous]
+        [HttpGet("{id}/followers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<FollowerDTO>>> GetFollowersOfRestaurant(int id)
+        {
+            var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
+            if(restaurant is null) return BadRequest($"Restaurant with id {id} does not exist.");
+
+
+            var listToRet = new List<FollowerDTO>();
+            foreach(var f in restaurant.Followers.ToList())
+            {
+                listToRet.Add(new FollowerDTO(f));
+            }
+            
+            return listToRet;
+        }
+
 
 
         #if DEBUG

@@ -17,11 +17,17 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserFollower>(entity => {
-                entity.HasOne(hf => hf.Followed)
+                entity.HasOne(hf => hf.Follower)
                 .WithMany(h => h.FollowedUsers)
+                .HasForeignKey(hf => hf.FollowerId)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+                entity.HasOne(hf => hf.Followed)
+                .WithMany(h => h.UserFollowers)
                 .HasForeignKey(hf => hf.FollowedId)
                 .OnDelete(DeleteBehavior.Restrict);
-                });
+                }
+                );
         }
         
         public DbSet<AppUser> Users { get; set; }
@@ -31,5 +37,7 @@ namespace API.Data
         public DbSet<Dish> Dishes { get; set; }
 
         public DbSet<Order> Orders { get; set; }
+
+        public DbSet<UserFollower> Follows { get; set; }
     }
 }

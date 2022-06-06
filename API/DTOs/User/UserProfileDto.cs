@@ -17,7 +17,8 @@ namespace API.DTOs
             Id = user.Id;
             Username = user.UserName;
             Verified = user.Verified;
-            //Followers = user.UserFollowers.Count();
+            Followers = user.UserFollowers.Count();
+            FollowedUsers = user.FollowedUsers.Count();
         }
 
         public int Id { get; set; }
@@ -25,6 +26,8 @@ namespace API.DTOs
         public bool Verified { get; set; }
 
         public int Followers { get; set; } = 0;
+
+        public int FollowedUsers { get; set; } = 0;
 
     }
 }

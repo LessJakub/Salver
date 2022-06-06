@@ -36,6 +36,8 @@ public enum Roles {
         
         public virtual ICollection<UserFollower> FollowedUsers { get; set; }
 
+        public virtual ICollection<UserFollower> UserFollowers { get; set; }
+
         public virtual ICollection<Restaurant_Review> Res_Review { get; set; }
     }
 }

@@ -156,6 +156,8 @@ namespace API.Controllers
         /// Search dish with specific name
         /// </summary>
         /// <param name="dishName">String containing search information</param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
         /// <remarks>
         /// Does not require authorization.
         /// Finds all restaurants containing search information. Not case sensitive. 
@@ -167,12 +169,16 @@ namespace API.Controllers
         [HttpGet("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IEnumerable<DishDto>> SearchDish(string dishName)
+        public async Task<IEnumerable<DishDto>> SearchDish(string dishName, int startingIndex = 0, int endIndex = 12)
         {
             if(String.IsNullOrEmpty(dishName))
             {
                 var dishesAll= new List<DishDto>();
-                foreach(var dish in context.Dishes)
+                foreach(var dish in await context.Dishes.
+                    OrderByDescending(dish => (dish.PriceRating + dish.ServiceRating + dish.TasteRating)/3.0  ).
+                    Skip(startingIndex).
+                    Take(endIndex).
+                    ToListAsync())
                 {
                     dishesAll.Add(new DishDto(dish));
                     if(dishesAll.Count() >= 10) break;
@@ -181,7 +187,12 @@ namespace API.Controllers
                 return dishesAll;
             }
 
-            var dishes = await context.Dishes.Where(e => e.Name.Contains(dishName)).ToListAsync();
+            var dishes = await context.Dishes.
+                Where(e => e.Name.Contains(dishName)).
+                OrderByDescending(dish => (dish.PriceRating + dish.ServiceRating + dish.TasteRating)/3.0).
+                Skip(startingIndex).
+                Take(endIndex).
+                ToListAsync();
 
             var dishesToReturn = new List<DishDto>();
             foreach(var dish in dishes)

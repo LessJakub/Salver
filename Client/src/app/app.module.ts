@@ -5,7 +5,6 @@ import { BrowserModule, Meta } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PostComponent } from './elements/post/post.component';
 
 import { SharedModule } from './shared/shared.module';
 import { RegularUserModule } from './regular-user/regular-user.module';
@@ -14,7 +13,6 @@ import { RestaurantOwnerModule } from './restaurant-owner/restaurant-owner.modul
 @NgModule({
   declarations: [
     AppComponent,
-    PostComponent,
   ],
   imports: [
     BrowserModule,

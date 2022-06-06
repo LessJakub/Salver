@@ -28,7 +28,7 @@ export class LoginOverlayComponent implements OnInit {
             console.log("Login action used.");
             this.closeOverlayAction();
 
-            if (this.service.restaurantOwner) {
+            if (this.service.ownerID != 0) {
                 this.router.navigate(['overview']);
             }
             else {

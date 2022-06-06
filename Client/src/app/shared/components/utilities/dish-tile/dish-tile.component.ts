@@ -12,10 +12,21 @@ import { DishDTO } from 'src/app/shared/models/DishDTO';
         <div class="flex h-60 w-60">
             <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:saturate-200 transition" [src]="this.modelImageURL" (error)="updateUrlWithDefault()">
             <div class="grid grid-cols-1 gap-2 h-full justify-center content-center px-0.5">
-                <ng-container *ngFor="let _ of [].constructor(5); let i = index">
+                <!-- TODO: Use this grade system in other places (Make a component for it) -->
+                <ng-container *ngFor="let _ of [].constructor(5 - this.model.totalGrade)">
+                    <div class="w-5 h-5 border border-green-700 rounded-full group-hover:saturate-200 transition"></div>
+                </ng-container>
+
+                <ng-container *ngFor="let _ of [].constructor(this.model.totalGrade); let i = index">
                     <div class="w-5 h-5 bg-green-700 rounded-full group-hover:saturate-200 transition"></div>
                 </ng-container>
             </div>
+
+            <!-- <div *ngIf="(this.model.totalGrade == 0)" class="grid grid-cols-1 gap-2 h-full justify-center content-center px-0.5">
+                <ng-container *ngFor="let _ of [].constructor(5); let i = index">
+                    <div class="w-5 h-5 border border-green-700 rounded-full group-hover:saturate-200 transition"></div>
+                </ng-container>
+            </div> -->
         </div>        
   
         <div *ngIf="showDescription == true" class="p-2 items-center content-center justify-center text-center w-60">

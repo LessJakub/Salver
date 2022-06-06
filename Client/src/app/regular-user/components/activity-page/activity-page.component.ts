@@ -6,6 +6,7 @@ import { SearchService } from 'src/app/shared/services/search.service';
 @Component({
     selector: 'app-activity-page',
     templateUrl: './activity-page.component.html',
+    host: { 'class': 'flex-auto flex justify-center items-center' } // ! Styling host container to fill all avialable space
 })
 export class ActivityPageComponent implements OnInit {
 

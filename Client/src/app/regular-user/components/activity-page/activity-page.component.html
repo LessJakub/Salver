@@ -2,9 +2,7 @@
 <div class="basis-3/4 flex flex-col h-full">
     <!-- Section button - Add post -->
     <div class="h-24 w-full flex items-center justify-center">
-        <button type="button"
-            class="bg-green-800 px-7 py-3 rounded-xl text-gray-50 font-medium hover:bg-green-900">Where are you eating
-            today?</button>
+        <button type="button" class="bg-green-800 px-7 py-3 rounded-xl text-gray-50 font-medium hover:bg-green-900">Where are you eating today?</button>
     </div>
 
     <!-- Post list -->
@@ -12,7 +10,7 @@
 
         <!-- Post -->
         <ng-container *ngFor="let PoPost of fetchedPosts">
-            <app-post [model]="PoPost"></app-post>
+            <app-activity-post [model]="PoPost"></app-activity-post>
         </ng-container>
 
     </div>
@@ -28,7 +26,8 @@
 
     <!-- Reccomendation list-->
     <ng-container *ngFor="let rec of this.recommendations">
-        <app-dish-tile class="mb-2" [model]="rec"></app-dish-tile>
-
+                
+        <app-dish-tile [model]="rec"></app-dish-tile>
+        
     </ng-container>
 </div>

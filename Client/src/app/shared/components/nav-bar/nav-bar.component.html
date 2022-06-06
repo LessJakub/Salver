@@ -41,7 +41,7 @@
                     </div>
 
                     <!-- User is logged in, thus we replace contents of nav-bar to match new functionalities. -->
-                    <div *ngIf="(accountService.currentUser$ | async) != null && !accountService.restaurantOwner">
+                    <div *ngIf="(accountService.currentUser$ | async) != null && accountService.ownerID == 0">
                         <a  [routerLink]="['/activity']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
                             Activity
                         </a>
@@ -59,7 +59,7 @@
                         </a>
                     </div>
 
-                    <div *ngIf="(accountService.currentUser$ | async) != null && accountService.restaurantOwner">
+                    <div *ngIf="(accountService.currentUser$ | async) != null && accountService.ownerID != 0">
                         <a [routerLink]="['/overview']" class="hover:text-green-700 px-3 py-2 rounded-md text-base font-light">
                             Overview
                         </a>

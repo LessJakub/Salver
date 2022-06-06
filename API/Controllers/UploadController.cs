@@ -26,13 +26,14 @@ namespace API.Controllers
         {
             IFormFile file = Request.Form.Files[0];
             string blobContainer = Request.Form["blobContainer"];
+            string fileID = Request.Form["fileID"];
 
             if (file == null || blobContainer == null || blobContainer == "")
             {
                 return BadRequest();
             }
 
-            var result = await _blobService.UploadFileBlobAsync(blobContainer, file.OpenReadStream(), file.ContentType, file.FileName);
+            var result = await _blobService.UploadFileBlobAsync(blobContainer, file.OpenReadStream(), file.ContentType, fileID);
             var toReturn = result.AbsoluteUri;
 
             return Ok(new { path = toReturn });

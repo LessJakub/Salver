@@ -15,7 +15,7 @@ export class AccountService {
     private loginUrl: string = this.baseUrl + ":8080/api/account/login"
 
     private loggedInStatus: boolean = false;
-    restaurantOwner: boolean = false;
+    ownerID: number = 0;
 
     constructor(private http: HttpClient) {
 
@@ -29,7 +29,7 @@ export class AccountService {
                 if (localUser != null) {
                     this.currentUserSource.next(localUser);
                     this.loggedInStatus = true;
-                    this.restaurantOwner = localUser.isRestaurantOwner;
+                    this.ownerID = localUser.isRestaurantOwner;
                 }
             }
             catch{
@@ -52,7 +52,7 @@ export class AccountService {
                     localStorage.setItem("user", JSON.stringify(user));
                     this.currentUserSource.next(user);
                     this.loggedInStatus = true;
-                    this.restaurantOwner = user.isRestaurantOwner;
+                    this.ownerID = user.isRestaurantOwner;
                 }
                 console.log(user);
             })

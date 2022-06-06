@@ -8,4 +8,5 @@ export interface DishDTO {
     tasteGrade: number;
     priceGrade: number;
     serviceGrade: number;
+    totalGrade: number;
 }

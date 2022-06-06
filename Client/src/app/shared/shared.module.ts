@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { SharedRoutingModule } from './shared-routing.module';
@@ -11,7 +12,6 @@ import { ReviewPostComponent } from './components/posts/review-post/review-post.
 import { TabSwitcherComponent } from './components/utilities/tab-switcher/tab-switcher.component';
 import { FaqPageComponent } from './components/faq-page/faq-page.component';
 import { DebugUploadPageComponent } from './components/debug-upload-page/debug-upload-page.component';
-import { FormsModule } from '@angular/forms';
 import { FooterComponent } from './components/footer/footer.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
@@ -19,45 +19,50 @@ import { LoginOverlayComponent } from './components/overlays/login-overlay/login
 import { TeamPageComponent } from './components/team-page/team-page.component';
 import { MenuPostComponent } from './components/posts/menu-post/menu-post.component';
 import { RestaurantPageComponent } from './components/restaurant-page/restaurant-page.component';
+import { ActivityPostComponent } from './components/posts/activity-post/activity-post.component';
+import { NewMealOverlayComponent } from './components/overlays/new-meal-overlay/new-meal-overlay.component';
 
 
 @NgModule({
-  declarations: [
-    ErrorPageComponent,
-    DishTileComponent,
-    RestaurantTileComponent,
-    DishOverlayComponent,
-    GradeTileComponent,
-    ReviewPostComponent,
-    TabSwitcherComponent,
-    FaqPageComponent,
-    DebugUploadPageComponent,
-    FooterComponent,
-    LandingPageComponent,
-    NavBarComponent,
-    LoginOverlayComponent,
-    TeamPageComponent,
-    MenuPostComponent,
-    RestaurantPageComponent,
-  ],
-  imports: [
-    CommonModule,
-    SharedRoutingModule,
-    FormsModule,
-  ],
-  exports: [
-    RestaurantTileComponent,
-    DishTileComponent,
-    GradeTileComponent,
-    ReviewPostComponent,
-    TabSwitcherComponent,
-    DebugUploadPageComponent,
-    FooterComponent,
-    LandingPageComponent,
-    NavBarComponent,
-    LoginOverlayComponent,
-    MenuPostComponent,
-    RestaurantPageComponent,
-  ]
+    declarations: [
+        ErrorPageComponent,
+        DishTileComponent,
+        RestaurantTileComponent,
+        DishOverlayComponent,
+        GradeTileComponent,
+        ReviewPostComponent,
+        TabSwitcherComponent,
+        FaqPageComponent,
+        DebugUploadPageComponent,
+        FooterComponent,
+        LandingPageComponent,
+        NavBarComponent,
+        LoginOverlayComponent,
+        TeamPageComponent,
+        MenuPostComponent,
+        RestaurantPageComponent,
+        ActivityPostComponent,
+        NewMealOverlayComponent,
+    ],
+    imports: [
+        CommonModule,
+        SharedRoutingModule,
+        FormsModule,
+    ],
+    exports: [
+        RestaurantTileComponent,
+        DishTileComponent,
+        GradeTileComponent,
+        ReviewPostComponent,
+        TabSwitcherComponent,
+        DebugUploadPageComponent,
+        FooterComponent,
+        LandingPageComponent,
+        NavBarComponent,
+        LoginOverlayComponent,
+        MenuPostComponent,
+        RestaurantPageComponent,
+        ActivityPostComponent,
+    ]
 })
 export class SharedModule { }

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
+import { AccountService } from 'src/app/shared/services/account.service';
+import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
     selector: 'app-overview',
@@ -8,12 +12,15 @@ import { Component, OnInit } from '@angular/core';
 
 export class OverviewComponent implements OnInit {
 
-    constructor() {}
+    model: RestaurantDTO = null;
 
-    selectedTabID: number = 0;
+    constructor(private searchService: SearchService,
+                private accountService: AccountService,
+                private router: Router
+    ) { }
 
-    ngOnInit(): void {}
-
-    getUserRestaurant(id: number) {}
+    ngOnInit(): void {
+        this.router.navigate(['/restaurant/' + this.accountService.ownerID]);
+    }
 
 }

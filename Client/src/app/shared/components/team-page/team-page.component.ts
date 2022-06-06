@@ -4,7 +4,6 @@ import { TeamMember } from '../../models/TeamMember';
 @Component({
   selector: 'app-team-page',
   templateUrl: './team-page.component.html',
-  styleUrls: ['./team-page.component.css'],
   host: {'class': 'flex-auto flex flex-col justify-center items-center'} // ! Styling host container to fill all avialable space
 })
 export class TeamPageComponent implements OnInit {

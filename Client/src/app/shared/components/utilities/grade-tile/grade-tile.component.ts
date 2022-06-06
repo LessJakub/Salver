@@ -36,9 +36,15 @@ import { Component, Input, OnInit } from '@angular/core';
         </div>
 
         <!-- Dots half -->
-        <div class="w-1/2 h-full flex gap-1 justify-end">
+        <div *ngIf="(this.grade) != 0" class="w-1/2 h-full flex gap-1 justify-end">
             <ng-container *ngFor="let _ of [].constructor(this.grade); let i = index">
                 <div class="w-5 h-5 bg-green-700 rounded-full"></div>
+            </ng-container>
+        </div>
+
+        <div *ngIf="(this.grade) == 0" class="w-1/2 h-full flex gap-1 justify-end">
+            <ng-container *ngFor="let _ of [].constructor(5); let i = index">
+                <div class="w-5 h-5 bg-gray-50 border border-green-700 rounded-full"></div>
             </ng-container>
         </div>
 

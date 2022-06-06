@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220605220118_ChangedFollowing")]
+    partial class ChangedFollowing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,29 +319,6 @@ namespace API.Migrations
                     b.ToTable("RestaurantFollowers");
                 });
 
-            modelBuilder.Entity("API.Entities.UserFollower", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("FollowedId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FollowerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FollowedId");
-
-                    b.HasIndex("FollowerId");
-
-                    b.ToTable("UserFollowers");
-                });
-
             modelBuilder.Entity("API.Entities.Dish", b =>
                 {
                     b.HasOne("API.Entities.AppRestaurant", "AppRestaurant")
@@ -470,26 +449,7 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.HasOne("API.Entities.AppUser", "Follower")
-                        .WithMany("FollowedRestaurants")
-                        .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Followed");
-
-                    b.Navigation("Follower");
-                });
-
-            modelBuilder.Entity("API.Entities.UserFollower", b =>
-                {
-                    b.HasOne("API.Entities.AppUser", "Followed")
-                        .WithMany("FollowedUsers")
-                        .HasForeignKey("FollowedId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.AppUser", "Follower")
-                        .WithMany()
+                        .WithMany("Followers")
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -516,9 +476,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
-                    b.Navigation("FollowedRestaurants");
-
-                    b.Navigation("FollowedUsers");
+                    b.Navigation("Followers");
 
                     b.Navigation("Orders");
 

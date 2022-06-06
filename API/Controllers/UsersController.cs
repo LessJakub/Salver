@@ -90,7 +90,7 @@ namespace API.Controllers
             var user = await context.Users.FindAsync(userId);
             if(user == null) return BadRequest($"There is no user with id {userId}");
 
-            var restaurant = user.Followers.FirstOrDefault(f => f.AppRestaurantId == id);
+            var restaurant = user.FollowedUsers.FirstOrDefault(f => f.FollowedId == id);
             if(restaurant is null) return false;
             return true;
         }
@@ -115,24 +115,94 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> FollowUser(int id)
         {
-            var user = await context.Users.FindAsync(id);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if(user == null) return NoContent();
 
             var reqId = GetRequesterId();
             if(id == -1) return BadRequest($"You must be signed in to follow someone");
 
-            var follow = new Follower {
+            var requester = await context.Users.FirstOrDefaultAsync(r => r.Id == reqId);
+            if(requester is null) return BadRequest($"Your account, with id {reqId}, does not exist");
+
+            var prevFollow = requester.FollowedUsers.FirstOrDefault(f => f.FollowedId == id);
+            if(prevFollow is not null) return BadRequest($"You already follow user with id {id}");
+
+            var follow = new UserFollower {
               FollowerId = reqId,
-              AppUser = user,
-              AppUserId = id,
-              AppRestaurant = null,
-              AppRestaurantId = 0
+              Follower = requester,
+              FollowedId = id,
+              Followed = user
             };
 
             context.Add(follow);
             await context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        #if DEBUG
+
+        #endif
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        /// <response code="401"></response>
+        [HttpGet("{id}/followed")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<List<FollowerDTO>>> GetFollowedByUser(int id)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if(user == null) return NoContent();
+
+            var listToRet = new List<FollowerDTO>();
+            foreach(var f in user.FollowedUsers.ToList())
+            {
+                listToRet.Add(new FollowerDTO(f));
+            }
+
+            return listToRet;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        /// <response code="401"></response>
+        [HttpGet("{id}/followers")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<List<FollowerDTO>>> GetFollowersOfUser(int id)
+        {
+            var listToRet = new List<FollowerDTO>();
+            foreach(var f in await context.Follows.Where(x => x.FollowedId == id).ToListAsync())
+            {
+                var tmp = new FollowerDTO{
+                    Id = f.FollowerId,
+                    Name = f.Follower.UserName
+                };
+                listToRet.Add(tmp);
+            }
+
+            return listToRet;
         }
 
         // 
@@ -160,9 +230,8 @@ namespace API.Controllers
 
             var user = await context.Users.FindAsync(reqId);
             if(user == null) return NoContent();
-            
 
-            var follow = user.Followers.FirstOrDefault(f => f.AppUserId == id);
+            var follow = user.FollowedUsers.FirstOrDefault(f => f.FollowedId == id);
             if(follow == null) return BadRequest($"You are not following user with id {id}");
 
             context.Remove(follow);

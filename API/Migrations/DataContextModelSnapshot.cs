@@ -31,18 +31,21 @@ namespace API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<float>("AtmosphereRating")
+                        .HasColumnType("real");
+
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<float>("ServiceRating")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
@@ -59,18 +62,15 @@ namespace API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Verified")
@@ -93,16 +93,25 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ingredients")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<float>("PriceRating")
+                        .HasColumnType("real");
+
+                    b.Property<float>("ServiceRating")
+                        .HasColumnType("real");
+
+                    b.Property<float>("TasteRating")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -123,13 +132,18 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DishId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Rating")
+                    b.Property<int>("PriceRating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceRating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TasteRating")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -164,32 +178,6 @@ namespace API.Migrations
                     b.ToTable("DishesInOrder");
                 });
 
-            modelBuilder.Entity("API.Entities.Follower", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AppRestaurantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FollowerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppRestaurantId");
-
-                    b.HasIndex("AppUserId");
-
-                    b.ToTable("Followers");
-                });
-
             modelBuilder.Entity("API.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -199,7 +187,6 @@ namespace API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AppRestaurantId")
@@ -289,11 +276,13 @@ namespace API.Migrations
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("AtmosphereRating")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Rating")
+                    b.Property<int>("ServiceRating")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -303,6 +292,52 @@ namespace API.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Res_Review");
+                });
+
+            modelBuilder.Entity("API.Entities.RestaurantFollower", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("FollowedId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowedId");
+
+                    b.HasIndex("FollowerId");
+
+                    b.ToTable("RestaurantFollowers");
+                });
+
+            modelBuilder.Entity("API.Entities.UserFollower", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("FollowedId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowedId");
+
+                    b.HasIndex("FollowerId");
+
+                    b.ToTable("UserFollowers");
                 });
 
             modelBuilder.Entity("API.Entities.Dish", b =>
@@ -352,25 +387,6 @@ namespace API.Migrations
                     b.Navigation("Dish");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("API.Entities.Follower", b =>
-                {
-                    b.HasOne("API.Entities.AppRestaurant", "AppRestaurant")
-                        .WithMany("Followers")
-                        .HasForeignKey("AppRestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Entities.AppUser", "AppUser")
-                        .WithMany("Followers")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppRestaurant");
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("API.Entities.Order", b =>
@@ -445,6 +461,44 @@ namespace API.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("API.Entities.RestaurantFollower", b =>
+                {
+                    b.HasOne("API.Entities.AppRestaurant", "Followed")
+                        .WithMany("Followers")
+                        .HasForeignKey("FollowedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "Follower")
+                        .WithMany("FollowedRestaurants")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Followed");
+
+                    b.Navigation("Follower");
+                });
+
+            modelBuilder.Entity("API.Entities.UserFollower", b =>
+                {
+                    b.HasOne("API.Entities.AppUser", "Followed")
+                        .WithMany("FollowedUsers")
+                        .HasForeignKey("FollowedId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "Follower")
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Followed");
+
+                    b.Navigation("Follower");
+                });
+
             modelBuilder.Entity("API.Entities.AppRestaurant", b =>
                 {
                     b.Navigation("Dishes");
@@ -462,7 +516,9 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
-                    b.Navigation("Followers");
+                    b.Navigation("FollowedRestaurants");
+
+                    b.Navigation("FollowedUsers");
 
                     b.Navigation("Orders");
 

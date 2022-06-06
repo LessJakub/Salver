@@ -1,0 +1,33 @@
+<!-- Activity wall -->
+<div class="basis-3/4 flex flex-col h-full">
+    <!-- Section button - Add post -->
+    <div class="h-24 w-full flex items-center justify-center">
+        <button type="button" class="bg-green-800 px-7 py-3 rounded-xl text-gray-50 font-medium hover:bg-green-900">Where are you eating today?</button>
+    </div>
+
+    <!-- Post list -->
+    <div class="grow w-full flex flex-col items-center space-y-20 mb-10">
+
+        <!-- Post -->
+        <ng-container *ngFor="let PoPost of fetchedPosts">
+            <app-activity-post [model]="PoPost"></app-activity-post>
+        </ng-container>
+
+    </div>
+
+</div>
+
+<!-- Reccomendations -->
+<div class="basis-1/4 h-full flex flex-col items-center">
+    <!-- Section header-->
+    <div class="h-24 flex items-center">
+        <h2 class="text-xl font-medium">We think you will enjoy these!</h2>
+    </div>
+
+    <!-- Reccomendation list-->
+    <ng-container *ngFor="let rec of this.recommendations">
+                
+        <app-dish-tile [model]="rec"></app-dish-tile>
+        
+    </ng-container>
+</div>

@@ -92,8 +92,111 @@ namespace API.Controllers
 
             if(restaurant == null) return NoContent();
 
+            
+
             return new RestaurantDto(restaurant);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        [AllowAnonymous]
+        [HttpGet("{id}/follow")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> FollowRestaurant(int id)
+        {
+            var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
+            if(restaurant is null) return BadRequest($"Restaurant with id {id} does not exist");
+
+            var reqId = GetRequesterId();
+            if(reqId == -1) return BadRequest($"You must be signed in to follow someone");
+
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == reqId);
+            if(user is null) return BadRequest($"User with id {reqId} does not exist");
+
+            var prevFollow = user.FollowedRestaurants.FirstOrDefault(p => p.FollowedId == id);
+            if(prevFollow is not null) return BadRequest($"User with id {reqId} already follows restaurant with id {id}");
+
+            var follow = new RestaurantFollower {
+                FollowerId = reqId,
+                Follower = user,
+                Followed = restaurant,
+                FollowedId = id
+            };
+
+            context.Add(follow);
+            await context.SaveChangesAsync();
+            
+            return Ok();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"> </response>
+        /// <response code="204">  </response>
+        /// <response code="400">  </response>
+        [AllowAnonymous]
+        [HttpDelete("{id}/unfollow")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UnfollowRestaurant(int id)
+        {
+            var reqId = GetRequesterId();
+            if(id == -1) return BadRequest($"You must be signed in to unfollow someone");
+
+            var user = await context.Users.FindAsync(reqId);
+            if(user is null) return NoContent();
+
+            var follow = user.FollowedRestaurants.FirstOrDefault(f => f.FollowedId == id);
+            if(follow is null) return BadRequest($"You are not following restaurant with id {id}");
+
+            context.Remove(follow);
+            await context.SaveChangesAsync();
+            
+            return Ok();
+        }
+
+         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"> </response>
+        /// <response code="204">  </response>
+        /// <response code="400">  </response>
+        [AllowAnonymous]
+        [HttpGet("{id}/followers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<FollowerDTO>>> GetFollowersOfRestaurant(int id)
+        {
+            var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
+            if(restaurant is null) return BadRequest($"Restaurant with id {id} does not exist.");
+
+
+            var listToRet = new List<FollowerDTO>();
+            foreach(var f in restaurant.Followers.ToList())
+            {
+                listToRet.Add(new FollowerDTO(f));
+            }
+            
+            return listToRet;
+        }
+
 
 
         #if DEBUG
@@ -197,7 +300,9 @@ namespace API.Controllers
             if(restaurant == null) return NoContent();
 
             var owner = restaurant.User_Res_Relation.FirstOrDefault(relation => relation.AppUserId == GetRequesterId());
-            if(owner == null) return Unauthorized();
+
+            var adminCheckStatusCode = AuthorizedByRole(Roles.Admin.ToString());
+            if(owner == null && adminCheckStatusCode != StatusCodes.Status200OK) return Unauthorized("User is not an admin or does not own the restaurant");
 
             context.Remove(restaurant);
 
@@ -223,6 +328,11 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IEnumerable<RestaurantDto>> SearchRestaurant(string restaurantName)
         {
+            if(String.IsNullOrEmpty(restaurantName)){
+                return await this.GetRestaurants();
+            }
+
+
             var restaurants = await context.Restaurants.Where(e => e.Name.Contains(restaurantName)).ToListAsync();
 
             var restaurantsToReturn = new List<RestaurantDto>();

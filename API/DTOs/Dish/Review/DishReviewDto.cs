@@ -15,14 +15,18 @@ namespace API.DTOs
         public DishReviewDto(Dish_Review dish_rev)
         {
             Id = dish_rev.Id;
-            Rating = dish_rev.Rating;
+            TasteRating = dish_rev.TasteRating;
+            PriceRating = dish_rev.PriceRating;
+            ServiceRating = dish_rev.ServiceRating;
             Description = dish_rev.Description;
             UserId = dish_rev.AppUserId;
             DishId = dish_rev.DishId;
         }
 
         public int Id { get; set; }
-        public int Rating { get; set; }
+        public int TasteRating { get; set; }
+        public int PriceRating { get; set; }
+        public int ServiceRating { get; set; }
         public string Description { get; set; }
         public int UserId { get; set; }
         public int DishId { get; set; }

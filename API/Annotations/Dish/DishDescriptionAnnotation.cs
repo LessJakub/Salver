@@ -8,7 +8,7 @@ namespace API.Annotations
 {
     public class DishDescriptionAnnotation : CustomAnnotation
     {
-        public DishDescriptionAnnotation(int minLength=0, int maxLength=100)
+        public DishDescriptionAnnotation(int minLength=0, int maxLength=250)
         {
              ErrorMessage = $"Dish description must have between {minLength}-{maxLength} characters";
 

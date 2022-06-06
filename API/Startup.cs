@@ -1,5 +1,7 @@
 using API.Extensions;
-
+using Azure.Storage.Blobs;
+using API.Services;
+using API.Interfaces;
 
 namespace API
 {
@@ -22,6 +24,9 @@ namespace API
             services.AddCors();
             services.AddIdentityServices(_config);
             services.AddSwaggerService(_config);
+
+            services.AddScoped(x => new BlobServiceClient(_config.GetValue<string>("AzureBlobStorage")));
+            services.AddScoped<IBlobService, BlobService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,7 +43,9 @@ namespace API
 
             app.UseRouting();
 
-            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "http://localhost:4200"));
+            // Add hostname to CORS for non-local hosts
+
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "http://localhost:4200", "http://192.168.1.35:4200"));
 
             app.UseAuthentication();
 

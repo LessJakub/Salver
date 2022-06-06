@@ -18,12 +18,13 @@ namespace API.Entities
 
         public virtual ICollection<Restaurant_Review> Res_Review { get; set; }
 
-        public virtual ICollection<Follower> Followers { get; set; }
+        public virtual ICollection<RestaurantFollower> Followers { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
 
         public virtual ICollection<Dish> Dishes { get; set; }
 
-        
+        public float AtmosphereRating{ get; set; }
+        public float ServiceRating { get; set; }
     }
 }

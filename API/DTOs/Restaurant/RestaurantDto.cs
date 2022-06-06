@@ -19,6 +19,7 @@ namespace API.DTOs
             Description = appRestaurant.Description;
             Address = appRestaurant.Address;
             Price = appRestaurant.Price;
+            Followers = appRestaurant.Followers.Count();
         }
 
         public int Id { get; set; }
@@ -26,5 +27,8 @@ namespace API.DTOs
         public string Description { get; set; }
         public string Address { get; set; }
         public float Price { get; set; }
+        public int Followers { get; set; } = 0;
+        public float AtmosphereRating { get; set; } = 0.0f;
+        public float ServiceRating { get; set; } = 0.0f;
     }
 }

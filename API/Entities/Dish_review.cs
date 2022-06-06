@@ -7,7 +7,9 @@ namespace API.Entities
     {
         public int Id { get; set; }
 
-        public int Rating { get; set; }
+        public int TasteRating { get; set; }
+        public int PriceRating { get; set; }
+        public int ServiceRating { get; set; }
 
         public string Description { get; set; }
 

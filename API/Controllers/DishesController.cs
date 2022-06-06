@@ -7,6 +7,7 @@ using API.DTOs;
 using API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -48,7 +49,8 @@ namespace API.Controllers
                 Ingredients = newDishDto.Ingredients,
                 Description = newDishDto.Description,
                 AppRestaurantId = restaurantId,
-                AppRestaurant = restaurant
+                AppRestaurant = restaurant,
+                Price = newDishDto.Price
             };
 
             context.Add(dish);
@@ -110,6 +112,7 @@ namespace API.Controllers
             dish.Name = newDishDto.Name;
             dish.Ingredients = newDishDto.Ingredients;
             dish.Description = newDishDto.Description;
+            dish.Price = newDishDto.Price;
 
             await context.SaveChangesAsync();
 
@@ -145,6 +148,47 @@ namespace API.Controllers
             await context.SaveChangesAsync();
 
             return Ok();
+        }
+
+
+
+        /// <summary>
+        /// Search dish with specific name
+        /// </summary>
+        /// <param name="dishName">String containing search information</param>
+        /// <remarks>
+        /// Does not require authorization.
+        /// Finds all restaurants containing search information. Not case sensitive. 
+        /// Always returns status code 200 OK but may return empty list. 
+        /// Currentlly accpets only name as parameter</remarks>
+        /// <returns>list of RestaurantDtos</returns>
+        /// <response code="200"> Returns list of restaurants with matching parameters</response>
+        [AllowAnonymous]
+        [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IEnumerable<DishDto>> SearchDish(string dishName)
+        {
+            if(String.IsNullOrEmpty(dishName))
+            {
+                var dishesAll= new List<DishDto>();
+                foreach(var dish in context.Dishes)
+                {
+                    dishesAll.Add(new DishDto(dish));
+                    if(dishesAll.Count() >= 10) break;
+                }
+                
+                return dishesAll;
+            }
+
+            var dishes = await context.Dishes.Where(e => e.Name.Contains(dishName)).ToListAsync();
+
+            var dishesToReturn = new List<DishDto>();
+            foreach(var dish in dishes)
+            {
+                dishesToReturn.Add(new DishDto(dish));
+            }
+            return dishesToReturn;
         }
     }
 }

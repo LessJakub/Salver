@@ -18,17 +18,29 @@ namespace API.DTOs
             Name = appRestaurant.Name;
             Description = appRestaurant.Description;
             Address = appRestaurant.Address;
-            Price = appRestaurant.Price;
+            //Price = appRestaurant.Price;
             Followers = appRestaurant.Followers.Count();
+            PhoneNumber = appRestaurant.PhoneNumber;
+            Email = appRestaurant.Email;
+            var MinPrice = appRestaurant.Dishes.Min(d => d.Price);
+            var MaxPrice = appRestaurant.Dishes.Max(d => d.Price);
+            PriceRange = (MinPrice != MaxPrice)?($"{MinPrice}-{MaxPrice}"):(null);
+            Price = appRestaurant.Dishes.Average(d => d.Price);
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Address { get; set; }
-        public float Price { get; set; }
+        public string? Address { get; set; } = null;
+
+        public string? PhoneNumber { get; set; } = null;
+
+        public string? Email { get; set; } = null;
         public int Followers { get; set; } = 0;
         public float AtmosphereRating { get; set; } = 0.0f;
         public float ServiceRating { get; set; } = 0.0f;
+        public string? PriceRange  { get; set; }
+
+        public float Price { get; set; }
     }
 }

@@ -16,11 +16,17 @@
             class="w-1/2 py-2 rounded-xl text-gray-50 border bg-green-900 hover:bg-red-800 hover:text-gray-50 border-green-900 hover:border-red-900">{{
             this.followButtonText }}</button>
 
+        <p class="text-center font-light mx-4">Followers: {{restaurant.followers}}</p>
+
         <p class="text-center font-light mx-4">{{restaurant.description}}</p>
 
         <p class="text-center font-light mx-4">{{restaurant.address}}</p>
 
-        <p *ngIf="(this.restaurant.priceRange != null)" class="text-center mx-4">{{restaurant.priceRange}}</p>
+        <p *ngIf="(restaurant.phoneNumber != null)" class="text-center font-light mx-4">{{restaurant.PhoneNumber}}</p>
+
+        <p *ngIf="(restaurant.email != null)" class="text-center font-light mx-4">{{restaurant.Email}}</p>
+
+        <p *ngIf="(this.restaurant.priceRange != null)" class="text-center mx-4">Price range: {{restaurant.priceRange}}</p>
         <p *ngIf="(this.restaurant.priceRange == null)" class="text-center font-semibold mx-4">Price range: Unavailable
         </p>
 

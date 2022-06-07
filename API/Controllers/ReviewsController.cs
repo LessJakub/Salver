@@ -25,6 +25,8 @@ namespace API.Controllers
         /// <remarks>If review already exist request will be routed to UpdateReview method.</remarks>
         /// <returns>ReviewDto from created post</returns>
         /// <response code="200">New review was created</response>
+        /// <response code="400">Nothing created, proper messeage should appear with error.</response>
+        /// <response code="401">User does not exist in the database.</response>
         [Authorize]
         [HttpPost("Restaurants/{restaurantId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -38,6 +40,9 @@ namespace API.Controllers
 
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
+
+            var userRes = user.User_Res_Relation.FirstOrDefault(r => r.AppRestaurantId == restaurantId);
+            if(userRes != null) return BadRequest($"User with id {userId} owns restaurant with id {restaurantId}");
 
             var rev = restaurant.Res_Review.FirstOrDefault(r => r.AppUserId == userId);
             if(rev != null) return await UpdateRestaurantReview(restaurantId, rev.Id, newReviewDto);
@@ -68,6 +73,8 @@ namespace API.Controllers
         /// Gets list of all reviews created under certain restaurant
         /// </summary>
         /// <param name="restaurantId">Id of the restaurant</param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
         /// <remarks>Status codes not documnted</remarks>
         /// <returns>List of ReviewDto created from restaurants reviews</returns>
         /// <response code="200">  </response>
@@ -76,13 +83,18 @@ namespace API.Controllers
         [HttpGet("Restaurants/{restaurantId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<ReviewDto>>> ReadAllRestaurantReviews(int restaurantId)
+        public async Task<ActionResult<List<ReviewDto>>> ReadRestaurantReviews(int restaurantId, uint startingIndex = 0, uint endIndex = 12)
         {
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
 
             var resReviews = new List<ReviewDto>();
-            foreach(var rev in restaurant.Res_Review.ToList()) resReviews.Add(new ReviewDto(rev));
+            foreach(var rev in restaurant.Res_Review.
+                Skip((int)startingIndex).
+                Take((int)endIndex).
+                OrderByDescending(res => res.AppUser.Res_Review.Count()).
+                ToList()) 
+                    resReviews.Add(new ReviewDto(rev));
 
             return resReviews;
         }
@@ -93,7 +105,7 @@ namespace API.Controllers
         /// <param name="restaurantId">Id of the restaurant</param>
         /// <param name="newReviewDto">Post parameters</param>
         /// <param name="reviewId">Id of the post</param>
-        /// <remarks>Status codes not documnted</remarks>
+        /// <remarks></remarks>
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>

@@ -70,7 +70,7 @@ namespace API.Controllers
 
                 context.Add(dishInOrder);
 
-                //price += tmp
+                price += tmp.Price;
             }
             order.DishesInOrder = dishesInOrder;
             order.TotalPrice = price;
@@ -81,7 +81,6 @@ namespace API.Controllers
             await context.SaveChangesAsync();
 
             return new OrderDTO(order);
-            
         }
 
 

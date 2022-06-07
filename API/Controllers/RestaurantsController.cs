@@ -47,7 +47,9 @@ namespace API.Controllers
                 Name = restaurantRegisterDto.Name,
                 Description = restaurantRegisterDto.Description,
                 Address = restaurantRegisterDto.Address,
-                Price = 0.0f
+                //Price = 0.0f
+                PhoneNumber = restaurantRegisterDto.PhoneNumber,
+                Email = restaurantRegisterDto.Email
             };
 
             var relation = new Restaurant_Owner{

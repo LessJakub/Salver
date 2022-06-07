@@ -4,6 +4,7 @@ import { Dish } from 'src/app/models/Dish';
 import { Post } from 'src/app/models/post';
 import { DishDTO } from '../../models/DishDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
+import { User } from '../../models/UserDTO';
 import { AccountService } from '../../services/account.service';
 import { BlobUploadService } from '../../services/blob-upload.service';
 import { SearchService } from '../../services/search.service';
@@ -22,7 +23,6 @@ export class RestaurantPageComponent implements OnInit {
     fetchedDishes: DishDTO[] = null;
 
     isFollowing: boolean = false;
-    isOwner: boolean = false;
     followButtonText = this.isFollowing ? "Unfollow" : "Follow";
 
     // Dummy
@@ -32,8 +32,10 @@ export class RestaurantPageComponent implements OnInit {
     constructor(private activatedRoute: ActivatedRoute,
                 private searchService: SearchService,
                 private uploadService: BlobUploadService,
-                private accountService: AccountService,
+                public accountService: AccountService,
                 private router: Router) { }
+
+    user = this.accountService.currentUser$;
 
     updateUrlWithDefault() {
         this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
@@ -71,16 +73,6 @@ export class RestaurantPageComponent implements OnInit {
         }
     }
 
-    private checkIfOwner() {
-        if (this.accountService.ownerID) {
-            this.isOwner = true;
-            console.log("USER IS OWNER")
-        }
-        else {
-            console.log("USER IS NOT OWNER")
-        }
-    }
-
     private getDetails() {
         // Obtain restaurant from DB based on ID.
         this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
@@ -109,18 +101,21 @@ export class RestaurantPageComponent implements OnInit {
         console.log("Restaurant - Activity Getter")
     }
 
+    public userID;
+
     async ngOnInit() {
 
         console.log("Using ID from ActivatedRoute");
         // Obtain restaurant ID from ActivatedRouter.
         this.restaurantID = this.activatedRoute.snapshot.params['id'];
 
+        this.accountService.currentUser$.subscribe((usr) => {
+            this.userID = usr.isRestaurantOwner;
+        });
+
         if (this.restaurantID == NaN) {
             this.router.navigate(['*']);
         }
-
-        // Check if currently logged-in user is an owner
-        this.checkIfOwner();
 
         // Obtain restaurant based on fetched ID.
         this.getDetails();

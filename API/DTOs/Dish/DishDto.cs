@@ -22,6 +22,7 @@ namespace API.DTOs
             TasteGrade = dish.TasteRating;
             PriceGrade = dish.PriceRating;
             ServiceGrade = dish.ServiceRating;
+            Price = dish.Price;
             TotalGrade = (dish.TasteRating + dish.PriceRating + dish.ServiceRating)/3.0f;
         }
 

@@ -41,7 +41,7 @@ export class AccountService {
 
     private currentUserSource = new ReplaySubject<User>()
 
-    currentUser$ = this.currentUserSource.asObservable();
+    public currentUser$ = this.currentUserSource.asObservable();
 
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe (

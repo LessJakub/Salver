@@ -235,7 +235,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<DishReviewDto>>> ReadAllDishReviews(int dishId)
         {
-            var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
+            var dish = await context.Dishes.FindAsync(dishId);
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
 
             var dishReviews = new List<DishReviewDto>();

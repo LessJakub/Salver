@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
 import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
+import { OrdersService } from 'src/app/shared/services/orders.service';
 import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
@@ -24,7 +25,8 @@ export class DishOverlayComponent implements OnInit {
     tabs: string[] = ["Overview", "Reviews"];
 
     constructor(private searchService: SearchService,
-        private uploadService: BlobUploadService) { }
+        private uploadService: BlobUploadService,
+        public orderService : OrdersService) { }
 
     updateUrlWithDefault() {
         this.modelImageURL = this.uploadService.defaultDishImageURL();
@@ -33,6 +35,11 @@ export class DishOverlayComponent implements OnInit {
     ngOnInit(): void {
         this.restaurant = this.searchService.searchRestaurantByID(this.model.appRestaurantId);
         this.modelImageURL = this.uploadService.dishImageURL(this.model.id);
+
+        if(this.model.appRestaurantId == this.orderService.currentRestaurant)
+        {
+            this.orderCount = this.orderService.dishIdInOrder(this.model.id);
+        }
 
         this.searchService.getRestaurantNameByID(this.model.appRestaurantId).then((name: string) => {
             this.restaurantName = name;
@@ -63,6 +70,17 @@ export class DishOverlayComponent implements OnInit {
     takeOrder() {
         if (this.orderCount === 0) {
             this.closeOverlayAction();
+        }
+        else
+        {
+            if(this.orderService.addDishToOrder(this.model, this.orderCount))
+            {
+                this.closeOverlayAction();
+            } 
+            else
+            {
+                this.orderCount = 0
+            }
         }
     }
 }

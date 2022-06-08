@@ -26,7 +26,7 @@ namespace API.Controllers
         /// <response code="200"> Returns a new created order</response>
         /// <response code="400"> Bad request, invalid input</response>
         [Authorize]
-        [HttpPost("Restaurants/{restaurantId}/orders")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<OrderDTO>> Create(NewOrderDTO newOrderDTO)
@@ -46,7 +46,7 @@ namespace API.Controllers
                 Address = newOrderDTO.Address,
                 Status = Status.NEW,
                 SubmitTime = DateTime.Now,
-                ExpectedTime = newOrderDTO.ExpectedTime,
+                ExpectedTime = TimeSpan.FromMinutes(15),
                 AppUser = user,
                 AppUserId = userId,
                 AppRestaurant = restaurant,
@@ -79,8 +79,6 @@ namespace API.Controllers
             }
             order.DishesInOrder = dishesInOrder;
             order.TotalPrice = price;
-            
-            
 
             context.Add(order);
             await context.SaveChangesAsync();
@@ -97,23 +95,27 @@ namespace API.Controllers
         /// <returns>List of OrderDtos created from user orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("user/{userId}/orders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<OrderDTO>>> ReadAllUserOrders(int userId)
+        public async Task<ActionResult<List<OrderDTO>>> ReadAllUserOrders(int userId, int startingIndex = 0, int endIndex = 12)
         {
             var user = await context.Users.FindAsync(userId);
             if(user == null) return BadRequest($"User with {userId} id does not exist");
 
             var usrOrders = new List<OrderDTO>();
-            foreach(var order in context.Orders.ToList()) usrOrders.Add(new OrderDTO(order));
+            foreach(var order in context.Orders.
+                Skip(startingIndex).
+                Take(endIndex).
+                OrderByDescending(o => o.SubmitTime).
+                ToList()) usrOrders.Add(new OrderDTO(order));
 
             return usrOrders;
         }
 
         
-         /// <summary>
+        /// <summary>
         /// Gets list of all orders created in certain restaurant
         /// </summary>
         /// <param name="restaurantId">Id of the restaurant</param>
@@ -121,17 +123,21 @@ namespace API.Controllers
         /// <returns>List of OrderDtos created from restaurant orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("Restaurants/{restaurantId}/orders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<OrderDTO>>> ReadAllRestaurantOrders(int restaurantId)
+        public async Task<ActionResult<List<OrderDTO>>> ReadAllRestaurantOrders(int restaurantId, int startingIndex = 0, int endIndex = 12)
         {
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             if(restaurant == null) return BadRequest($"Restaurant with {restaurantId} id does not exist");
 
             var resOrders = new List<OrderDTO>();
-            foreach(var order in context.Orders.ToList()) resOrders.Add(new OrderDTO(order));
+            foreach(var order in context.Orders.
+                Skip(startingIndex).
+                Take(endIndex).
+                OrderByDescending(o => o.SubmitTime).
+                ToList()) resOrders.Add(new OrderDTO(order));
 
             return resOrders;
         }

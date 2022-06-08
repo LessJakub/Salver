@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AccountService } from '../../services/account.service';
+import { OrdersService } from '../../services/orders.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -11,7 +12,7 @@ export class NavBarComponent {
 
     showLoginOverlay: Boolean
 
-    constructor(public accountService: AccountService) {
+    constructor(public accountService: AccountService, public orderService : OrdersService) {
     // Set to true to see login overlay
         this.showLoginOverlay = false
     }

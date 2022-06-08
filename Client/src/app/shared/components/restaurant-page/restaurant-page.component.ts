@@ -77,6 +77,7 @@ export class RestaurantPageComponent implements OnInit {
         // Obtain restaurant from DB based on ID.
         this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
             this.restaurant = restaurant;
+            //console.log(this.restaurant)
         })
 
         if (this.restaurant == null) {

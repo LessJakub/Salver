@@ -22,11 +22,11 @@
 
         <p class="text-center font-light mx-4">{{restaurant.address}}</p>
 
-        <p *ngIf="(restaurant.phoneNumber != null)" class="text-center font-light mx-4">{{restaurant.PhoneNumber}}</p>
+        <p *ngIf="(restaurant.phoneNumber != '')" class="text-center font-light mx-4">{{restaurant.phoneNumber}}</p>
 
-        <p *ngIf="(restaurant.email != null)" class="text-center font-light mx-4">{{restaurant.Email}}</p>
+        <p *ngIf="(restaurant.email != '')" class="text-center font-light mx-4">{{restaurant.email}}</p>
 
-        <p *ngIf="(this.restaurant.priceRange != null)" class="text-center mx-4">Price range: {{restaurant.priceRange}}</p>
+        <p *ngIf="(this.restaurant.priceRange != null)" class="text-center mx-4">Price range: {{restaurant.minPrice}} - {{restaurant.maxPrice}</p>
         <p *ngIf="(this.restaurant.priceRange == null)" class="text-center font-semibold mx-4">Price range: Unavailable
         </p>
 

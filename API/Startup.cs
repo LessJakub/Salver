@@ -2,6 +2,7 @@ using API.Extensions;
 using Azure.Storage.Blobs;
 using API.Services;
 using API.Interfaces;
+using System.Diagnostics;
 
 namespace API
 {
@@ -27,11 +28,14 @@ namespace API
 
             services.AddScoped(x => new BlobServiceClient(_config.GetValue<string>("AzureBlobStorage")));
             services.AddScoped<IBlobService, BlobService>();
+            services.AddSingleton<DiagnosticObserver>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DiagnosticListener diagnosticListenerSource, DiagnosticObserver diagnosticObserver)
         {
+            diagnosticListenerSource.Subscribe(diagnosticObserver);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

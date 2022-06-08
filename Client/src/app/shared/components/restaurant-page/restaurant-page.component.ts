@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, IterableDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Dish } from 'src/app/models/Dish';
 import { Post } from 'src/app/models/post';
@@ -29,13 +29,23 @@ export class RestaurantPageComponent implements OnInit {
     fetchedDishes2: Dish[];
     fetchedPosts: Post[] | null;
 
+    iterableDiff;
+
     constructor(private activatedRoute: ActivatedRoute,
                 private searchService: SearchService,
                 private uploadService: BlobUploadService,
                 public accountService: AccountService,
-                private router: Router) { }
+                private router: Router) { 
+                }
 
     user = this.accountService.currentUser$;
+
+    updateData(eventFlag: boolean) {
+        console.log("Obtained event:", eventFlag);
+        if (eventFlag == true) {
+            this.getDishes();
+        }
+    }
 
     updateUrlWithDefault() {
         this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
@@ -102,7 +112,8 @@ export class RestaurantPageComponent implements OnInit {
         console.log("Restaurant - Activity Getter")
     }
 
-    public userID;
+    private userID;
+    public isOwner: boolean;
 
     async ngOnInit() {
 
@@ -113,6 +124,8 @@ export class RestaurantPageComponent implements OnInit {
         this.accountService.currentUser$.subscribe((usr) => {
             this.userID = usr.isRestaurantOwner;
         });
+
+        this.isOwner = (this.userID == this.restaurantID);
 
         if (this.restaurantID == NaN) {
             this.router.navigate(['*']);

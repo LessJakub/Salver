@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
 import { User } from 'src/app/shared/models/UserDTO';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { AccountService } from 'src/app/shared/services/account.service';
 import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
@@ -33,16 +33,20 @@ export class RestaurantService {
             }));
     }
 
+    removeDish(dishID: number, restaurantID: number) {
 
-    // /**
-    //  * Returns RestaurantDTO object identified by given ID.
-    //  * @param id Restaurant ID
-    //  * @returns RestaurantDTO object, null if not found.
-    //  */
-    //  async searchRestaurantByID(id: number) {
-    //     if (id == null || id == NaN) {
-    //         return null;
-    //     }
-    //     return await this.http.get<RestaurantDTO>(this.restaurantDetailURL + id).toPromise();
-    // }
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            userToken = user.token;
+        })
+
+        return this.http.delete(this.addDishURL + restaurantID + "/dishes/" + dishID, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
+            map((Response: HttpHeaderResponse) => {
+                return Response;
+            }, error => {
+                console.log(error);
+            }));
+    }
+
 }

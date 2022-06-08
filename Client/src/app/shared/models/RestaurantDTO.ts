@@ -14,5 +14,7 @@ export interface RestaurantDTO {
     atmosphereRating: number,
     serviceRating: number,
     priceRange: string,
+    minPrice: number,
+    maxPrice: number,
     grades: GradeElement[]
 }

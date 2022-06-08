@@ -98,7 +98,7 @@ namespace API.Controllers
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
         [AllowAnonymous]
-        [HttpGet("Restaurants/{restaurantId}/orders")]
+        [HttpGet("user/{userId}/orders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<OrderDTO>>> ReadAllUserOrders(int userId)

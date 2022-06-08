@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
 
 @Component({
@@ -13,7 +13,8 @@ export class MenuPostComponent implements OnInit {
     showOverlay: boolean = false;
 
     @Input() model: DishDTO;
-    @Input() adder: boolean = false;
+    @Input() isOwner: boolean = false;
+    @Output() reloadEventEmitter = new EventEmitter();
 
     orderCount: number = 0;
 
@@ -28,8 +29,18 @@ export class MenuPostComponent implements OnInit {
         this.orderCount -= 1;
     }
 
-    adderAction() {
-        console.log("Add new dish action");
+    emitReload(flag: boolean) {
+        this.reloadEventEmitter.emit(flag);
+    }
+
+    // TODO: Complete add review action in menu post
+    addReviewAction() {
+        console.log("UNIMPLEMENTED - Add review to dish action")
+    }
+
+    // TODO: Complete add review action in menu post
+    deleteAction() {
+        console.log("UNIMPLEMENTED - Add delete dish action")
     }
 
     invertOverlayFlag() {

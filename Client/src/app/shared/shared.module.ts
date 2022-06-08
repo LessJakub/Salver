@@ -21,6 +21,8 @@ import { MenuPostComponent } from './components/posts/menu-post/menu-post.compon
 import { RestaurantPageComponent } from './components/restaurant-page/restaurant-page.component';
 import { ActivityPostComponent } from './components/posts/activity-post/activity-post.component';
 import { NewMealOverlayComponent } from './components/overlays/new-meal-overlay/new-meal-overlay.component';
+import { AddDishPostComponent } from './components/posts/add-dish-post/add-dish-post.component';
+import { DeleteDishOverlayComponent } from './components/overlays/delete-dish-overlay/delete-dish-overlay.component';
 
 
 @NgModule({
@@ -43,6 +45,8 @@ import { NewMealOverlayComponent } from './components/overlays/new-meal-overlay/
         RestaurantPageComponent,
         ActivityPostComponent,
         NewMealOverlayComponent,
+        AddDishPostComponent,
+        DeleteDishOverlayComponent,
     ],
     imports: [
         CommonModule,
@@ -63,6 +67,8 @@ import { NewMealOverlayComponent } from './components/overlays/new-meal-overlay/
         MenuPostComponent,
         RestaurantPageComponent,
         ActivityPostComponent,
+        AddDishPostComponent,
+        DeleteDishOverlayComponent,
     ]
 })
 export class SharedModule { }

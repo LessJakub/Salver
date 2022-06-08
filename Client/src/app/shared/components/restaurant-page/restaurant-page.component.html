@@ -16,11 +16,17 @@
             class="w-1/2 py-2 rounded-xl text-gray-50 border bg-green-900 hover:bg-red-800 hover:text-gray-50 border-green-900 hover:border-red-900">{{
             this.followButtonText }}</button>
 
+        <p class="text-center font-light mx-4">Followers: {{restaurant.followers}}</p>
+
         <p class="text-center font-light mx-4">{{restaurant.description}}</p>
 
         <p class="text-center font-light mx-4">{{restaurant.address}}</p>
 
-        <p *ngIf="(this.restaurant.priceRange != null)" class="text-center mx-4">{{restaurant.priceRange}}</p>
+        <p *ngIf="(restaurant.phoneNumber != null)" class="text-center font-light mx-4">{{restaurant.PhoneNumber}}</p>
+
+        <p *ngIf="(restaurant.email != null)" class="text-center font-light mx-4">{{restaurant.Email}}</p>
+
+        <p *ngIf="(this.restaurant.priceRange != null)" class="text-center mx-4">Price range: {{restaurant.priceRange}}</p>
         <p *ngIf="(this.restaurant.priceRange == null)" class="text-center font-semibold mx-4">Price range: Unavailable
         </p>
 
@@ -49,13 +55,16 @@
             class="w-full flex flex-col space-y-5 absolute top-0 left-0 justify-center content-center items-center align-middle">
             <!-- If there are dishes to show, display dishes list -->
             
-            <!-- TODO: Make component out of it which detects if user is owner -->
-            <app-menu-post class="w-5/6 h-fit" *ngIf="(this.isOwner)" [adder]="true"></app-menu-post>
+            <app-add-dish-post class="w-5/6 h-fit" *ngIf="(this.isOwner)" 
+                                [model]="this.restaurant" 
+                                (reloadEventEmitter)="this.updateData($event)"></app-add-dish-post>
 
             <div class="flex w-full h-full items-center content-center justify-center"
                 *ngFor="let dish of this.fetchedDishes">
                 <div class="w-5/6 h-fit">
-                    <app-menu-post [model]="dish"></app-menu-post>
+                    <app-menu-post [model]="dish" 
+                                   [isOwner]="this.isOwner"
+                                   (reloadEventEmitter)="this.updateData($event)"></app-menu-post>
                 </div>
             </div>
         </div>

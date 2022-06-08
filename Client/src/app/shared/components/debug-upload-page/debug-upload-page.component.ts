@@ -78,6 +78,7 @@ export class DebugUploadPageComponent implements OnInit {
 
             if (files[0]) {
                 formData.append(files[0].name, files[0]);
+                formData.append("fileID", files[0].name);
                 formData.append("blobContainer", this.blobContainer);
             }
 

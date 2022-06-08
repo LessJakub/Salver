@@ -70,7 +70,7 @@ namespace API.Controllers
             if(userId != GetRequesterId()) return Unauthorized("Only owner of account can create posts");
 
             var claimedId = GetRequesterId();
-            var user = await context.Users.FindAsync();
+            var user = await context.Users.FindAsync(claimedId);
             
             if(user == null) return Unauthorized($"User with {claimedId} id does not exist");
 

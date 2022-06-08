@@ -34,18 +34,22 @@ namespace API.Controllers
         public async Task<ActionResult<RestaurantDto>> Register(RestaurantRegisterDto restaurantRegisterDto)
         {
             var requesterId = GetRequesterId();
-            if(requesterId < 0) return BadRequest();
+            if(requesterId < 0) return BadRequest($"You must be sign in to create restaurant.");
 
             var user = await context.Users.FindAsync(requesterId);
         
-            if(user == null) return NoContent();
+            if(user == null) return BadRequest($"There is no user with id {requesterId}.");
+
+            if(user.User_Res_Relation.Count() > 0) return BadRequest($"User with id {requesterId} already owns restaurant.");
 
             var restaurant = new AppRestaurant
             {
                 Name = restaurantRegisterDto.Name,
                 Description = restaurantRegisterDto.Description,
                 Address = restaurantRegisterDto.Address,
-                Price = 0.0f
+                //Price = 0.0f
+                PhoneNumber = restaurantRegisterDto.PhoneNumber,
+                Email = restaurantRegisterDto.Email
             };
 
             var relation = new Restaurant_Owner{
@@ -90,9 +94,7 @@ namespace API.Controllers
         {
             var restaurant = await context.Restaurants.FindAsync(id);
 
-            if(restaurant == null) return NoContent();
-
-            
+            if(restaurant == null) return BadRequest($"There is no restaurant with id {id}");
 
             return new RestaurantDto(restaurant);
         }
@@ -315,6 +317,8 @@ namespace API.Controllers
         /// Search restaurants with specific name
         /// </summary>
         /// <param name="restaurantName">String containing search information</param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
         /// <remarks>
         /// Does not require authorization.
         /// Finds all restaurants containing search information. Not case sensitive. 
@@ -326,14 +330,25 @@ namespace API.Controllers
         [HttpGet("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IEnumerable<RestaurantDto>> SearchRestaurant(string restaurantName)
+        public async Task<IEnumerable<RestaurantDto>> SearchRestaurant(string restaurantName, int startingIndex=0, int endIndex=12)
         {
             if(String.IsNullOrEmpty(restaurantName)){
-                return await this.GetRestaurants();
+                var list = await this.GetRestaurants();
+                return list.
+                    OrderByDescending(res => res.Followers).
+                    Skip(startingIndex).
+                    Take(endIndex).
+                    ToList();
             }
 
 
-            var restaurants = await context.Restaurants.Where(e => e.Name.Contains(restaurantName)).ToListAsync();
+            var restaurants = await context.Restaurants.
+                Where(e => e.Name.Contains(restaurantName)).
+                OrderByDescending(res => res.Followers.Count()).
+                Skip(startingIndex).
+                Take(endIndex).
+                ToListAsync();
+
 
             var restaurantsToReturn = new List<RestaurantDto>();
             foreach(var res in restaurants)

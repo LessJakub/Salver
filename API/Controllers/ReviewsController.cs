@@ -22,14 +22,16 @@ namespace API.Controllers
         /// </summary>
         /// <param name="restaurantId">Id of the restaurant</param>
         /// <param name="newReviewDto">New review parameters</param>
-        /// <remarks>Status codes not documented</remarks>
+        /// <remarks>If review already exist request will be routed to UpdateReview method.</remarks>
         /// <returns>ReviewDto from created post</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <response code="200">New review was created</response>
+        /// <response code="400">Nothing created, proper messeage should appear with error.</response>
+        /// <response code="401">User does not exist in the database.</response>
         [Authorize]
         [HttpPost("Restaurants/{restaurantId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ReviewDto>> CreateRestaurantReview(int restaurantId, NewReviewDto newReviewDto)
         {
             var userId = GetRequesterId();
@@ -39,8 +41,11 @@ namespace API.Controllers
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
 
+            var userRes = user.User_Res_Relation.FirstOrDefault(r => r.AppRestaurantId == restaurantId);
+            if(userRes != null) return BadRequest($"User with id {userId} owns restaurant with id {restaurantId}");
+
             var rev = restaurant.Res_Review.FirstOrDefault(r => r.AppUserId == userId);
-            if(rev != null) return BadRequest("You've already reviewed this restaurant");
+            if(rev != null) return await UpdateRestaurantReview(restaurantId, rev.Id, newReviewDto);
             
             var review = new Restaurant_Review{
                 AtmosphereRating = newReviewDto.AtmosphereRating,
@@ -68,6 +73,8 @@ namespace API.Controllers
         /// Gets list of all reviews created under certain restaurant
         /// </summary>
         /// <param name="restaurantId">Id of the restaurant</param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
         /// <remarks>Status codes not documnted</remarks>
         /// <returns>List of ReviewDto created from restaurants reviews</returns>
         /// <response code="200">  </response>
@@ -76,13 +83,18 @@ namespace API.Controllers
         [HttpGet("Restaurants/{restaurantId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<ReviewDto>>> ReadAllRestaurantReviews(int restaurantId)
+        public async Task<ActionResult<List<ReviewDto>>> ReadRestaurantReviews(int restaurantId, uint startingIndex = 0, uint endIndex = 12)
         {
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
 
             var resReviews = new List<ReviewDto>();
-            foreach(var rev in restaurant.Res_Review.ToList()) resReviews.Add(new ReviewDto(rev));
+            foreach(var rev in restaurant.Res_Review.
+                Skip((int)startingIndex).
+                Take((int)endIndex).
+                OrderByDescending(res => res.AppUser.Res_Review.Count()).
+                ToList()) 
+                    resReviews.Add(new ReviewDto(rev));
 
             return resReviews;
         }
@@ -93,7 +105,7 @@ namespace API.Controllers
         /// <param name="restaurantId">Id of the restaurant</param>
         /// <param name="newReviewDto">Post parameters</param>
         /// <param name="reviewId">Id of the post</param>
-        /// <remarks>Status codes not documnted</remarks>
+        /// <remarks></remarks>
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
@@ -105,11 +117,11 @@ namespace API.Controllers
         {
             //var ownCheck = await OwnsRestaurant(restaurantId);
             //if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
-            var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
+            //var restaurant = await context.Restaurants.FindAsync(restaurantId);
+            //if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
 
-            var rev = restaurant.Res_Review.FirstOrDefault(r => r.Id == reviewId);
-            if(rev == null) return BadRequest("Review with given Id does not exist");
+            var rev = context.RestaurantReviews.FirstOrDefault(r => r.Id == reviewId);
+            if(rev == null) return await CreateRestaurantReview(restaurantId, newReviewDto);
 
             var userId = GetRequesterId();
             if(rev.AppUserId != userId) return Unauthorized("You don't have permissions to edit this post"); 
@@ -119,6 +131,8 @@ namespace API.Controllers
             rev.AtmosphereRating = newReviewDto.AtmosphereRating;
             rev.ServiceRating = newReviewDto.ServiceRating;
 
+            var restaurant = context.Restaurants.FirstOrDefault(r => r.Id == rev.AppRestaurantId);
+            if(restaurant is null) return BadRequest($"Restaurant with id {rev.AppRestaurantId} does not exist.");
             CalculateRestaurantScores(restaurant);
 
             await context.SaveChangesAsync();
@@ -144,14 +158,21 @@ namespace API.Controllers
             //var ownCheck = await OwnsRestaurant(restaurantId);
             //if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
             
-            var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
+            //var restaurant = await context.Restaurants.FindAsync(restaurantId);
+            //if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
+            var reqId = GetRequesterId();
+            var adminCheck = AuthorizedByRole(Roles.Admin.ToString());
 
-            var rev = restaurant.Res_Review.FirstOrDefault(r => r.Id == reviewId);
-            if(rev == null) return BadRequest("Review with given id does not exist");
+            var rev = context.RestaurantReviews.FirstOrDefault(r => r.Id == reviewId);
+            if(rev == null) return BadRequest("Review with given id does not exist.");
+
+            if(rev.AppUserId != reqId && adminCheck != StatusCodes.Status200OK) 
+                return BadRequest($"User with id {reqId} is not creator of review {reviewId}.");
 
             context.Remove(rev);
 
+            var restaurant = await context.Restaurants.FindAsync(rev.AppRestaurantId);
+            if(restaurant == null) return BadRequest($"Restaurant with id {rev.AppRestaurantId} does not exist.");
             CalculateRestaurantScores(restaurant);
 
             await context.SaveChangesAsync();
@@ -160,12 +181,9 @@ namespace API.Controllers
         }
 
 
-
-
         /// <summary>
         /// Creates new dish review
         /// </summary>
-        /// <param name="restaurantId">Id of the restaurant</param>
         /// <param name="dishId">Id of the dish</param>
         /// <param name="newReviewDto">New review parameters</param>
         /// <remarks>Status codes not documented</remarks>
@@ -187,6 +205,9 @@ namespace API.Controllers
 
             var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
+
+            var rev = dish.Dish_Review.FirstOrDefault(r => r.AppUserId == userId);
+            if(rev != null) return await UpdateDishReview(dishId, rev.Id, newReviewDto);
             
             var review = new Dish_Review{
                 TasteRating = newReviewDto.TasteRating,
@@ -215,7 +236,6 @@ namespace API.Controllers
         /// <summary>
         /// Gets list of all reviews created under certain dish
         /// </summary>
-        /// <param name="restaurantId">Id of the restaurant</param>
         /// <param name="dishId">Id of the dish</param>
         /// <remarks>Status codes not documnted</remarks>
         /// <returns>List of DishReviewDto created from dish reviews</returns>
@@ -227,7 +247,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<DishReviewDto>>> ReadAllDishReviews(int dishId)
         {
-            var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
+            var dish = await context.Dishes.FindAsync(dishId);
             if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
 
             var dishReviews = new List<DishReviewDto>();
@@ -239,10 +259,9 @@ namespace API.Controllers
         /// <summary>
         /// Updates selected dish review
         /// </summary>
-        /// <param name="restaurantId">Id of the restaurant</param>
-        /// <param name="dishId">Id of the restaurant</param>
-        /// <param name="newReviewDto">Review parameters</param>
+        /// <param name="dishId">Id of the review</param>
         /// <param name="reviewId">Id of the review</param>
+        /// <param name="newReviewDto">Review parameters</param>
         /// <remarks>Status codes not documnted</remarks>
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
@@ -253,16 +272,11 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<DishReviewDto>> UpdateDishReview(int dishId, int reviewId, NewDishReviewDto newReviewDto)
         {
-            //var ownCheck = await OwnsRestaurant(restaurantId);
-            //if(ownCheck != StatusCodes.Status200OK) return StatusCode(ownCheck);
-            //var restaurant = await context.Restaurants.FindAsync(restaurantId);
-            //if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
+            //var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
+            //if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
 
-            var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
-            if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
-
-            var rev = dish.Dish_Review.FirstOrDefault(r => r.Id == reviewId);
-            if(rev == null) return BadRequest($"Dish review with {reviewId} id does not exist");
+            var rev = context.DishReviews.FirstOrDefault(r => r.Id == reviewId);
+            if(rev == null) return await CreateDishReview(dishId, newReviewDto);
 
             var userId = GetRequesterId();
             if(rev.AppUserId != userId) return Unauthorized("You don't have permissions to edit this post"); 
@@ -272,6 +286,9 @@ namespace API.Controllers
             rev.TasteRating = newReviewDto.TasteRating;
             rev.Description = newReviewDto.Description;
 
+
+            var dish = await context.Dishes.FindAsync(rev.DishId);
+            if(dish == null) return BadRequest($"Dish with id {rev.DishId} does not exist");
             CalculateDishScores(dish);
 
             await context.SaveChangesAsync();
@@ -282,9 +299,8 @@ namespace API.Controllers
         /// <summary>
         /// Delates selected dish review
         /// </summary>
-        /// <param name="restaurantId">Id of restaurant</param>
+        /// <param name="dishId">Id of review</param>
         /// <param name="reviewId">Id of review</param>
-        /// <param name="dishId">Id of dish</param>
         /// <remarks>Status codes not documnted</remarks>
         /// <returns>Status code</returns>
         /// <response code="200">  </response>
@@ -301,16 +317,19 @@ namespace API.Controllers
             //var restaurant = await context.Restaurants.FindAsync(restaurantId);
             //if(restaurant == null) return BadRequest("Restaurant with given id does not exist");
 
-            var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
-            if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
+            //var dish = context.Dishes.FirstOrDefault(d => d.Id == dishId);
+            //if(dish == null) return BadRequest($"Dish with {dishId} id does not exist");
 
-            var rev = dish.Dish_Review.FirstOrDefault(r => r.Id == reviewId);
+            var rev = context.DishReviews.FirstOrDefault(r => r.Id == reviewId);
             if(rev == null) return BadRequest($"Dish review with {reviewId} id does not exist");
 
             var userId = GetRequesterId();
-            if(rev.AppUserId != userId) return Unauthorized("You don't have permissions to edit this post"); 
+            var adminCheck = AuthorizedByRole(Roles.Admin.ToString());
+            if(rev.AppUserId != userId && adminCheck != StatusCodes.Status200OK) return Unauthorized("You don't have permissions to edit this post"); 
 
             context.Remove(rev);
+            var dish = await context.Dishes.FindAsync(dishId);
+            if(dish is null) return BadRequest($"Dish with id {dishId} does not exist.");
             CalculateDishScores(dish);
             await context.SaveChangesAsync();
 

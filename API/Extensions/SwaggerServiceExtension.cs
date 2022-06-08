@@ -18,7 +18,6 @@ namespace API.Extensions
 
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
                 options.AddSecurityDefinition("jwt_auth", new OpenApiSecurityScheme {
                     Name = "Bearer",
                     BearerFormat = "JWT",

@@ -8,9 +8,13 @@ namespace API.Entities
 
         public string Description { get; set; }
 
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
-        public float Price { get; set; }
+        public string? PhoneNumber { get; set; }
+
+        public string? Email { get; set; }
+
+        //public float Price { get; set; }
 
         public virtual ICollection<Restaurant_Owner> User_Res_Relation  { get; set; }
 
@@ -23,7 +27,6 @@ namespace API.Entities
         public virtual ICollection<Order> Orders { get; set; }
 
         public virtual ICollection<Dish> Dishes { get; set; }
-
         public float AtmosphereRating{ get; set; }
         public float ServiceRating { get; set; }
     }

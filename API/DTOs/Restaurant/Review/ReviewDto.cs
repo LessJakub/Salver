@@ -18,6 +18,8 @@ namespace API.DTOs
             Description = rev.Description;
             //Rating = rev.Rating;
             UserId = rev.AppUserId;
+            AtmosphereRating = rev.AtmosphereRating;
+            ServiceRating = rev.ServiceRating;
         }
 
         public int Id { get; set; }

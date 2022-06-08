@@ -34,7 +34,10 @@ namespace API.Data
 
         public DbSet<AppRestaurant> Restaurants { get; set; }
 
+        public DbSet<Restaurant_Review> RestaurantReviews { get; set; }
+
         public DbSet<Dish> Dishes { get; set; }
+        public DbSet<Dish_Review> DishReviews { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 

@@ -30,7 +30,7 @@ namespace API.Controllers
 
             if (file == null || blobContainer == null || blobContainer == "")
             {
-                return BadRequest();
+                return BadRequest("Something is null.");
             }
 
             var result = await _blobService.UploadFileBlobAsync(blobContainer, file.OpenReadStream(), file.ContentType, fileID);

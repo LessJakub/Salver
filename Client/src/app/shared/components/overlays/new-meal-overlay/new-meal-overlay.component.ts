@@ -14,6 +14,7 @@ import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.
 export class NewMealOverlayComponent implements OnInit {
 
     @Output() closeOverlayEventEmitter = new EventEmitter();
+    @Output() reloadEventEmitter = new EventEmitter();
     @Input() model: RestaurantDTO;
 
     dishModel: any = {};
@@ -35,10 +36,6 @@ export class NewMealOverlayComponent implements OnInit {
         this.modelImageURL = this.uploadService.defaultDishImageURL();
     }
 
-    closeOverlayAction() {
-        this.closeOverlayEventEmitter.emit(false);
-    }
-
     setFilename(files) {
         if (files[0]) {
             // this.filename = files[0].name;
@@ -53,7 +50,7 @@ export class NewMealOverlayComponent implements OnInit {
                 if (this.dishModel.price != null && this.dishModel.price != NaN) {
                     if (this.dishModel.ingredients != null && this.dishModel.ingredients != "") {
                         if (files[0]) {
-                            var response = this.restaurantService.addDish(8, this.dishModel).toPromise().then((model: DishDTO) => {
+                            var response = this.restaurantService.addDish(this.model.id, this.dishModel).toPromise().then((model: DishDTO) => {
                                 console.log("Response - Model")
                                 console.log(model);
                                 this.filename = model.id + ".webp";
@@ -61,8 +58,8 @@ export class NewMealOverlayComponent implements OnInit {
                                 console.log(model);
                                 this.uploadFiles(files);
 
-                                this.closeOverlayAction();
-
+                                this.reloadEventEmitter.emit(true);
+                                this.closeOverlayEventEmitter.emit(false);
                             }).catch((error) => {
                                 console.log(error);
                             });

@@ -7,7 +7,7 @@
     <!-- Search content -->
     <div class="w-full h-fit items-center">
         <div class="w-full h-full flex flex-grow">
-            <div class="w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 justify-items-center">
+            <div class="w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-items-center">
                 <ng-container *ngFor="let result of filteredSearchResults">
                     <app-dish-tile [model]="result" *ngIf="(this.searchResultsType) === 'Dish'"></app-dish-tile>
     

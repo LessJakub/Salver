@@ -38,7 +38,7 @@ export class DishOverlayComponent implements OnInit {
 
         if(this.model.appRestaurantId == this.orderService.currentRestaurant)
         {
-            this.orderCount = this.orderService.dishIdInOrder(this.model.id);
+            this.orderCount = this.orderService.dishAmountInOrder(this.model);
         }
 
         this.searchService.getRestaurantNameByID(this.model.appRestaurantId).then((name: string) => {
@@ -68,19 +68,15 @@ export class DishOverlayComponent implements OnInit {
     }
 
     takeOrder() {
-        if (this.orderCount === 0) {
-            this.closeOverlayAction();
-        }
-        else
-        {
-            if(this.orderService.addDishToOrder(this.model, this.orderCount))
+
+            if(this.orderService.setDishAmount(this.model, this.orderCount))
             {
                 this.closeOverlayAction();
             } 
             else
             {
                 this.orderCount = 0
+                console.log("Error while taking order.");
             }
-        }
     }
 }

@@ -97,7 +97,7 @@
                         </p>
                     </button>
                     
-                    <p *ngIf="(accountService.currentUser$ | async) != null && accountService.ownerID == 0 && (orderService.dishesInOrder.length > 0)">Order price: {{orderService.currentPrice}}</p>
+                    <button (click)="orderService.order()" *ngIf="(accountService.currentUser$ | async) != null && accountService.ownerID == 0 && (orderService.dishesInOrder.length > 0)">Order price: {{orderService.currentPrice}}</button>
 
                     <button [routerLink]="['/landing-page']" (click)="logoutUser()" *ngIf="(accountService.currentUser$ | async) != null" class="group px-3 py-2 rounded-md text-base font-light flex items-center space-x-2">
 

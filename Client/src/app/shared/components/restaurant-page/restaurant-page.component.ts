@@ -2,6 +2,7 @@ import { Component, Input, IterableDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Dish } from 'src/app/models/Dish';
 import { Post } from 'src/app/models/post';
+import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { DishDTO } from '../../models/DishDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
 import { User } from '../../models/UserDTO';
@@ -35,6 +36,7 @@ export class RestaurantPageComponent implements OnInit {
                 private searchService: SearchService,
                 private uploadService: BlobUploadService,
                 public accountService: AccountService,
+                private restaurantService: RestaurantService,
                 private router: Router) { 
                 }
 

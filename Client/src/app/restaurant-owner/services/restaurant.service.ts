@@ -49,4 +49,25 @@ export class RestaurantService {
             }));
     }
 
+    async editDish(dishID: number, restaurantID: number, updatedModel: DishDTO): Promise<DishDTO> {
+
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            userToken = user.token;
+        })
+
+        var response = await this.http.put<DishDTO>(this.addDishURL + restaurantID + "/dishes/" + dishID, updatedModel, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
+            map((Response: DishDTO) =>{
+                const resp = Response;
+                console.log(resp);
+                return resp;
+            }, error => {
+                console.log(error)
+            })
+        );
+
+        return response.toPromise();
+    }
+
 }

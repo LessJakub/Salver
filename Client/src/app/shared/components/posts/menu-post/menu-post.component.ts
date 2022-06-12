@@ -12,16 +12,15 @@ import { DishDTO } from 'src/app/shared/models/DishDTO';
 export class MenuPostComponent implements OnInit {
 
     constructor(private restaurantService: RestaurantService) { 
-
     }
 
-    showOverlay: boolean = false;
+    showDeleteOverlay: boolean = false;
+    showNewDishOverlay: boolean = false;
+    showNewReviewOverlay: boolean = false;
 
     @Input() model: DishDTO;
     @Input() isOwner: boolean = false;
     @Output() reloadEventEmitter = new EventEmitter();
-
-    orderCount: number = 0;
 
     ngOnInit(): void {
         this.editModel = {...this.model};
@@ -39,6 +38,12 @@ export class MenuPostComponent implements OnInit {
             console.log("You are not an owner.")
         }
     }
+    handleReload(flag: boolean) {
+        console.log("Handle reload:", flag);
+        if (flag == true) {
+            this.reloadEventEmitter.emit(true);
+        }
+    }
     
     cancelEditAction() {
         console.log("Menu post - Edit mode disabled.");
@@ -52,36 +57,28 @@ export class MenuPostComponent implements OnInit {
         this.emitReload(true);
     }
 
-    incrementCount() {
-        this.orderCount += 1;
-    }
-
-    decrementCount() {
-        this.orderCount -= 1;
-    }
-
     emitReload(flag: boolean) {
         this.reloadEventEmitter.emit(flag);
     }
 
-    // TODO: Complete add review action in menu post
     addReviewAction() {
-        console.log("UNIMPLEMENTED - Add review to dish action")
-    }
-
-    // TODO: Complete add review action in menu post
-    deleteAction() {
-        console.log("UNIMPLEMENTED - Add delete dish action")
-    }
-
-    invertOverlayFlag() {
-        this.showOverlay = !this.showOverlay;
+        this.invertReviewOverlayFlag();
     }
     
-    disableLoginOverlay(eventFlag: boolean) {
-        this.showOverlay = eventFlag;
+    disableDeleteOverlay(eventFlag: boolean) {
+        this.showDeleteOverlay = eventFlag;
     }
 
-    takeOrder() { }
+    invertDeleteOverlayFlag() {
+        this.showDeleteOverlay = !this.showDeleteOverlay;
+    }
+
+    disableReviewOverlay(eventFlag: boolean) {
+        this.showNewReviewOverlay = eventFlag;
+    }
+
+    invertReviewOverlayFlag() {
+        this.showNewReviewOverlay = !this.showNewReviewOverlay;
+    }
 
 }

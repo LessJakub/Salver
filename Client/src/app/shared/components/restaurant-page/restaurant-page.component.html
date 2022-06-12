@@ -91,7 +91,7 @@
 
         <div class="flex w-full px-4">
             <mat-form-field class="w-full items-center">
-                <textarea matInput [(ngModel)]="this.editModel.description" minlength="1" maxlength="150"
+                <textarea matInput [(ngModel)]="this.editModel.description" rows="3" minlength="1" maxlength="150"
                     name="description" required
                     class="flex w-full h-fit text-center resize-none font-light text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700 focus:invalid:border-red-800"
                     placeholder="{{this.model.description}}"></textarea>

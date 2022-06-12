@@ -16,11 +16,11 @@ import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
             <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:saturate-200 transition" [src]="this.modelImageURL" (error)="updateUrlWithDefault()">
             <div class="grid grid-cols-1 gap-2 h-full justify-center content-center px-0.5">
                 <!-- TODO: Use this grade system in other places (Make a component for it) -->
-                <ng-container *ngFor="let _ of [].constructor(5 - this.model.totalGrade)">
+                <ng-container *ngFor="let _ of [].constructor(5 - this.averageTotalGrade)">
                     <div class="w-5 h-5 border border-green-700 rounded-full group-hover:saturate-200 transition"></div>
                 </ng-container>
 
-                <ng-container *ngFor="let _ of [].constructor(this.model.totalGrade); let i = index">
+                <ng-container *ngFor="let _ of [].constructor(this.averageTotalGrade); let i = index">
                     <div class="w-5 h-5 bg-green-700 rounded-full group-hover:saturate-200 transition"></div>
                 </ng-container>
             </div>
@@ -30,11 +30,11 @@ import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
             <img class="mx-auto w-fit h-auto object-cover rounded-full group-hover:animate-pulse" [src]="this.modelImageURL" (error)="updateUrlWithDefault()">
             <div class="grid grid-cols-1 gap-2 h-full justify-center content-center px-0.5">
                 <!-- TODO: Use this grade system in other places (Make a component for it) -->
-                <ng-container *ngFor="let _ of [].constructor(5 - this.model.totalGrade)">
+                <ng-container *ngFor="let _ of [].constructor(5 - this.averageTotalGrade)">
                     <div class="w-5 h-5 border border-green-700 rounded-full group-hover:saturate-200 transition"></div>
                 </ng-container>
 
-                <ng-container *ngFor="let _ of [].constructor(this.model.totalGrade); let i = index">
+                <ng-container *ngFor="let _ of [].constructor(this.averageTotalGrade); let i = index">
                     <div class="w-5 h-5 bg-green-700 rounded-full group-hover:saturate-200 transition"></div>
                 </ng-container>
             </div>
@@ -64,6 +64,8 @@ export class DishTileComponent implements OnInit {
     imgBaseURL = "https://salver.blob.core.windows.net/dishimages/";
     modelImageURL;
 
+    averageTotalGrade: number = 0;
+
     currencySymbol: string = "$"
 
     constructor(private uploadService: BlobUploadService) { }
@@ -73,12 +75,14 @@ export class DishTileComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.averageTotalGrade = Math.round(this.model.totalGrade);
         if (this.model.id == null) {
             this.modelImageURL = this.defaultIMG;
         }
         else {
             this.modelImageURL = this.imgBaseURL + this.model.id + ".webp"
         }
+
     }
 
     invertOverlayFlag() {

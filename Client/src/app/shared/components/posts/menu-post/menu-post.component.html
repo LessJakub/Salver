@@ -12,7 +12,15 @@
 
     <div class="flex flex-col w-1/4 h-full overflow-clip">
 
+        <app-review-dish-overlay *ngIf="(showNewReviewOverlay) == true" 
+                      [model]="model" 
+                      (closeOverlayEventEmitter)="this.disableReviewOverlay($event)"
+                      (reloadEventEmitter)="this.handleReload($event)"></app-review-dish-overlay>
+
         <div class="flex flex-col flex-grow w-full h-1/2 gap-2 mt-8">
+
+            
+            <!-- <div (click)="invertReviewOverlayFlag()" class="flex w-full h-fit justify-center items-center content-center flex-col cursor-pointer group"></div> -->
 
             <button *ngIf="(this.isOwner == false)" (click)='this.addReviewAction()'
                 class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Review</button>
@@ -20,10 +28,11 @@
             <button *ngIf="(this.isOwner == true)" (click)='this.editButtonAction()'
                 class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
 
-            <app-delete-dish-overlay *ngIf="(showOverlay) == true" [model]="model"
-                (closeOverlayEventEmitter)="disableLoginOverlay()" (reloadEventEmitter)="this.emitReload($event)">
+            
+            <app-delete-dish-overlay *ngIf="(this.showDeleteOverlay) == true" [model]="model"
+                (closeOverlayEventEmitter)="this.disableDeleteOverlay($event)" (reloadEventEmitter)="this.emitReload($event)">
             </app-delete-dish-overlay>
-            <div (click)="invertOverlayFlag()"
+            <div (click)="invertDeleteOverlayFlag()"
                 class="flex w-full h-fit justify-center items-center content-center flex-col cursor-pointer group">
                 <button *ngIf="(this.isOwner == true)" (click)='this.deleteAction()'
                     class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
@@ -52,7 +61,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <textarea matInput [(ngModel)]="this.editModel.description" minlength="1" maxlength="150" name="description"
+            <textarea matInput [(ngModel)]="this.editModel.description" minlength="1" maxlength="249" name="description"
                 required
                 class="w-full resize-none text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
                 placeholder="{{this.model.description}}"></textarea>

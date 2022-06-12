@@ -87,13 +87,14 @@ export class AccountService {
             var authToken = this.currentUser$.subscribe((user: User) => {
                 userToken = user.token;
             })
-            var response = this.http.post(this.followURL + id + "/follow", { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) });
+            console.log(userToken);
+            var response = this.http.get(this.followURL + id + "/follow", { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) });
             return response.toPromise();
         }
     }
 
     /**
-     * Attempts to use follow endpoint for user identified with token, to follow restaurant identified by ID.
+     * Attempts to use follow endpoint for user identified with token, to unfollow restaurant identified by ID.
      * @param id Restaurant ID
      * @returns Request response
      */

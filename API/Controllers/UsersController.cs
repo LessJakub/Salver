@@ -90,7 +90,7 @@ namespace API.Controllers
             var user = await context.Users.FindAsync(userId);
             if(user == null) return BadRequest($"There is no user with id {userId}");
 
-            var restaurant = user.FollowedUsers.FirstOrDefault(f => f.FollowedId == id);
+            var restaurant = user.FollowedRestaurants.FirstOrDefault(f => f.FollowedId == id);
             if(restaurant is null) return false;
             return true;
         }

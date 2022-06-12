@@ -29,6 +29,11 @@ namespace API.DTOs
                 //PriceRange = (MinPrice != MaxPrice)?($"{MinPrice}-{MaxPrice}"):(null);
                 Price = appRestaurant.Dishes.Average(d => d.Price);
             }
+            if(appRestaurant.Res_Review.Count() > 0)
+            {
+                AtmosphereRating = appRestaurant.Res_Review.Average(r => r.AtmosphereRating);
+                ServiceRating = appRestaurant.Res_Review.Average(r => r.ServiceRating);
+            }
         }
 
         public int Id { get; set; }
@@ -40,8 +45,8 @@ namespace API.DTOs
 
         public string? Email { get; set; } = null;
         public int Followers { get; set; } = 0;
-        public float AtmosphereRating { get; set; } = 0.0f;
-        public float ServiceRating { get; set; } = 0.0f;
+        public double AtmosphereRating { get; set; } = 0.0f;
+        public double ServiceRating { get; set; } = 0.0f;
         public float MinPrice { get; set; } = 0.0f;
         public float MaxPrice { get; set; } = 0.0f;
 

@@ -30,13 +30,12 @@ namespace API.Services
             {
                 foreach(var res in restaurants.Select((value, i) => new { i, value}))
                 {
-                    
                     claims.Add(new Claim($"RestaurantId{res.i}", res.value.ToString()));
                 }
-                // claims.Add(new Claim("RestaurantOwner", "true"));
+                claims.Add(new Claim("RestaurantOwner", "true"));
             }
             else{
-                // claims.Add(new Claim("Customer", "true"));
+                claims.Add(new Claim("Customer", "true"));
             }
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/htt
 import { map } from 'rxjs/operators';
 import { AccountService } from 'src/app/shared/services/account.service';
 import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
+import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
 
 @Injectable({
     providedIn: 'root'
@@ -14,6 +15,7 @@ export class RestaurantService {
     // Obtain true hostname URL (fixes issue where we need to connect to API on non-local host)
     private baseUrl: string = "http://" + location.hostname;
     private addDishURL: string = this.baseUrl + ":8080/api/Dishes/Restaurants/"
+    private restaurantsURL: string = this.baseUrl + ":8080/api/Restaurants/"
 
     constructor(private http: HttpClient, private accountService: AccountService) { }
 
@@ -59,6 +61,27 @@ export class RestaurantService {
 
         var response = await this.http.put<DishDTO>(this.addDishURL + restaurantID + "/dishes/" + dishID, updatedModel, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
             map((Response: DishDTO) =>{
+                const resp = Response;
+                console.log(resp);
+                return resp;
+            }, error => {
+                console.log(error)
+            })
+        );
+
+        return response.toPromise();
+    }
+
+    async editDetails(restaurantID: number, updatedModel: RestaurantDTO): Promise<RestaurantDTO> {
+
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            userToken = user.token;
+        })
+
+        var response = await this.http.put<RestaurantDTO>(this.restaurantsURL + restaurantID, updatedModel, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
+            map((Response: RestaurantDTO) =>{
                 const resp = Response;
                 console.log(resp);
                 return resp;

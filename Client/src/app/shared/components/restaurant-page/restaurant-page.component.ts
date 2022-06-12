@@ -18,7 +18,7 @@ import { SearchService } from '../../services/search.service';
 export class RestaurantPageComponent implements OnInit {
 
     restaurantID: number = null;
-    restaurant: RestaurantDTO | null;
+    model: RestaurantDTO | null;
     profileImageURL: string;
 
     fetchedDishes: DishDTO[] = null;
@@ -38,6 +38,8 @@ export class RestaurantPageComponent implements OnInit {
                 public accountService: AccountService,
                 private restaurantService: RestaurantService,
                 private router: Router) { 
+
+                    this.editModel = {...this.model};
                 }
 
     user = this.accountService.currentUser$;
@@ -88,11 +90,11 @@ export class RestaurantPageComponent implements OnInit {
     private getDetails() {
         // Obtain restaurant from DB based on ID.
         this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
-            this.restaurant = restaurant;
+            this.model = restaurant;
             //console.log(this.restaurant)
         })
 
-        if (this.restaurant == null) {
+        if (this.model == null) {
             console.log("No restaurant found for ID:" + this.restaurantID)
             // this.router.navigate(['*']);
         }
@@ -116,6 +118,31 @@ export class RestaurantPageComponent implements OnInit {
 
     private userID;
     public isOwner: boolean;
+
+    editModel: RestaurantDTO;
+    editMode: boolean = false;
+    editDetailsAction() {
+        console.log("Menu post - Edit button action.");  
+        if (this.isOwner == true) {
+            this.editModel = {...this.model};
+            this.editMode = true;
+        }
+        else {
+            console.log("You are not an owner.")
+        }
+    }
+
+    cancelEditAction() {
+        console.log("Menu post - Edit mode disabled.");
+        this.editMode = false;
+    }
+
+    async submitEditAction() {
+        console.log("Restaurant edit - Submit action.");
+        this.editModel = await this.restaurantService.editDetails(this.model.id, this.editModel);
+        this.cancelEditAction();
+        this.getDetails();
+    }
 
     async ngOnInit() {
 

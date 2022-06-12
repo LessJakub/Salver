@@ -62,4 +62,23 @@ export class ReviewsService {
                 console.log(error);
         }));
     }
+
+
+
+
+    /**
+     * Method used to get all dish reviews for given dish identified by ID.
+     * @param id Dish id for which review should be added
+     * @param model Model of the review to add
+     * @returns Response as a promise
+     */
+     getDishReviews(id: number) {
+        var url = this.baseUrl + ":8080/api/Reviews/dishes" + id + "reviews";
+        return this.http.get<DishReviewDTO[]>(url).pipe(
+            map((Response: DishReviewDTO[]) => {
+                return Response;
+            }, error => {
+                console.log(error);
+        }));
+    }
 }

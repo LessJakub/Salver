@@ -107,56 +107,43 @@
 
                 <!-- Overview contents -->
                 <div *ngIf="(this.selectedTabID) == 0" class="h-4/5 w-full px-4">
+                    
                     <div class="w-full h-1/2 break-words overflow-clip overflow-y-scroll">
                         <p class="text-lg font-bold text-gray-900 py-2">Description</p>
 
                         <p class="text-base font-light text-gray-900">{{model.description}}</p>
                     </div>
 
-                    <div class="w-full h-1/2 break-words">
-                        <p class="text-lg font-bold text-gray-900 py-2">Details</p>
+                    <div class="w-full h-1/2 flex">
+                        <div class="w-1/2 h-full flex flex-col break-words">
+                            <p class="text-lg font-bold text-gray-900 py-2">Details</p>
 
-                        <p class="text-base font-light text-gray-900">{{ model.ingredients }}</p>
+                            <p class="text-base font-light text-gray-900">{{ model.ingredients }}</p>
+                        </div>
+
+                        <div class="w-1/2 h-full flex flex-col break-words">
+                            <p class="text-lg font-bold text-gray-900 py-2">Price</p>
+
+                            <p class="text-base font-light text-gray-900">{{ model.price }} $</p>
+                        </div>
+                        
                     </div>
                 </div>
 
                 <!-- Reviews contents -->
                 <div *ngIf="(this.selectedTabID) == 1" class="h-4/5 w-full px-4 overflow-hidden overflow-y-scroll">
                     <div class="w-full h-72 snap-start">
+                        <app-review-post [model]="this.reviews[0]"></app-review-post>
+                    </div>
+
+                    <!-- <div class="w-full h-72 snap-start">
                         <app-review-post></app-review-post>
                     </div>
 
                     <div class="w-full h-72 snap-start">
                         <app-review-post></app-review-post>
-                    </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
+                    </div> -->
                 </div>
-
-
-
-
-                <!-- Review posts -->
-                <!-- <div class="h-fit w-full p-4 overflow-y-scroll snap-y snap-proximity space-y-10">
-                    
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-                </div> -->
             </div>
            
 

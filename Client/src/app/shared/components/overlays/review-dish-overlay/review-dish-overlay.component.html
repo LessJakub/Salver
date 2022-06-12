@@ -1,0 +1,86 @@
+<div class="fixed top-0 left-0 h-screen w-screen flex items-center justify-center py-4 z-50">
+
+    <!-- BG absolute child which is used to detect actions happening behind the main square overlay. -->
+    <div (click)="this.closeOverlayEventEmitter.emit(false)"
+        class="absolute w-full h-full z-10 bg-green-900/30 cursor-pointer backdrop-blur-sm hover:backdrop-blur-none transition-all">
+    </div>
+
+    <form (ngSubmit)="this.submitAction(fileInput.files)"
+        class="aspect-square h-[95%] bg-gray-50 rounded-2xl shadow-md shadow-green-900 border-1 border-green-900 z-20">
+
+        <div class="p-8 2xl:p-16 w-full h-full">
+
+            <!-- Upper half content -->
+            <div class="flex h-1/2 w-full rounded-2xl overflow-hidden p-4">
+                <!-- Left half width content -->
+                <div (click)="fileInput.click()" class="w-1/2 h-full rounded-2xl cursor-pointer overflow-hidden flex bg-gray-300 hover:animate-pulse">
+                    <div class="w-full h-fit flex space-x-5">
+                        <input hidden #fileInput type="file" requiredFileType="image/webp" id="file" />
+                    </div>
+                </div>
+
+                <!-- Right half width content -->
+                <div class="w-1/2 h-full">
+
+                    <div class="flex flex-col w-full h-full pl-4 justify-between pb-1.5">
+
+                        <div class="w-full h-1/4 overflow-clip">
+                            <div class="w-full h-1/2 content-center text-right">
+                                <p class="text-2xl font-bold truncate text-green-900">{{this.model.name}}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col w-full h-3/4 gap-5">
+                            <app-grade-tile [name]="'taste'" 
+                                            [grade]="this.reviewModel.tasteRating"    
+                                            [enableGrading]="true" 
+                                            (choiceEmitter)="this.handleGradeChoice($event)"></app-grade-tile>
+            
+                            <app-grade-tile [name]="'price'"    
+                                            [grade]="this.reviewModel.priceRating" 
+                                            [enableGrading]="true" 
+                                            (choiceEmitter)="this.handleGradeChoice($event)"></app-grade-tile>
+                        
+                            <app-grade-tile [name]="'service'"
+                                            [grade]="this.reviewModel.serviceRating" 
+                                            [enableGrading]="true" 
+                                            (choiceEmitter)="this.handleGradeChoice($event)"></app-grade-tile>
+
+                            <p class="font-light text-center text-red-900 py-2">{{error}}</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Bottom half content -->
+            <div class="h-1/2 rounded-2xl px-5">
+                <div class="flex flex-col h-3/4 items-start">
+                    <p class="text-xl font-light text-gray-900 py-2">Description</p>
+                        <textarea matInput [(ngModel)]="this.reviewModel.description" rows="7" minlength="1" maxlength="540" name="description"
+                            required
+                            class="w-full resize-none text-md appearance-none invalid:border-red-800 rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                            placeholder="Be honest in your review, use appropriate language.">
+                        </textarea>
+                </div>
+
+                <div class="flex h-1/4 items-end">
+                    <div class="flex w-full h-1/2 content-center text-right gap-2 justify-between">
+                        <button class="w-full h-fit px-5 py-2 bg-green-900 text-gray-50 shadow-md rounded-2xl"
+                            type="button" (click)="submitAction(fileInput.files)">Add review
+                        </button>
+
+                        <button class="w-full h-fit px-5 py-2 rounded-2xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900"
+                            type="button" (click)="this.closeOverlayEventEmitter.emit(false)">Cancel
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

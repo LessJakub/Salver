@@ -25,14 +25,19 @@ export class RestaurantPageComponent implements OnInit {
 
     fetchedDishes: DishDTO[] = null;
 
+    showRestReviewOverlay: boolean = false;
+
+    disableRestOverlay(event: boolean) {
+        this.showRestReviewOverlay = event;
+    }
+
     isFollowing: boolean = false;
+    canFollow: boolean = false;
     followButtonText = this.isFollowing ? "Unfollow" : "Follow";
 
     // Dummy
     fetchedDishes2: Dish[];
     fetchedPosts: Post[] | null;
-
-    iterableDiff;
 
     constructor(private activatedRoute: ActivatedRoute,
                 private searchService: SearchService,
@@ -53,18 +58,27 @@ export class RestaurantPageComponent implements OnInit {
         }
     }
 
+    handleRestReviewReload(event: boolean) {
+        this.getDetails();
+    }
+
     updateUrlWithDefault() {
         this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
     }
 
+    reviewRestaurantAction() {
+        this.showRestReviewOverlay = true;
+    }
+
+
     selectedTabID: number = 0;
 
-    followButtonAction() {
+    async followButtonAction() {
         console.log("Is following: " + this.isFollowing);
         if (this.isFollowing) {
             // Perform unfollow action when ready
             console.log("Unfollow action");
-            this.accountService.unfollowRestaurant(this.restaurantID).then((response) => {
+            await this.accountService.unfollowRestaurant(this.restaurantID).then((response) => {
                 this.isFollowing = false;
                 console.log(response);
             }).catch((error) => {
@@ -73,20 +87,19 @@ export class RestaurantPageComponent implements OnInit {
         }
         else {
             console.log("Follow action");
-            this.accountService.followRestaurant(this.restaurantID).then((response) => {
+            await this.accountService.followRestaurant(this.restaurantID).then((response) => {
                 this.isFollowing = true;
                 console.log(response);
             }).catch((error) => {
                 console.log(error);
             })
         }
-        this.followButtonText = this.isFollowing ? "Unfollow" : "Follow";
         this.getDetails();
     }
 
     selectNewTab(selectedID: number) {
         this.selectedTabID = selectedID;
-
+        this.isOwner = (this.userID == this.restaurantID);
         switch (this.selectedTabID) {
             case 0:
                 this.getDishes();
@@ -106,6 +119,9 @@ export class RestaurantPageComponent implements OnInit {
             this.model = restaurant;
             //console.log(this.restaurant)
         })
+
+        this.isFollowing = await this.accountService.followsRestaurant(this.restaurantID);
+        this.followButtonText = this.isFollowing ? "Following" : "Follow";
 
         if (this.model == null) {
             console.log("No restaurant found for ID:" + this.restaurantID)
@@ -176,6 +192,7 @@ export class RestaurantPageComponent implements OnInit {
             console.log("Upload service - Files empty");
         }
     }
+
 
     async ngOnInit() {
 

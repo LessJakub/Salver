@@ -20,6 +20,8 @@ export class DishOverlayComponent implements OnInit {
 
     orderCount: number = 0;
     selectedTabID: number = 0;
+
+    averageTotalGrade: number = 0;
     modelImageURL: string;
 
     tabs: string[] = ["Overview", "Reviews"];

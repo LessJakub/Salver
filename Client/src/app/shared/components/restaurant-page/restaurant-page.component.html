@@ -1,4 +1,9 @@
 <!-- Side area -->
+<app-review-rest-overlay *ngIf="(showRestReviewOverlay) == true" 
+                      [model]="model" 
+                      (closeOverlayEventEmitter)="this.disableRestOverlay($event)"
+                      (reloadEventEmitter)="this.handleRestReviewReload($event)"></app-review-rest-overlay>
+
 <div *ngIf="this.editMode == false"
     class="basis-1/4 min-w-[25rem] h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
     <div class="h-full pt-4 flex flex-col items-center justify-start space-y-5 absolute top-0 left-0">
@@ -21,8 +26,13 @@
                 this.followButtonText }}
             </button>
 
-            <p class="text-center font-light mx-4">Followers: {{model.followers}}</p>
+            <button (click)='this.reviewRestaurantAction()'
+            class="w-1/2 py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Review
+        </button>
+
         </div>
+
+        <p class="text-center font-light mx-4">Followers: {{model.followers}}</p>
 
         <div *ngIf="this.isOwner == true" class="w-full h-fit flex items-center justify-start px-4 gap-2">
             <button (click)='this.editDetailsAction()'
@@ -91,7 +101,7 @@
 
         <div class="flex w-full px-4">
             <mat-form-field class="w-full items-center">
-                <textarea matInput [(ngModel)]="this.editModel.description" minlength="1" maxlength="150"
+                <textarea matInput [(ngModel)]="this.editModel.description" rows="3" minlength="1" maxlength="150"
                     name="description" required
                     class="flex w-full h-fit text-center resize-none font-light text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700 focus:invalid:border-red-800"
                     placeholder="{{this.model.description}}"></textarea>

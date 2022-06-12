@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRouteReuseStrategy } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
@@ -13,6 +13,7 @@ export class AccountService {
     // Obtain true hostname URL (fixes issue where we need to connect to API on non-local host)
     private baseUrl: string = "http://" + location.hostname;
     private loginUrl: string = this.baseUrl + ":8080/api/account/login"
+    private followURL: string = this.baseUrl + ":8080/api/Restaurants/"
 
     private loggedInStatus: boolean = false;
     ownerID: number = 0;
@@ -67,6 +68,67 @@ export class AccountService {
 
     isLoggedIn(): boolean {
         return this.loggedInStatus;
+    }
+
+
+    /**
+     * Attempts to use follow endpoint for user identified with token, to follow restaurant identified by ID.
+     * @param id Restaurant ID
+     * @returns Request response
+     */
+    followRestaurant(id: number) {
+
+        if (id == null || id == NaN) {
+            return
+        }
+        else {
+            // Obtain user token for authentication
+            var userToken;
+            var authToken = this.currentUser$.subscribe((user: User) => {
+                userToken = user.token;
+            })
+            var response = this.http.post(this.followURL + id + "/follow", { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) });
+            return response.toPromise();
+        }
+    }
+
+    /**
+     * Attempts to use follow endpoint for user identified with token, to follow restaurant identified by ID.
+     * @param id Restaurant ID
+     * @returns Request response
+     */
+     unfollowRestaurant(id: number) {
+
+        if (id == null || id == NaN) {
+            return
+        }
+        else {
+            // Obtain user token for authentication
+            var userToken;
+            var authToken = this.currentUser$.subscribe((user: User) => {
+                userToken = user.token;
+            })
+            var response = this.http.delete(this.followURL + id + "/unfollow", { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) });
+            return response.toPromise();
+        }
+    }
+
+    async followsRestaurant(id : number) {
+        if (id == null || id == NaN) {
+            return
+        }
+        else {
+            var returnedFlag = false;
+            // Obtain user token for authentication
+            var userToken;
+            var authToken = this.currentUser$.subscribe((user: User) => {
+                userToken = user.token;
+            })
+            var response = await this.http.get<boolean>(this.baseUrl + ":8080/api/Users/follows-restaurant?id=" + id, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise().then((resp) => {
+                returnedFlag = resp;
+            })
+            return returnedFlag;
+        }
     }
 
 }

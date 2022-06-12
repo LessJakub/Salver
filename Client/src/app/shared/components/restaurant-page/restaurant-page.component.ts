@@ -1,5 +1,7 @@
 import { Component, Input, IterableDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpResponse } from '@azure/core-http';
+import { map } from 'rxjs/operators';
 import { Dish } from 'src/app/models/Dish';
 import { Post } from 'src/app/models/post';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
@@ -58,17 +60,28 @@ export class RestaurantPageComponent implements OnInit {
     selectedTabID: number = 0;
 
     followButtonAction() {
+        console.log("Is following: " + this.isFollowing);
         if (this.isFollowing) {
             // Perform unfollow action when ready
-
-            this.isFollowing = false;
-            this.followButtonText = "Follow"
+            console.log("Unfollow action");
+            this.accountService.unfollowRestaurant(this.restaurantID).then((response) => {
+                this.isFollowing = false;
+                console.log(response);
+            }).catch((error) => {
+                console.log(error);
+            })
         }
         else {
-            // Perform follow action when ready
-            this.isFollowing = true;
-            this.followButtonText = "Unfollow"
+            console.log("Follow action");
+            this.accountService.followRestaurant(this.restaurantID).then((response) => {
+                this.isFollowing = true;
+                console.log(response);
+            }).catch((error) => {
+                console.log(error);
+            })
         }
+        this.followButtonText = this.isFollowing ? "Unfollow" : "Follow";
+        this.getDetails();
     }
 
     selectNewTab(selectedID: number) {
@@ -87,7 +100,7 @@ export class RestaurantPageComponent implements OnInit {
         }
     }
 
-    private getDetails() {
+    private async getDetails() {
         // Obtain restaurant from DB based on ID.
         this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
             this.model = restaurant;

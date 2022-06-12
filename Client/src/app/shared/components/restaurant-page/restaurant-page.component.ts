@@ -2,6 +2,7 @@ import { Component, Input, IterableDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Dish } from 'src/app/models/Dish';
 import { Post } from 'src/app/models/post';
+import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { DishDTO } from '../../models/DishDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
 import { User } from '../../models/UserDTO';
@@ -17,7 +18,7 @@ import { SearchService } from '../../services/search.service';
 export class RestaurantPageComponent implements OnInit {
 
     restaurantID: number = null;
-    restaurant: RestaurantDTO | null;
+    model: RestaurantDTO | null;
     profileImageURL: string;
 
     fetchedDishes: DishDTO[] = null;
@@ -35,7 +36,10 @@ export class RestaurantPageComponent implements OnInit {
                 private searchService: SearchService,
                 private uploadService: BlobUploadService,
                 public accountService: AccountService,
+                private restaurantService: RestaurantService,
                 private router: Router) { 
+
+                    this.editModel = {...this.model};
                 }
 
     user = this.accountService.currentUser$;
@@ -86,11 +90,11 @@ export class RestaurantPageComponent implements OnInit {
     private getDetails() {
         // Obtain restaurant from DB based on ID.
         this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
-            this.restaurant = restaurant;
+            this.model = restaurant;
             //console.log(this.restaurant)
         })
 
-        if (this.restaurant == null) {
+        if (this.model == null) {
             console.log("No restaurant found for ID:" + this.restaurantID)
             // this.router.navigate(['*']);
         }
@@ -114,6 +118,51 @@ export class RestaurantPageComponent implements OnInit {
 
     private userID;
     public isOwner: boolean;
+
+    editModel: RestaurantDTO;
+    editMode: boolean = false;
+    editDetailsAction() {
+        console.log("Menu post - Edit button action.");  
+        if (this.isOwner == true) {
+            this.editModel = {...this.model};
+            this.editMode = true;
+        }
+        else {
+            console.log("You are not an owner.")
+        }
+    }
+
+    cancelEditAction() {
+        console.log("Menu post - Edit mode disabled.");
+        this.editMode = false;
+    }
+
+    async submitEditAction() {
+        console.log("Restaurant edit - Submit action.");
+        this.editModel = await this.restaurantService.editDetails(this.model.id, this.editModel);
+        this.cancelEditAction();
+        this.getDetails();
+    }
+
+    uploadFiles(files) {
+        console.log("Upload service - Upload files")
+        const formData = new FormData();
+
+        if (files[0]) {
+            var filename = this.model.id + ".webp"
+            console.log(filename)
+            formData.append(files[0].filename, files[0]);
+            formData.append("fileID", filename)
+            formData.append("blobContainer", "resprof");
+
+            this.uploadService
+            .upload(formData)
+            .subscribe(({ path }) => (console.log(path)));
+        }
+        else {
+            console.log("Upload service - Files empty");
+        }
+    }
 
     async ngOnInit() {
 

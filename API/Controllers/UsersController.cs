@@ -84,7 +84,34 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<Boolean>> UserFollows([FromQuery] int id)
+        public async Task<ActionResult<Boolean>> UserFollowsRestaurant([FromQuery] int id)
+        {
+            var userId = GetRequesterId();
+            var user = await context.Users.FindAsync(userId);
+            if(user == null) return BadRequest($"There is no user with id {userId}");
+
+            var restaurant = user.FollowedRestaurants.FirstOrDefault(f => f.FollowedId == id);
+            if(restaurant is null) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        /// <response code="401"></response>
+        [HttpGet("follows-user")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<Boolean>> UserFollowsUser([FromQuery] int id)
         {
             var userId = GetRequesterId();
             var user = await context.Users.FindAsync(userId);

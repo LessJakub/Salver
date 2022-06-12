@@ -109,7 +109,7 @@ namespace API.Controllers
         /// <response code="204"></response>
         /// <response code="400"></response>
         [AllowAnonymous]
-        [HttpGet("{id}/follow")]
+        [HttpPost("{id}/follow")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> FollowRestaurant(int id)

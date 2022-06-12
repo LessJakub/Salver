@@ -25,6 +25,12 @@ export class RestaurantPageComponent implements OnInit {
 
     fetchedDishes: DishDTO[] = null;
 
+    showRestReviewOverlay: boolean = false;
+
+    disableRestOverlay(event: boolean) {
+        this.showRestReviewOverlay = event;
+    }
+
     isFollowing: boolean = false;
     canFollow: boolean = false;
     followButtonText = this.isFollowing ? "Unfollow" : "Follow";
@@ -52,9 +58,18 @@ export class RestaurantPageComponent implements OnInit {
         }
     }
 
+    handleRestReviewReload(event: boolean) {
+        this.getDetails();
+    }
+
     updateUrlWithDefault() {
         this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
     }
+
+    reviewRestaurantAction() {
+        this.showRestReviewOverlay = true;
+    }
+
 
     selectedTabID: number = 0;
 

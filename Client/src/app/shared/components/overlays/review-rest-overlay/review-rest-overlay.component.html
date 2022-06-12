@@ -30,14 +30,9 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col w-full h-3/4 gap-5">
-                            <app-grade-tile [name]="'taste'" 
-                                            [grade]="this.reviewModel.tasteRating"    
-                                            [enableGrading]="true" 
-                                            (choiceEmitter)="this.handleGradeChoice($event)"></app-grade-tile>
-            
-                            <app-grade-tile [name]="'price'"    
-                                            [grade]="this.reviewModel.priceRating" 
+                        <div class="flex flex-col w-full h-3/4 gap-5">            
+                            <app-grade-tile [name]="'atmosphere'"    
+                                            [grade]="this.reviewModel.atmosphereRating" 
                                             [enableGrading]="true" 
                                             (choiceEmitter)="this.handleGradeChoice($event)"></app-grade-tile>
                         
@@ -45,7 +40,7 @@
                                             [grade]="this.reviewModel.serviceRating" 
                                             [enableGrading]="true" 
                                             (choiceEmitter)="this.handleGradeChoice($event)"></app-grade-tile>
-
+                        
                             <p class="font-light text-center text-red-900 py-2">{{error}}</p>
                         </div>
 

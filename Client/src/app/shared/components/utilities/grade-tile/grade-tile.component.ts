@@ -15,11 +15,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
         <!-- Dots half -->
         <div class="w-1/2 h-full flex gap-1 justify-end">
             <ng-container *ngFor="let _ of [].constructor(this.grade); let i = index">
-                <div (click)="this.selectGrade(i + 1)" class="w-5 h-5 aspect-square bg-green-700 cursor-pointer rounded-full group-hover:saturate-200 transition"></div>
+                <div (click)="this.selectGrade(i + 1)" class="w-5 h-5 aspect-square bg-green-700 rounded-full group-hover:saturate-200 transition"></div>
             </ng-container>
 
             <ng-container *ngFor="let _ of [].constructor(5 - this.grade); let i = index">
-                <div (click)="this.selectGrade(this.activeGrade + i + 1)" class="w-5 h-5 aspect-square border border-green-700 cursor-pointer rounded-full group-hover:saturate-200 transition"></div>
+                <div (click)="this.selectGrade(this.activeGrade + i + 1)" class="w-5 h-5 aspect-square border border-green-700 rounded-full group-hover:saturate-200 transition"></div>
             </ng-container>
         </div>
         

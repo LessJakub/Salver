@@ -1,4 +1,5 @@
-<div *ngIf="this.editMode == false" class="flex w-full h-full bg-gray-50 border-2 p-4 border-green-900 rounded-2xl overflow-hidden">
+<div *ngIf="this.editMode == false"
+    class="flex w-full h-full bg-gray-50 border-2 p-4 border-green-900 rounded-2xl overflow-hidden">
     <div class="flex flex-grow w-fit h-full">
         <app-dish-tile [model]="model" [showDescription]="false"></app-dish-tile>
     </div>
@@ -14,18 +15,18 @@
         <div class="flex flex-col flex-grow w-full h-1/2 gap-2 mt-8">
 
             <button *ngIf="(this.isOwner == false)" (click)='this.addReviewAction()'
-            class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Review</button>
-    
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Review</button>
+
             <button *ngIf="(this.isOwner == true)" (click)='this.editButtonAction()'
-            class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
-    
-            <app-delete-dish-overlay *ngIf="(showOverlay) == true" 
-                                     [model]="model" 
-                                     (closeOverlayEventEmitter)="disableLoginOverlay()"
-                                     (reloadEventEmitter)="this.emitReload($event)"></app-delete-dish-overlay>
-            <div (click)="invertOverlayFlag()" class="flex w-full h-fit justify-center items-center content-center flex-col cursor-pointer group">
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
+
+            <app-delete-dish-overlay *ngIf="(showOverlay) == true" [model]="model"
+                (closeOverlayEventEmitter)="disableLoginOverlay()" (reloadEventEmitter)="this.emitReload($event)">
+            </app-delete-dish-overlay>
+            <div (click)="invertOverlayFlag()"
+                class="flex w-full h-fit justify-center items-center content-center flex-col cursor-pointer group">
                 <button *ngIf="(this.isOwner == true)" (click)='this.deleteAction()'
-                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
             </div>
 
         </div>
@@ -37,41 +38,44 @@
 
 <!-- Edit mode -->
 <form *ngIf="this.editMode == true" (ngSubmit)="this.submitEditAction()"
-      class="flex w-full h-full bg-gray-50 border-2 p-4 border-green-900 rounded-2xl overflow-hidden">
+    class="flex w-full h-full bg-gray-50 border-2 p-4 border-green-900 rounded-2xl overflow-hidden">
+
     <div class="flex flex-grow w-fit h-full">
-        <app-dish-tile [model]="model" [showDescription]="false"></app-dish-tile>
+        <app-dish-tile [model]="model" [showDescription]="false" [imageUploader]="this.editMode"></app-dish-tile>
     </div>
 
     <div class="flex flex-col w-2/4 h-full p-4 ml-4 space-y-2 overflow-clip">
         <mat-form-field>
             <textarea matInput [(ngModel)]="this.editModel.name" minlength="1" maxlength="20" name="name" required
-                      class="flex w-full h-full resize-none text-xl text-green-900 font-bold appearance-none rounded-2xl bg-gray-200 border border-gray-200 py-1 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700" 
-                      placeholder="{{this.model.name}}"></textarea>
-        </mat-form-field>
-        
-        <mat-form-field>
-            <textarea matInput [(ngModel)]="this.editModel.description" minlength="1" maxlength="150" name="description" required
-                      class="w-full resize-none text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700" 
-                      placeholder="{{this.model.description}}"></textarea>
+                class="flex w-full h-full resize-none text-xl text-green-900 font-bold appearance-none rounded-2xl bg-gray-200 border border-gray-200 py-1 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                placeholder="{{this.model.name}}"></textarea>
         </mat-form-field>
 
         <mat-form-field>
-            <textarea matInput [(ngModel)]="this.editModel.ingredients" minlength="1" maxlength="100" name="ingredients" required
-                      class="w-full resize-none text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700" 
-                      placeholder="{{this.model.ingredients}}"></textarea>
+            <textarea matInput [(ngModel)]="this.editModel.description" minlength="1" maxlength="150" name="description"
+                required
+                class="w-full resize-none text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                placeholder="{{this.model.description}}"></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+            <textarea matInput [(ngModel)]="this.editModel.ingredients" minlength="1" maxlength="100" name="ingredients"
+                required
+                class="w-full resize-none text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                placeholder="{{this.model.ingredients}}"></textarea>
         </mat-form-field>
     </div>
 
     <div class="flex flex-col w-1/4 h-full overflow-clip">
 
         <div class="flex flex-col flex-grow w-full h-1/2 gap-2 mt-8 pl-6">
-    
+
             <button *ngIf="(this.isOwner == true)" (click)='this.submitEditAction()'
-            class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Apply</button>
-    
-            
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Apply</button>
+
+
             <button *ngIf="(this.isOwner == true)" (click)='this.cancelEditAction()'
-                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Cancel</button>
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Cancel</button>
 
         </div>
 

@@ -12,6 +12,8 @@ namespace API.Extensions
                 services.AddAuthorization(options =>
                 {
                     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Role", "Admin"));
+                    options.AddPolicy("RestaurantOwner", policy => policy.RequireClaim("RestaurantOwner", "true"));
+                    options.AddPolicy("Customer", policy => policy.RequireClaim("Customer", "true"));
                 });
 
             return services;

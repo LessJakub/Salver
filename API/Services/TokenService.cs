@@ -26,14 +26,17 @@ namespace API.Services
                 new Claim("Role", user.Role.ToString()) 
             };
 
-            if(restaurants != null)
+            if(restaurants != null && restaurants.Count() > 0)
             {
                 foreach(var res in restaurants.Select((value, i) => new { i, value}))
                 {
                     
                     claims.Add(new Claim($"RestaurantId{res.i}", res.value.ToString()));
                 }
-                
+                claims.Add(new Claim("RestaurantOwner", "true"));
+            }
+            else{
+                claims.Add(new Claim("Customer", "true"));
             }
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

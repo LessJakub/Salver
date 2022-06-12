@@ -276,6 +276,8 @@ namespace API.Controllers
             restaurant.Name = restaurantUpdateDto.Name;
             restaurant.Description = restaurantUpdateDto.Description;
             restaurant.Address = restaurantUpdateDto.Address;
+            restaurant.Email = restaurantUpdateDto.Email;
+            restaurant.PhoneNumber = restaurantUpdateDto.PhoneNumber;
 
             await context.SaveChangesAsync();
 

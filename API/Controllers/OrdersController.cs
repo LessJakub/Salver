@@ -8,6 +8,10 @@ using API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+
+
+
+
 namespace API.Controllers
 {
     public class OrdersController : BaseAuthController
@@ -17,6 +21,7 @@ namespace API.Controllers
         }
 
         
+        
         /// <summary>
         /// Creates a new order in certain restaurant
         /// </summary>
@@ -25,7 +30,7 @@ namespace API.Controllers
         /// <returns>OrderDTO from created order</returns>
         /// <response code="200"> Returns a new created order</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize]
+        [Authorize("Customer")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,7 +51,7 @@ namespace API.Controllers
                 Address = newOrderDTO.Address,
                 Status = Status.NEW,
                 SubmitTime = DateTime.Now,
-                ExpectedTime = TimeSpan.FromMinutes(15),
+                ExpectedTime = TimeSpan.FromMinutes(60),
                 AppUser = user,
                 AppUserId = userId,
                 AppRestaurant = restaurant,
@@ -91,12 +96,14 @@ namespace API.Controllers
         /// Gets list of all orders created by a certain user
         /// </summary>
         /// <param name="userId">Id of the restaurant</param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
         /// <remarks></remarks>
         /// <returns>List of OrderDtos created from user orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize]
-        [HttpGet("user/{userId}/orders")]
+        [Authorize("Customer")]
+        [HttpGet("user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<OrderDTO>>> ReadAllUserOrders(int userId, int startingIndex = 0, int endIndex = 12)
@@ -109,7 +116,9 @@ namespace API.Controllers
                 Skip(startingIndex).
                 Take(endIndex).
                 OrderByDescending(o => o.SubmitTime).
-                ToList()) usrOrders.Add(new OrderDTO(order));
+                OrderByDescending(o => o.Status).
+                ToList()) 
+                    usrOrders.Add(new OrderDTO(order));
 
             return usrOrders;
         }
@@ -119,12 +128,14 @@ namespace API.Controllers
         /// Gets list of all orders created in certain restaurant
         /// </summary>
         /// <param name="restaurantId">Id of the restaurant</param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
         /// <remarks></remarks>
         /// <returns>List of OrderDtos created from restaurant orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize]
-        [HttpGet("Restaurants/{restaurantId}/orders")]
+        [Authorize("RestaurantOwner")]
+        [HttpGet("restaurant")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<OrderDTO>>> ReadAllRestaurantOrders(int restaurantId, int startingIndex = 0, int endIndex = 12)
@@ -137,9 +148,173 @@ namespace API.Controllers
                 Skip(startingIndex).
                 Take(endIndex).
                 OrderByDescending(o => o.SubmitTime).
-                ToList()) resOrders.Add(new OrderDTO(order));
+                OrderByDescending(o => o.Status).
+                ToList()) 
+                    resOrders.Add(new OrderDTO(order));
 
             return resOrders;
         }
+
+        /// <summary>
+        /// DEBUG FUNCTION
+        /// </summary>
+        /// <param name="orderId">Id of the restaurant</param>
+        /// <param name="status"></param>
+        /// <remarks></remarks>
+        /// <returns>List of OrderDtos created from restaurant orders</returns>
+        /// <response code="200"> Returns list of orders with matching parameters</response>
+        /// <response code="400"> Bad request, invalid input</response>
+        [Authorize("AdminOnly")]
+        [HttpPut("orders/{orderId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ChangeOrderStatus(int orderId, Status status)
+        {
+            var reqId = GetRequesterId();
+            var user = await context.Users.FindAsync(reqId);
+            if(user == null) return Unauthorized($"You must be signed in to do that");
+
+            //If user is restaurant owner
+            if(user.User_Res_Relation.Count() > 0)
+            {
+                foreach(var rel in user.User_Res_Relation.ToList())
+                {
+                    var restaurant = rel.AppRestaurant;
+                    if(restaurant == null) return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
+                    var order = restaurant.Orders.FirstOrDefault(o => o.Id == orderId);
+                    if(order == null) return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
+
+                    order.Status = status;
+                }
+            }
+            else
+            {
+                if(status != Status.CANCELLED) return BadRequest($"User can only cancel orders");
+                var order = user.Orders.FirstOrDefault(o => o.Id == orderId);
+                if(order == null) return BadRequest($"User with id {reqId} does not own order with id {orderId}");
+
+                if(order.Status != Status.NEW) return BadRequest($"User can cancel order only while it's {Status.NEW.ToString()}");
+
+                order.Status = Status.CANCELLED;
+
+            }
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Gets list of all orders created in certain restaurant
+        /// </summary>
+        /// <param name="orderId">Id of the restaurant</param>
+        /// <param name="minutes"></param>
+        /// <remarks></remarks>
+        /// <returns>List of OrderDtos created from restaurant orders</returns>
+        /// <response code="200"> Returns list of orders with matching parameters</response>
+        /// <response code="400"> Bad request, invalid input</response>
+        [Authorize("RestaurantOwner")]
+        [HttpPut("restaurant/{orderId}/accept")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> AcceptOrder(int orderId, int minutes = 60)
+        {
+            var reqId = GetRequesterId();
+            var user = await context.Users.FindAsync(reqId);
+            if(user == null) return Unauthorized($"You must be signed in to do that");
+
+            foreach(var rel in user.User_Res_Relation.ToList())
+            {
+                var restaurant = rel.AppRestaurant;
+                if(restaurant == null) return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
+                var order = restaurant.Orders.FirstOrDefault(o => o.Id == orderId);
+                if(order == null) return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
+
+                order.Status = Status.IN_PROGRESS;
+                order.ExpectedTime = TimeSpan.FromMinutes(minutes);
+
+                break;
+            }
+
+            return Ok();
+        }
+
+
+        /// <summary>
+        /// Gets list of all orders created in certain restaurant
+        /// </summary>
+        /// <param name="orderId">Id of the restaurant</param>
+        /// <remarks></remarks>
+        /// <returns>List of OrderDtos created from restaurant orders</returns>
+        /// <response code="200"> Returns list of orders with matching parameters</response>
+        /// <response code="400"> Bad request, invalid input</response>
+        [Authorize]
+        [HttpPut("{orderId}/cancel")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> CancelOrder(int orderId)
+        {
+            var reqId = GetRequesterId();
+            var user = await context.Users.FindAsync(reqId);
+            if(user == null) return Unauthorized($"You must be signed in to do that");
+
+            //If user is restaurant owner
+            if(user.User_Res_Relation.Count() > 0)
+            {
+                foreach(var rel in user.User_Res_Relation.ToList())
+                {
+                    var restaurant = rel.AppRestaurant;
+                    if(restaurant == null) return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
+                    var order = restaurant.Orders.FirstOrDefault(o => o.Id == orderId);
+                    if(order == null) return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
+
+                    order.Status = Status.CANCELLED;
+                }
+            }
+            else
+            {
+                var order = user.Orders.FirstOrDefault(o => o.Id == orderId);
+                if(order == null) return BadRequest($"User with id {reqId} does not own order with id {orderId}");
+
+                if(order.Status != Status.NEW) return BadRequest($"User can cancel order only while it's {Status.NEW.ToString()}");
+
+                order.Status = Status.CANCELLED;
+            }
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Gets list of all orders created in certain restaurant
+        /// </summary>
+        /// <param name="orderId">Id of the restaurant</param>
+        /// <remarks></remarks>
+        /// <returns>List of OrderDtos created from restaurant orders</returns>
+        /// <response code="200"> Returns list of orders with matching parameters</response>
+        /// <response code="400"> Bad request, invalid input</response>
+        [Authorize("RestaurantOwner")]
+        [HttpPut("{orderId}/finish")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> FinishOrder(int orderId)
+        {
+            var reqId = GetRequesterId();
+            var user = await context.Users.FindAsync(reqId);
+            if(user == null) return Unauthorized($"You must be signed in to do that");
+            if(user.User_Res_Relation.Count() < 1) return BadRequest($"User with id {reqId} does not own any restaurants");
+
+            foreach(var rel in user.User_Res_Relation.ToList())
+            {
+                var restaurant = rel.AppRestaurant;
+                if(restaurant == null) return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
+                var order = restaurant.Orders.FirstOrDefault(o => o.Id == orderId);
+                if(order == null) return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
+
+                order.Status = Status.CANCELLED;
+            }
+
+            return Ok();
+        }
+
+
+
     }
 }

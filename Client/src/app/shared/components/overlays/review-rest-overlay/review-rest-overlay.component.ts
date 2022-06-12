@@ -58,14 +58,13 @@ export class ReviewRestOverlayComponent implements OnInit {
                 if (files[0]) {
                     console.log("Rest Review - Files for upload present.")
                     var filename = review.id + ".webp";
-                    this.uploadFiles(files, filename);
-
-                    this.reloadEventEmitter.emit(true);
-                    this.closeOverlayEventEmitter.emit(false);
+                    this.uploadFiles(files, filename); 
                 }
                 else {
                     console.log("Review - No files uploaded.");
                 }
+                this.reloadEventEmitter.emit(true);
+                this.closeOverlayEventEmitter.emit(false);
             }).catch((error) => {
                 console.log("Review - Error:");
                 console.log(error);

@@ -63,13 +63,12 @@ export class ReviewDishOverlayComponent implements OnInit {
                     console.log("Review - Files for upload present.")
                     var filename = review.id + ".webp";
                     this.uploadFiles(files, filename);
-                    
-                    this.reloadEventEmitter.emit(true);
-                    this.closeOverlayEventEmitter.emit(false);
                 }
                 else {
                     console.log("Review - No files uploaded.");
                 }
+                this.reloadEventEmitter.emit(true);
+                this.closeOverlayEventEmitter.emit(false);
             }).catch((error) => {
                 console.log("Review - Error:");
                 console.log(error);

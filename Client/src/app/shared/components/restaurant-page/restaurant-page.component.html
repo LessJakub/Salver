@@ -71,8 +71,9 @@
         </div>
 
         <div class="h-56 flex justify-center px-4">
-            <img [src]="this.profileImageURL" (error)="updateUrlWithDefault()"
-                class="w-fit object-cover aspect-square rounded-2xl">
+            <input (change)="this.uploadFiles(fileInput.files)" hidden #fileInput type="file" requiredFileType="image/webp" id="file"/>
+            <img [src]="this.profileImageURL" (error)="updateUrlWithDefault()" (click)="fileInput.click()"
+                class="w-fit object-cover aspect-square rounded-2xl hover:animate-pulse cursor-pointer">
         </div>
 
         <div *ngIf="this.isOwner == true" class="w-full h-fit flex items-center justify-start px-4 gap-2">

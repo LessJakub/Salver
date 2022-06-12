@@ -144,6 +144,26 @@ export class RestaurantPageComponent implements OnInit {
         this.getDetails();
     }
 
+    uploadFiles(files) {
+        console.log("Upload service - Upload files")
+        const formData = new FormData();
+
+        if (files[0]) {
+            var filename = this.model.id + ".webp"
+            console.log(filename)
+            formData.append(files[0].filename, files[0]);
+            formData.append("fileID", filename)
+            formData.append("blobContainer", "resprof");
+
+            this.uploadService
+            .upload(formData)
+            .subscribe(({ path }) => (console.log(path)));
+        }
+        else {
+            console.log("Upload service - Files empty");
+        }
+    }
+
     async ngOnInit() {
 
         console.log("Using ID from ActivatedRoute");

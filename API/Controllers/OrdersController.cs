@@ -115,10 +115,10 @@ namespace API.Controllers
 
             var usrOrders = new List<OrderDTO>();
             foreach(var order in context.Orders.
-                Skip(startingIndex).
-                Take(endIndex).
                 OrderByDescending(o => o.SubmitTime).
                 OrderByDescending(o => o.Status).
+                Skip(startingIndex).
+                Take(endIndex).
                 ToList()) 
                     usrOrders.Add(new OrderDTO(order));
 
@@ -140,8 +140,10 @@ namespace API.Controllers
         [HttpGet("restaurant")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<OrderDTO>>> ReadAllRestaurantOrders(int restaurantId, int startingIndex = 0, int endIndex = 12)
+        public async Task<ActionResult<List<OrderDTO>>> ReadAllRestaurantOrders(int startingIndex = 0, int endIndex = 12)
         {
+            var restaurantId = GetRestaurantsId().First();
+
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             if(restaurant == null) return BadRequest($"Restaurant with {restaurantId} id does not exist");
 
@@ -217,7 +219,7 @@ namespace API.Controllers
         [HttpPut("restaurant/{orderId}/accept")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> AcceptOrder(int orderId, int minutes = 60)
+        public async Task<ActionResult> AcceptOrder(int orderId,[FromBody] int minutes = 60)
         {
             var reqId = GetRequesterId();
             var user = await context.Users.FindAsync(reqId);
@@ -226,13 +228,15 @@ namespace API.Controllers
             foreach(var rel in user.User_Res_Relation.ToList())
             {
                 var restaurant = rel.AppRestaurant;
-                if(restaurant == null) return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
+                if(restaurant == null) continue; // return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
                 var order = restaurant.Orders.FirstOrDefault(o => o.Id == orderId);
-                if(order == null) return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
+                if(order == null) continue; // return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
 
+                if(order.Status != Status.NEW) return BadRequest($"Order with id {order.Id} is not state: {Status.NEW.ToString()}");
                 order.Status = Status.IN_PROGRESS;
                 order.ExpectedTime = TimeSpan.FromMinutes(minutes);
-
+                
+                await context.SaveChangesAsync();
                 break;
             }
 
@@ -264,9 +268,10 @@ namespace API.Controllers
                 foreach(var rel in user.User_Res_Relation.ToList())
                 {
                     var restaurant = rel.AppRestaurant;
-                    if(restaurant == null) return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
+                    if(restaurant == null) continue; //return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
                     var order = restaurant.Orders.FirstOrDefault(o => o.Id == orderId);
-                    if(order == null) return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
+                    if(order == null) continue; //return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
+                    if(order.Status == Status.FINISHED) return BadRequest($"Order with id {order.Id} is in state: {order.Status.ToString()}");
 
                     order.Status = Status.CANCELLED;
                 }
@@ -280,7 +285,7 @@ namespace API.Controllers
 
                 order.Status = Status.CANCELLED;
             }
-
+            await context.SaveChangesAsync();
             return Ok();
         }
 
@@ -306,17 +311,17 @@ namespace API.Controllers
             foreach(var rel in user.User_Res_Relation.ToList())
             {
                 var restaurant = rel.AppRestaurant;
-                if(restaurant == null) return BadRequest($"Restaurant with id {rel.AppRestaurantId}");
+                if(restaurant == null) continue;
                 var order = restaurant.Orders.FirstOrDefault(o => o.Id == orderId);
-                if(order == null) return BadRequest($"Order with id {orderId} does not belong to restaurant with id {restaurant.Id}.");
-
-                order.Status = Status.CANCELLED;
+                if(order == null) continue;
+                if(order.Status != Status.CANCELLED) return BadRequest($"Order is already in state: {order.Status.ToString()}");
+                order.Status = Status.FINISHED;
+                order.RealizationTime = DateTime.Now;
+                await context.SaveChangesAsync();
+                return Ok();
             }
-
-            return Ok();
+            return BadRequest();
         }
-
-
 
     }
 }

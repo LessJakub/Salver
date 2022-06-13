@@ -48,12 +48,14 @@ export class DishOverlayComponent implements OnInit {
             this.orderCount = this.orderService.dishAmountInOrder(this.model);
         }
 
+        this.restaurantName = this.model.restaurantName;
+        /*
         this.searchService.getRestaurantNameByID(this.model.appRestaurantId).then((name: string) => {
             this.restaurantName = name;
         }).catch((error) => {
             console.log(error);
             this.restaurantName = "Unknown";
-        });
+        });*/
     }
 
     incrementCount() {

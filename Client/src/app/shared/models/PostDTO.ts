@@ -5,4 +5,5 @@ export interface PostDTO {
     description: string;
     appUserId: number;
     appRestaurantId: number;
+    name: string;
 }

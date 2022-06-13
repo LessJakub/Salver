@@ -1,6 +1,7 @@
 export interface DishDTO {
     id: number;
     name: string;
+    restaurantName: string,
     description: string;
     ingredients: string;
     appRestaurantId: number;

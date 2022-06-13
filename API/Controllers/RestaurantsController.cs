@@ -359,6 +359,55 @@ namespace API.Controllers
             }
             return restaurantsToReturn;
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        [AllowAnonymous]
+        [HttpGet("{id}/activity")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ActivityDTO>> GetActivitiesOfRestaurant(int id, int startingIndex = 0, int endIndex = 20)
+        {
+            var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
+            if(restaurant is null) return BadRequest($"Restaurant with id {id} does not exist");
+
+            var activities = new List<Tuple<ActivityDTO, DateTime>>();
+            Post pinnedPost = null;
+
+            var posts = restaurant.Posts.OrderByDescending(p => p.Date).Skip(startingIndex).Take(endIndex).ToList();
+            var resReviews = restaurant.Res_Review.Where(d => d.CreationDate > posts.Last().Date).OrderByDescending(d => d.Id).ToList();
+            var dishReviews = await context.DishReviews.Where(r => r.Dish.AppRestaurantId == restaurant.Id).OrderByDescending(r => r.CreationDate).ToListAsync();
+
+            foreach(var p in posts)
+            {
+                if(pinnedPost is null) pinnedPost = p;
+                else activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(p), p.Date));
+            }
+            
+            foreach(var r in resReviews)
+            {
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(r), r.CreationDate));
+            }
+
+            foreach(var r in dishReviews)
+            {
+                 activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(r), r.CreationDate));
+            }
+
+            
+
+
+
+            return Ok();
+        }
         
     }
 }

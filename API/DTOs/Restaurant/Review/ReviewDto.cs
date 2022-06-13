@@ -20,6 +20,7 @@ namespace API.DTOs
             UserId = rev.AppUserId;
             AtmosphereRating = rev.AtmosphereRating;
             ServiceRating = rev.ServiceRating;
+            RestaurantId = rev.AppRestaurantId;
         }
 
         public int Id { get; set; }
@@ -27,5 +28,7 @@ namespace API.DTOs
         public int AtmosphereRating { get; set; }
         public int ServiceRating { get; set; }
         public int UserId { get; set; }
+
+        public int RestaurantId { get; set; }
     }
 }

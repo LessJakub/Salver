@@ -13,6 +13,8 @@ namespace API.Entities
 
         public string Description { get; set; }
 
+        public DateTime CreationDate { get; set; }
+
         public virtual AppUser AppUser { get; set; }
 
         public int AppUserId { get; set; }

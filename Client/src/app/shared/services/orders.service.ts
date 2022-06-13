@@ -51,8 +51,7 @@ export class OrdersService {
             }, error => {
               console.log(error)
             }
-          )
-        ).toPromise();
+          )).toPromise();
 
     this.dishesInOrder = new Array<DishDTO>();
     this.calculateOrderPrice();

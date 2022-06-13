@@ -365,6 +365,8 @@ namespace API.Controllers
         /// 
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
         /// <remarks></remarks>
         /// <returns></returns>
         /// <response code="200"></response>
@@ -374,7 +376,7 @@ namespace API.Controllers
         [HttpGet("{id}/activity")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ActivityDTO>> GetActivitiesOfRestaurant(int id, int startingIndex = 0, int endIndex = 20)
+        public async Task<ActionResult<List<ActivityDTO>>> GetActivitiesOfRestaurant(int id, int startingIndex = 0, int endIndex = 20)
         {
             var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
             if(restaurant is null) return BadRequest($"Restaurant with id {id} does not exist");
@@ -384,15 +386,16 @@ namespace API.Controllers
 
             var posts = restaurant.Posts.
                                     OrderByDescending(p => p.Date).
-                                    Skip(startingIndex).
                                     Take(endIndex).
                                     ToList();
+
             var resReviews = restaurant.Res_Review.
-                                    Where(d => d.CreationDate > posts.Last().Date).
                                     OrderByDescending(d => d.Id).
+                                    Take(endIndex).
                                     ToList();
             var dishReviews = await context.DishReviews.
                                     Where(r => r.Dish.AppRestaurantId == restaurant.Id).
+                                    Take(endIndex).
                                     OrderByDescending(r => r.CreationDate).
                                     ToListAsync();
 
@@ -412,11 +415,14 @@ namespace API.Controllers
                  activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(r), r.CreationDate));
             }
 
-            
+            var listToRet = new List<ActivityDTO>();
+            if(pinnedPost is not null) listToRet.Add(new ActivityDTO(pinnedPost));
+            foreach(var a in activities.OrderByDescending(a => a.Item2).Skip(startingIndex).Take(endIndex).ToList())
+            {
+                listToRet.Add(a.Item1);
+            }
 
-
-
-            return Ok();
+            return listToRet;
         }
         
     }

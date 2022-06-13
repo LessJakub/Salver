@@ -25,6 +25,7 @@ import { AddDishPostComponent } from './components/posts/add-dish-post/add-dish-
 import { DeleteDishOverlayComponent } from './components/overlays/delete-dish-overlay/delete-dish-overlay.component';
 import { ReviewDishOverlayComponent } from './components/overlays/review-dish-overlay/review-dish-overlay.component';
 import { ReviewRestOverlayComponent } from './components/overlays/review-rest-overlay/review-rest-overlay.component';
+import { RegularPostComponent } from './components/posts/regular-post/regular-post.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { ReviewRestOverlayComponent } from './components/overlays/review-rest-ov
         DeleteDishOverlayComponent,
         ReviewDishOverlayComponent,
         ReviewRestOverlayComponent,
+        RegularPostComponent,
     ],
     imports: [
         CommonModule,
@@ -75,6 +77,7 @@ import { ReviewRestOverlayComponent } from './components/overlays/review-rest-ov
         DeleteDishOverlayComponent,
         ReviewDishOverlayComponent,
         ReviewRestOverlayComponent,
+        RegularPostComponent,
     ]
 })
 export class SharedModule { }

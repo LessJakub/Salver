@@ -95,7 +95,6 @@ namespace API.Controllers
         /// <summary>
         /// Gets list of all orders created by a certain user
         /// </summary>
-        /// <param name="userId">Id of the restaurant</param>
         /// <param name="startingIndex"></param>
         /// <param name="endIndex"></param>
         /// <remarks></remarks>
@@ -106,8 +105,11 @@ namespace API.Controllers
         [HttpGet("user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<OrderDTO>>> ReadAllUserOrders(int userId, int startingIndex = 0, int endIndex = 12)
+        public async Task<ActionResult<List<OrderDTO>>> ReadAllUserOrders( int startingIndex = 0, int endIndex = 12)
         {
+            var userId = GetRequesterId();
+            if(userId == -1) return BadRequest("You must be signed in to read you orders");
+
             var user = await context.Users.FindAsync(userId);
             if(user == null) return BadRequest($"User with {userId} id does not exist");
 

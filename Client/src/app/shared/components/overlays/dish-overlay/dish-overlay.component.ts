@@ -39,7 +39,7 @@ export class DishOverlayComponent implements OnInit {
         this.modelImageURL = this.uploadService.defaultDishImageURL();
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
         this.restaurant = this.searchService.searchRestaurantByID(this.model.appRestaurantId);
         this.modelImageURL = this.uploadService.dishImageURL(this.model.id);
 
@@ -48,14 +48,14 @@ export class DishOverlayComponent implements OnInit {
             this.orderCount = this.orderService.dishAmountInOrder(this.model);
         }
 
-        this.restaurantName = this.model.restaurantName;
-        /*
-        this.searchService.getRestaurantNameByID(this.model.appRestaurantId).then((name: string) => {
-            this.restaurantName = name;
-        }).catch((error) => {
-            console.log(error);
-            this.restaurantName = "Unknown";
-        });*/
+        await this.searchService.getRestaurantNameByID(this.model.appRestaurantId).then((name) => {
+            if (name == null || name == "") {
+                this.restaurantName = "Unknown";
+            }
+            else {
+                this.restaurantName = name;
+            }
+        });
     }
 
     incrementCount() {

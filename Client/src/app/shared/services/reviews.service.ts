@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { DishReviewDTO } from '../models/DishReviewDTO';
+import { PostDTO } from '../models/PostDTO';
 import { RestReviewDTO } from '../models/RestReviewDTO';
 import { User } from '../models/UserDTO';
 import { AccountService } from './account.service';
@@ -69,16 +70,26 @@ export class ReviewsService {
     /**
      * Method used to get all dish reviews for given dish identified by ID.
      * @param id Dish id for which review should be added
-     * @param model Model of the review to add
      * @returns Response as a promise
      */
      getDishReviews(id: number) {
-        var url = this.baseUrl + ":8080/api/Reviews/dishes" + id + "reviews";
+        var url = this.baseUrl + ":8080/api/Reviews/dishes/" + id + "/reviews";
         return this.http.get<DishReviewDTO[]>(url).pipe(
             map((Response: DishReviewDTO[]) => {
                 return Response;
             }, error => {
                 console.log(error);
         }));
+    }
+
+
+    /**
+     * Method used to get all restaurant posts for given restaurant identified by ID.
+     * @param id Restaurant id for which review should be added
+     * @returns Response as a promise
+     */
+     async getRestaurantPosts(id: number) {
+        var url = this.baseUrl + ":8080/api/Posts/Restaurants/" + id + "/posts";
+        return await this.http.get<PostDTO[]>(url).toPromise();
     }
 }

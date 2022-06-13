@@ -6,11 +6,13 @@ import { Dish } from 'src/app/models/Dish';
 import { Post } from 'src/app/models/post';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { DishDTO } from '../../models/DishDTO';
+import { PostDTO } from '../../models/PostDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
 import { User } from '../../models/UserDTO';
 import { AccountService } from '../../services/account.service';
 import { ActivityService } from '../../services/activity.service';
 import { BlobUploadService } from '../../services/blob-upload.service';
+import { ReviewsService } from '../../services/reviews.service';
 import { SearchService } from '../../services/search.service';
 
 @Component({
@@ -25,6 +27,7 @@ export class RestaurantPageComponent implements OnInit {
     profileImageURL: string;
 
     fetchedDishes: DishDTO[] = null;
+    fetchedPosts: PostDTO[] = null;
 
     showRestReviewOverlay: boolean = false;
 
@@ -41,8 +44,9 @@ export class RestaurantPageComponent implements OnInit {
                 private uploadService: BlobUploadService,
                 public accountService: AccountService,
                 private restaurantService: RestaurantService,
-                private router: Router,
-                public activityService: ActivityService) { 
+                private reviewsService: ReviewsService,
+                public activityService: ActivityService,
+                private router: Router) { 
 
                     this.editModel = {...this.model};
                 }
@@ -137,6 +141,7 @@ export class RestaurantPageComponent implements OnInit {
 
     private async getPosts() {
         console.log("Restaurant - Posts Getter");
+        this.fetchedPosts = await this.reviewsService.getRestaurantPosts(this.restaurantID);
     }
 
     private async getActivity() {

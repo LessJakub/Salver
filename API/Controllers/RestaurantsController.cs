@@ -382,9 +382,19 @@ namespace API.Controllers
             var activities = new List<Tuple<ActivityDTO, DateTime>>();
             Post pinnedPost = null;
 
-            var posts = restaurant.Posts.OrderByDescending(p => p.Date).Skip(startingIndex).Take(endIndex).ToList();
-            var resReviews = restaurant.Res_Review.Where(d => d.CreationDate > posts.Last().Date).OrderByDescending(d => d.Id).ToList();
-            var dishReviews = await context.DishReviews.Where(r => r.Dish.AppRestaurantId == restaurant.Id).OrderByDescending(r => r.CreationDate).ToListAsync();
+            var posts = restaurant.Posts.
+                                    OrderByDescending(p => p.Date).
+                                    Skip(startingIndex).
+                                    Take(endIndex).
+                                    ToList();
+            var resReviews = restaurant.Res_Review.
+                                    Where(d => d.CreationDate > posts.Last().Date).
+                                    OrderByDescending(d => d.Id).
+                                    ToList();
+            var dishReviews = await context.DishReviews.
+                                    Where(r => r.Dish.AppRestaurantId == restaurant.Id).
+                                    OrderByDescending(r => r.CreationDate).
+                                    ToListAsync();
 
             foreach(var p in posts)
             {

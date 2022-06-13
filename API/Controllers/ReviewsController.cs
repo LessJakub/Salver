@@ -54,7 +54,8 @@ namespace API.Controllers
                 AppRestaurantId = restaurantId,
                 AppRestaurant = restaurant,
                 AppUserId = userId,
-                AppUser = user
+                AppUser = user,
+                CreationDate = DateTime.Now
             };
             
 
@@ -217,7 +218,8 @@ namespace API.Controllers
                 Dish = dish,
                 DishId = dishId,
                 AppUserId = userId,
-                AppUser = user
+                AppUser = user,
+                CreationDate = DateTime.Now
             };
 
 

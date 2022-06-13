@@ -9,6 +9,7 @@ import { DishDTO } from '../../models/DishDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
 import { User } from '../../models/UserDTO';
 import { AccountService } from '../../services/account.service';
+import { ActivityService } from '../../services/activity.service';
 import { BlobUploadService } from '../../services/blob-upload.service';
 import { SearchService } from '../../services/search.service';
 
@@ -40,7 +41,8 @@ export class RestaurantPageComponent implements OnInit {
                 private uploadService: BlobUploadService,
                 public accountService: AccountService,
                 private restaurantService: RestaurantService,
-                private router: Router) { 
+                private router: Router,
+                public activityService: ActivityService) { 
 
                     this.editModel = {...this.model};
                 }
@@ -139,6 +141,7 @@ export class RestaurantPageComponent implements OnInit {
 
     private async getActivity() {
         console.log("Restaurant - Activity Getter")
+        this.activityService.getActivities(this.restaurantID);
     }
 
     private userID;

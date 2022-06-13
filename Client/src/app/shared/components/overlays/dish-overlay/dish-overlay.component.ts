@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
+import { DishReviewDTO } from 'src/app/shared/models/DishReviewDTO';
 import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 import { OrdersService } from 'src/app/shared/services/orders.service';
+import { ReviewsService } from 'src/app/shared/services/reviews.service';
 import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
@@ -24,11 +26,14 @@ export class DishOverlayComponent implements OnInit {
     averageTotalGrade: number = 0;
     modelImageURL: string;
 
+    reviews: DishReviewDTO[] = [];
+
     tabs: string[] = ["Overview", "Reviews"];
 
     constructor(private searchService: SearchService,
         private uploadService: BlobUploadService,
-        public orderService : OrdersService) { }
+        public orderService : OrdersService,
+        private reviewsService: ReviewsService) { }
 
     updateUrlWithDefault() {
         this.modelImageURL = this.uploadService.defaultDishImageURL();
@@ -57,6 +62,17 @@ export class DishOverlayComponent implements OnInit {
 
     selectNewTab(selectedID: number) {
         this.selectedTabID = selectedID;
+
+        switch(this.selectedTabID) {
+            case 1:
+
+        }
+    }
+
+    fetchReviews() {
+        this.reviewsService.getDishReviews(this.model.id).toPromise().then((dishRevs: [DishReviewDTO]) => {
+            this.reviews = {...dishRevs};
+        })
     }
 
     decrementCount() {

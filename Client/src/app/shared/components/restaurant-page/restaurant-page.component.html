@@ -143,7 +143,7 @@
 
     <div class="flex w-full h-[10%] content-center justify-center items-center">
         <div class="w-1/2 h-full">
-            <app-tab-switcher (tabSelectEvent)="selectNewTab($event)" [default]="0"
+            <app-tab-switcher (tabSelectEvent)="selectNewTab($event)" [default]="this.selectedTabID"
                 [tabNames]="['Menu', 'Posts', 'Activity']"></app-tab-switcher>
         </div>
     </div>
@@ -166,6 +166,18 @@
             </div>
         </div>
 
+        <!-- Posts -->
+        <div *ngIf="(this.selectedTabID) == 1"
+            class="w-full flex flex-col space-y-5 absolute top-0 left-0 justify-center content-center items-center align-middle">
+            
+            <div class="flex w-full h-full items-center content-center justify-center"
+                *ngFor="let post of this.fetchedPosts">
+                <div class="w-5/6 h-fit">
+                    <app-regular-post [model]="post"></app-regular-post>
+                </div>
+            </div>
+        </div>
+
         <!-- Activity -->
         <div *ngIf="(this.selectedTabID) == 2"
             class="w-full flex flex-col items-center justify-center space-y-5 absolute top-0 left-0">
@@ -174,18 +186,5 @@
             </div>
         </div>
 
-        <!-- Posts -->
-        <div *ngIf="(this.selectedTabID) == 1"
-            class="w-full flex flex-col space-y-5 absolute top-0 left-0 justify-center content-center items-center align-middle">
-            <div class="w-5/6 h-72">
-                <app-review-post></app-review-post>
-            </div>
-            <div class="w-5/6 h-72">
-                <app-review-post></app-review-post>
-            </div>
-            <div class="w-5/6 h-72">
-                <app-review-post></app-review-post>
-            </div>
-        </div>
     </div>
 </div>

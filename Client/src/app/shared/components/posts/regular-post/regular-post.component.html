@@ -1,1 +1,87 @@
-<p>regular-post works!</p>
+<!-- Overflow hidden prevents image from overflowing -->
+
+<!-- REVIEW PROTOTYPE -->
+<div *ngIf="this.dishReview == true || this.restaurantReview == true"
+    class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden">
+
+    <div class="bg-fuchsia-300 w-[31%] aspect-square">
+
+    </div>
+
+    <div class="bg-blue-300 w-[69%] p-1">
+
+        <div class="bg-green-500 w-full h-1/2 rounded-2xl flex">
+            <div class="bg-pink-500 w-1/2 h-full rounded-2xl">
+
+            </div>
+
+            <div class="bg-orange-500 w-1/2 px-4 h-full rounded-2xl flex flex-col justify-center">
+
+            </div>
+        </div>
+
+        <div class="bg-blue-500 w-full h-1/2 rounded-2xl overflow-hidden">
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- POST PROTOTYPE -->
+<div *ngIf="this.post == true" class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden">
+
+    <div class="w-[31%] aspect-square flex">
+        <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r" [src]="this.postImageURL"
+            (error)="updateUrlWithDefault()">
+    </div>
+
+    <div class="w-[69%] p-1">
+
+        <div class="w-full h-1/2 rounded-2xl flex">
+            <div class="flex flex-col w-1/2 h-full rounded-2xl p-2 justify-evenly">
+
+                <a [routerLink]="['/restaurant/', this.model.appRestaurantId]"
+                    class="group flex w-full h-fit gap-2">
+                    <svg class="fill-gray-50 stroke-green-900" width="24" height="24" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M17.657 16.657L13.414 20.9C13.2284 21.0857 13.0081 21.2331 12.7656 21.3336C12.523 21.4342 12.2631 21.4859 12.0005 21.4859C11.738 21.4859 11.478 21.4342 11.2354 21.3336C10.9929 21.2331 10.7726 21.0857 10.587 20.9L6.343 16.657C5.22422 15.5382 4.46234 14.1127 4.15369 12.5609C3.84504 11.009 4.00349 9.40051 4.60901 7.93873C5.21452 6.47694 6.2399 5.22754 7.55548 4.3485C8.87107 3.46947 10.4178 3.00029 12 3.00029C13.5822 3.00029 15.1289 3.46947 16.4445 4.3485C17.7601 5.22754 18.7855 6.47694 19.391 7.93873C19.9965 9.40051 20.155 11.009 19.8463 12.5609C19.5377 14.1127 18.7758 15.5382 17.657 16.657V16.657Z"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M14.1213 13.1213C14.6839 12.5587 15 11.7956 15 11C15 10.2044 14.6839 9.44129 14.1213 8.87868C13.5587 8.31607 12.7956 8 12 8C11.2044 8 10.4413 8.31607 9.87868 8.87868C9.31607 9.44129 9 10.2044 9 11C9 11.7956 9.31607 12.5587 9.87868 13.1213C10.4413 13.6839 11.2044 14 12 14C12.7956 14 13.5587 13.6839 14.1213 13.1213Z"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                    <div class="text-lg font-light truncate text-green-900 group-hover:animate-pulse"> {{
+                        this.restaurantName }}</div>
+                </a>
+
+                <div class="group flex w-full h-fit space-x-2">
+                    <svg class="fill-gray-50 stroke-green-900" width="24" height="24" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 8V12L15 15M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                    <p class="text-base font-light text-left text-green-900"> {{ prettyTimeFromDate(model.date) }}</p>
+                </div>
+                
+            </div>
+
+            <div *ngIf="this.isOwner == true" class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
+                <button (click)='this.cancelEditAction()'
+                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-green-900 hover:border-green-800 border-green-900">Edit</button>
+
+                <button (click)='this.cancelEditAction()'
+                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Delete</button>
+            </div>
+        </div>
+
+        <div class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">
+            <p class="text-base font-light text-left text-gray-900">{{model.description}}</p>
+        </div>
+    </div>
+
+</div>

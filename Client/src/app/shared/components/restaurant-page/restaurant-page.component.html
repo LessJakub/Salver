@@ -4,6 +4,7 @@
                       (closeOverlayEventEmitter)="this.disableRestOverlay($event)"
                       (reloadEventEmitter)="this.handleRestReviewReload($event)"></app-review-rest-overlay>
 
+
 <div *ngIf="this.editMode == false"
     class="basis-1/4 min-w-[25rem] h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
     <div class="h-full pt-4 flex flex-col items-center justify-start space-y-5 absolute top-0 left-0">
@@ -32,18 +33,16 @@
 
         </div>
 
-        <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Followers: {{model.followers}}</p>
-
         <div *ngIf="this.isOwner == true" class="w-full h-fit flex items-center justify-start px-4 gap-2">
             <button (click)='this.editDetailsAction()'
-                class="w-1/2 py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                 Edit
             </button>
 
-            <p class="text-center font-light mx-4">Followers: {{model.followers}}</p>
         </div>
 
-        <div class="flex  flex-col gap-2 w-full h-fit px-6">
+        <div class="flex flex-col gap-2 w-full h-fit px-6">
+            <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Followers: {{model.followers}}</p>
             <app-grade-tile [name]="'atmosphere'" [grade]="this.model.atmosphereRating"></app-grade-tile>
             <app-grade-tile [name]="'service'" [grade]="this.model.serviceRating"></app-grade-tile>
         </div>
@@ -173,7 +172,7 @@
             <div class="flex w-full h-full items-center content-center justify-center"
                 *ngFor="let post of this.fetchedPosts">
                 <div class="w-5/6 h-fit">
-                    <app-regular-post [model]="post"></app-regular-post>
+                    <app-adjustable-post [model]="post"></app-adjustable-post>
                 </div>
             </div>
         </div>

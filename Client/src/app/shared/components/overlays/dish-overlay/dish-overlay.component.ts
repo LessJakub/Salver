@@ -15,11 +15,6 @@ export class DishOverlayComponent implements OnInit {
     @Output() closeOverlayEventEmitter = new EventEmitter();
     @Input() model: DishDTO;
 
-    // Data fetched from services for model
-    restaurant;
-
-    restaurantName: string;
-
     orderCount: number = 0;
     selectedTabID: number = 0;
 
@@ -40,22 +35,13 @@ export class DishOverlayComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.restaurant = this.searchService.searchRestaurantByID(this.model.appRestaurantId);
+        // this.restaurant = this.searchService.searchRestaurantByID(this.model.appRestaurantId);
         this.modelImageURL = this.uploadService.dishImageURL(this.model.id);
 
         if(this.model.appRestaurantId == this.orderService.currentRestaurant)
         {
             this.orderCount = this.orderService.dishAmountInOrder(this.model);
         }
-
-        await this.searchService.getRestaurantNameByID(this.model.appRestaurantId).then((name) => {
-            if (name == null || name == "") {
-                this.restaurantName = "Unknown";
-            }
-            else {
-                this.restaurantName = name;
-            }
-        });
     }
 
     incrementCount() {

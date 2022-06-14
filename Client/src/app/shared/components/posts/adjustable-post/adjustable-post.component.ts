@@ -2,19 +2,22 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PostDTO } from 'src/app/shared/models/PostDTO';
 import { SearchService } from 'src/app/shared/services/search.service';
 
-@Component({
-    selector: 'app-regular-post',
-    templateUrl: './regular-post.component.html',
-})
-export class RegularPostComponent implements OnInit {
+export enum POST_TYPE {
+    REST_REVIEW = 0,
+    DISH_REVIEW = 1,
+    REGULAR_POST = 2
+}
 
-    restaurantReview = false;
-    dishReview = false;
-    post = true;
+@Component({
+    selector: 'app-adjustable-post',
+    templateUrl: './adjustable-post.component.html',
+})
+export class AdjustablePostComponent implements OnInit {
+
+    @Input() public type: POST_TYPE = POST_TYPE.REGULAR_POST;
+    @Input() model: PostDTO;
 
     isOwner = false;
-
-    @Input() model: PostDTO;
 
     postBlobBaseURL = "https://salver.blob.core.windows.net/posts/";
     postImageURL: string = "";

@@ -1,19 +1,15 @@
 import { Component, Input, IterableDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpResponse } from '@azure/core-http';
-import { map } from 'rxjs/operators';
-import { Dish } from 'src/app/models/Dish';
-import { Post } from 'src/app/models/post';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { DishDTO } from '../../models/DishDTO';
 import { PostDTO } from '../../models/PostDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
-import { User } from '../../models/UserDTO';
 import { AccountService } from '../../services/account.service';
 import { ActivityService } from '../../services/activity.service';
 import { BlobUploadService } from '../../services/blob-upload.service';
 import { ReviewsService } from '../../services/reviews.service';
 import { SearchService } from '../../services/search.service';
+import { POST_TYPE } from '../posts/adjustable-post/adjustable-post.component';
 
 @Component({
     selector: 'app-restaurant-page',
@@ -21,6 +17,8 @@ import { SearchService } from '../../services/search.service';
     host: { 'class': 'flex-auto flex justify-center items-center' } // ! Styling host container to fill all avialable space
 })
 export class RestaurantPageComponent implements OnInit {
+
+    public postTypes = POST_TYPE;        
 
     restaurantID: number = null;
     model: RestaurantDTO | null;

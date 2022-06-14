@@ -1,7 +1,7 @@
 <!-- Overflow hidden prevents image from overflowing -->
 
 <!-- REVIEW PROTOTYPE -->
-<div *ngIf="this.dishReview == true || this.restaurantReview == true"
+<div *ngIf="this.type == 0 || this.type == 1"
     class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden">
 
     <div class="bg-fuchsia-300 w-[31%] aspect-square">
@@ -28,8 +28,8 @@
 </div>
 
 
-<!-- POST PROTOTYPE -->
-<div *ngIf="this.post == true" class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden">
+<!-- REGULAR POST -->
+<div *ngIf="this.type == 2" class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden shadow-xl">
 
     <div class="w-[31%] aspect-square flex">
         <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r" [src]="this.postImageURL"

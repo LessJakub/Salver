@@ -1,5 +1,5 @@
 <div *ngIf="this.editMode == false"
-    class="flex w-full h-full bg-gray-50 border p-4 border-green-900 rounded-2xl overflow-hidden">
+    class="flex w-full h-full bg-gray-50 border p-4 border-green-900 rounded-2xl overflow-hidden shadow-xl">
     <div class="flex flex-grow w-fit h-full">
         <app-dish-tile [model]="model" [showDescription]="false"></app-dish-tile>
     </div>
@@ -47,7 +47,7 @@
 
 <!-- Edit mode -->
 <form *ngIf="this.editMode == true" (ngSubmit)="this.submitEditAction()"
-    class="flex w-full h-full bg-gray-50 border p-4 border-green-900 rounded-2xl overflow-hidden">
+    class="flex w-full h-full bg-gray-50 border p-4 border-green-900 rounded-2xl overflow-hidden shadow-xl">
 
     <div class="flex flex-grow w-fit h-full">
         <app-dish-tile [model]="model" [showDescription]="false" [imageUploader]="this.editMode"></app-dish-tile>

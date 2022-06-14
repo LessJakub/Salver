@@ -169,6 +169,9 @@
         <div *ngIf="(this.selectedTabID) == 1"
             class="w-full flex flex-col space-y-5 absolute top-0 left-0 justify-center content-center items-center align-middle">
             
+            <app-add-rest-post class="w-5/6 h-fit" *ngIf="(this.isOwner)" [model]="this.model"
+                (reloadEventEmitter)="this.updateData($event)"></app-add-rest-post>
+
             <div class="flex w-full h-full items-center content-center justify-center"
                 *ngFor="let post of this.fetchedPosts">
                 <div class="w-5/6 h-fit">

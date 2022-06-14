@@ -20,7 +20,9 @@ export class AdjustablePostComponent implements OnInit {
     isOwner = false;
 
     postBlobBaseURL = "https://salver.blob.core.windows.net/posts/";
+    routerLink: string = '';
     postImageURL: string = "";
+    creatorName: string = '';
 
     updateUrlWithDefault() {
 
@@ -39,6 +41,17 @@ export class AdjustablePostComponent implements OnInit {
 
     ngOnInit() {
         this.postImageURL = this.postBlobBaseURL + this.model.id + ".webp";
+        //If post was created by restaurant
+        if(this.model.appRestaurantId != 0) 
+        {
+            this.routerLink = '/restaurant/' + this.model.appRestaurantId
+            this.creatorName = this.model.name
+        }
+        else
+        {
+            this.routerLink = '/activity/'
+            this.creatorName = this.model.username
+        }
     }
 
 }

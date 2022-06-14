@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Dish } from 'src/app/models/Dish';
 import { Post } from 'src/app/models/post';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
+import { ActivityDTO } from '../../models/ActivityDTO';
 import { DishDTO } from '../../models/DishDTO';
 import { PostDTO } from '../../models/PostDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
@@ -28,6 +29,7 @@ export class RestaurantPageComponent implements OnInit {
 
     fetchedDishes: DishDTO[] = null;
     fetchedPosts: PostDTO[] = null;
+    fetchedActivity: ActivityDTO[] = null;
 
     showRestReviewOverlay: boolean = false;
 
@@ -146,7 +148,7 @@ export class RestaurantPageComponent implements OnInit {
 
     private async getActivity() {
         console.log("Restaurant - Activity Getter")
-        this.activityService.getActivities(this.restaurantID);
+        this.fetchedActivity = await this.activityService.getRestaurantActivities(this.restaurantID);
     }
 
     private userID;

@@ -308,56 +308,48 @@ namespace API.Controllers
         /// <response code="204"></response>
         /// <response code="400"></response>
         [AllowAnonymous]
-        [HttpGet("{id}/activity")]
+        [HttpGet("activity")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<ActivityDTO>>> GetActivitiesOfUser(int startingIndex = 0, int endIndex = 20)
+        public async Task<ActionResult<List<PostDto>>> GetActivitiesOfUser(int startingIndex = 0, int endIndex = 20)
         {
             var userId = GetRequesterId();
             if(userId == -1) return BadRequest("You be signed in to get you activities");
 
-            var user = await context.Restaurants.FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if(user is null) return BadRequest($"User with id {userId} does not exist");
 
-            var activities = new List<Tuple<ActivityDTO, DateTime>>();
+            var activities = new List<Tuple<PostDto, DateTime>>();
 
-            // var posts = restaurant.Posts.
-            //                         OrderByDescending(p => p.Date).
-            //                         Take(endIndex).
-            //                         ToList();
 
-            // var resReviews = restaurant.Res_Review.
-            //                         OrderByDescending(d => d.Id).
-            //                         Take(endIndex).
-            //                         ToList();
-            // var dishReviews = await context.DishReviews.
-            //                         Where(r => r.Dish.AppRestaurantId == restaurant.Id).
-            //                         Take(endIndex).
-            //                         OrderByDescending(r => r.CreationDate).
-            //                         ToListAsync();
+            foreach(var post in context.Posts.
+                                Where(p => user.FollowedRestaurants.Select(f => f.FollowedId).Contains(p.Id)).
+                                OrderByDescending(p => p.Date).
+                                ToList())
+            {
+                activities.Add(new Tuple<PostDto, DateTime>(new PostDto(post), post.Date));
+            }
 
-            // foreach(var p in posts)
-            // {
-            //     if(pinnedPost is null) pinnedPost = p;
-            //     else activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(p), p.Date));
-            // }
+            foreach(var post in context.Posts.
+                                Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains(p.Id)).
+                                OrderByDescending(p => p.Date).
+                                ToList())
+            {
+                activities.Add(new Tuple<PostDto, DateTime>(new PostDto(post), post.Date));
+            }
+
+            var listToRet = new List<PostDto>();
+
+            foreach(var activity in activities.
+                                    OrderByDescending(a => a.Item2).
+                                    Skip(startingIndex).
+                                    Take(endIndex).
+                                    ToList())
+            {
+                listToRet.Add(activity.Item1);
+            }            
+
             
-            // foreach(var r in resReviews)
-            // {
-            //     activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(r), r.CreationDate));
-            // }
-
-            // foreach(var r in dishReviews)
-            // {
-            //      activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(r), r.CreationDate));
-            // }
-
-            var listToRet = new List<ActivityDTO>();
-            // if(pinnedPost is not null) listToRet.Add(new ActivityDTO(pinnedPost));
-            // foreach(var a in activities.OrderByDescending(a => a.Item2).Skip(startingIndex).Take(endIndex).ToList())
-            // {
-            //     listToRet.Add(a.Item1);
-            //}
 
             return listToRet;
         }

@@ -181,7 +181,7 @@
         <!-- Activity -->
         <div *ngIf="(this.selectedTabID) == 2"
             class="w-full flex flex-col items-center justify-center space-y-5 absolute top-0 left-0">
-            <div class="w-full h-full" *ngFor="let activity of fetchedPosts">
+            <div class="w-full h-full" *ngFor="let activity of fetchedActivity">
                 <app-activity-post [model]="activity"></app-activity-post>
             </div>
         </div>

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { Post } from 'src/app/models/post';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
+import { PostDTO } from 'src/app/shared/models/PostDTO';
+import { ActivityService } from 'src/app/shared/services/activity.service';
 import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
@@ -10,7 +13,7 @@ import { SearchService } from 'src/app/shared/services/search.service';
 })
 export class ActivityPageComponent implements OnInit {
 
-    constructor(private searchService: SearchService) { }
+    constructor(private searchService: SearchService, private activityService: ActivityService) { }
 
     fetchedPosts: Post[] | null;
     recommendations: DishDTO[] = [];
@@ -41,26 +44,67 @@ export class ActivityPageComponent implements OnInit {
         }
     }
 
-    ngOnInit(): void {
+    postBlobBaseURL = "https://salver.blob.core.windows.net/posts/";
+
+    async ngOnInit() {
 
         this.generateRecommendations();
-
+        //this.fetchedPosts = 
+        var dtos = await this.activityService.getUserActivities();
+        this.fetchedPosts = new Array<Post>();
+        
         this.fetchedPosts = [
-            { date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{ category: "Taste", grade: 5 }, { category: "Serving", grade: 5 }, { category: "Atmosphere", grade: 5 }] },
+            { date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{ category: "Taste", grade: 5 }, { category: "Serving", grade: 5 }, { category: "Atmosphere", grade: 5 }], taggedRestaurantId: 0 },
             {
                 date: new Date(2022, 4, 11), likes: 8, imageURL: "/assets/images/3W2A0956@0.5x.webp", description: "Wow, this is such a nice place with fantastic food. If you're looking for great sushi and very friendly sushimasters then this is the spot! " +
                     "I've been to many sushi bars but this one is going to really make me visit over and over again! 100% reccomend! By the way check out my account for other reccomendations of the best restaurants round town!", taggedRestaurant: "SushiDoo", user: "Billie Thongroght",
-                grades: [{ category: "Taste", grade: 5 }, { category: "Atmosphere", grade: 5 }, { category: "Service", grade: 5 }, { category: "Price", grade: 4 }, { category: "Serving", grade: 5 }]
+                grades: [{ category: "Taste", grade: 5 }, { category: "Atmosphere", grade: 5 }, { category: "Service", grade: 5 }, { category: "Price", grade: 4 }, { category: "Serving", grade: 5 }], taggedRestaurantId: 0
             },
-            { date: new Date(2022, 4, 16), likes: 2, imageURL: "/assets/images/W2A6423@0.5x.webp", description: "Very tasty!", taggedRestaurant: "SushiDoo", user: "Eli Bentalc", grades: [{ category: "Taste", grade: 5 }, { category: "Price", grade: 3 }] },
-            { date: new Date(2022, 4, 17), likes: 134, imageURL: "/assets/images/3W2A0925@0.5x.webp", description: "A bit bland", taggedRestaurant: "SushiDoo", user: "Margaret Nam", grades: [{ category: "Taste", grade: 3 }] },
+            { date: new Date(2022, 4, 16), likes: 2, imageURL: "/assets/images/W2A6423@0.5x.webp", description: "Very tasty!", taggedRestaurant: "SushiDoo", user: "Eli Bentalc", grades: [{ category: "Taste", grade: 5 }, { category: "Price", grade: 3 }], taggedRestaurantId: 0 },
+            { date: new Date(2022, 4, 17), likes: 134, imageURL: "/assets/images/3W2A0925@0.5x.webp", description: "A bit bland", taggedRestaurant: "SushiDoo", user: "Margaret Nam", grades: [{ category: "Taste", grade: 3 }], taggedRestaurantId: 0 },
             {
                 date: new Date(2022, 4, 11), likes: 8, imageURL: "/assets/images/3W2A0956@0.5x.webp", description: "Wow, this is such a nice place with fantastic food. If you're looking for great sushi and very friendly sushimasters then this is the spot! " +
                     "I've been to many sushi bars but this one is going to really make me visit over and over again! 100% reccomend! By the way check out my account for other reccomendations of the best restaurants round town!", taggedRestaurant: "SushiDoo", user: "Billie Thongroght",
-                grades: [{ category: "Taste", grade: 5 }, { category: "Atmosphere", grade: 5 }, { category: "Service", grade: 5 }, { category: "Price", grade: 4 }, { category: "Serving", grade: 5 }]
+                grades: [{ category: "Taste", grade: 5 }, { category: "Atmosphere", grade: 5 }, { category: "Service", grade: 5 }, { category: "Price", grade: 4 }, { category: "Serving", grade: 5 }], taggedRestaurantId: 0
             }
         ]
-
+        
+        dtos.forEach(d =>
+        {
+            console.log(d);
+            if(d.appRestaurantId != 0)
+            {
+                this.fetchedPosts.push({
+                    imageURL: this.postBlobBaseURL + d.id + '.webp',
+                    user: null,
+                    date: d.date,
+                    likes: d.likes,
+                    taggedRestaurant: d.name,
+                    taggedRestaurantId: d.appRestaurantId,
+                    description: d.description,
+                    grades: null
+                    //    
+                    
+                })
+            }
+            else if(d.appUserId != 0)
+            {
+                this.fetchedPosts.push({
+                    imageURL: this.postBlobBaseURL + d.id + '.webp',
+                    user: d.username,
+                    date: d.date,
+                    likes: d.likes,
+                    taggedRestaurant: null,
+                    taggedRestaurantId: null,
+                    description: d.description,
+                    grades: null
+                })
+            }
+            
+        })
+        
+        
+        
         // this.reccomendations = [
         //     {name:"Fried Ice-Cream", imageURL:["/assets/images/W2A6500@0.5x.webp", "/assets/images/W2A6500@0.5x.webp"], grade:[4, 3, 2, 3], description:"Fried ice cream with mango pulp", price:17,restaurant: "Japan Sun"},
         //     {name:"Fusion Rolls", imageURL:["/assets/images/W2A6389@0.5x.webp"], grade:[4, 3, 2, 4], description:"Salmon marinated in togarashi, avocado, mango sauce, micro greens", price:24, restaurant: "Japan Sun"},

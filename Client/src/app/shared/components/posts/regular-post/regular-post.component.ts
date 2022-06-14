@@ -24,7 +24,8 @@ export class RegularPostComponent implements OnInit {
         description: 'Special deal for New Years Eve. This week, all meals are 50% off, with additional coupons available throughout the week. Make sure you follow our profile to obtain special deals.',
         appUserId: 0,
         appRestaurantId: 5,
-        name: 'restaurant name'
+        name: 'restaurant name',
+        username: 'username'
     }
 
     restaurantName: string = "Fetched restaurant name";

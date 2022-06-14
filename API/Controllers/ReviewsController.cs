@@ -131,6 +131,7 @@ namespace API.Controllers
             rev.Description = newReviewDto.Description;
             rev.AtmosphereRating = newReviewDto.AtmosphereRating;
             rev.ServiceRating = newReviewDto.ServiceRating;
+            rev.CreationDate = DateTime.Now;
 
             var restaurant = context.Restaurants.FirstOrDefault(r => r.Id == rev.AppRestaurantId);
             if(restaurant is null) return BadRequest($"Restaurant with id {rev.AppRestaurantId} does not exist.");
@@ -287,6 +288,7 @@ namespace API.Controllers
             rev.ServiceRating = newReviewDto.ServiceRating;
             rev.TasteRating = newReviewDto.TasteRating;
             rev.Description = newReviewDto.Description;
+            rev.CreationDate = DateTime.Now;
 
 
             var dish = await context.Dishes.FindAsync(rev.DishId);

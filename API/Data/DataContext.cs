@@ -41,6 +41,8 @@ namespace API.Data
 
         public DbSet<Order> Orders { get; set; }
 
+        public DbSet<Post> Posts { get; set; }
+
         public DbSet<UserFollower> Follows { get; set; }
     }
 }

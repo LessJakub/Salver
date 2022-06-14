@@ -386,16 +386,13 @@ namespace API.Controllers
 
             var posts = restaurant.Posts.
                                     OrderByDescending(p => p.Date).
-                                    Take(endIndex).
                                     ToList();
 
             var resReviews = restaurant.Res_Review.
                                     OrderByDescending(d => d.Id).
-                                    Take(endIndex).
                                     ToList();
             var dishReviews = await context.DishReviews.
                                     Where(r => r.Dish.AppRestaurantId == restaurant.Id).
-                                    Take(endIndex).
                                     OrderByDescending(r => r.CreationDate).
                                     ToListAsync();
 
@@ -417,7 +414,11 @@ namespace API.Controllers
 
             var listToRet = new List<ActivityDTO>();
             if(pinnedPost is not null) listToRet.Add(new ActivityDTO(pinnedPost));
-            foreach(var a in activities.OrderByDescending(a => a.Item2).Skip(startingIndex).Take(endIndex).ToList())
+            foreach(var a in activities.
+                            OrderByDescending(a => a.Item2).
+                            Skip(startingIndex).
+                            Take(endIndex).
+                            ToList())
             {
                 listToRet.Add(a.Item1);
             }

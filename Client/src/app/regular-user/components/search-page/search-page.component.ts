@@ -46,6 +46,7 @@ export class SearchPageComponent implements OnInit {
     }
 
     updateFilteredArray() {
+        this.filteredSearchResults = []
         if (this.searchForm == null) {
             this.filterDishes();
             this.searchResultsType = "Dish";

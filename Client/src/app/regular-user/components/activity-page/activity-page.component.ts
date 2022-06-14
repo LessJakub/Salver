@@ -15,7 +15,7 @@ export class ActivityPageComponent implements OnInit {
 
     constructor(private searchService: SearchService, private activityService: ActivityService) { }
 
-    fetchedPosts: Post[] | null;
+    fetchedPosts: PostDTO[] | null;
     recommendations: DishDTO[] = [];
 
     async generateRecommendations() {
@@ -50,9 +50,8 @@ export class ActivityPageComponent implements OnInit {
 
         this.generateRecommendations();
         //this.fetchedPosts = 
-        var dtos = await this.activityService.getUserActivities();
-        this.fetchedPosts = new Array<Post>();
-        
+        this.fetchedPosts = await this.activityService.getUserActivities();
+        /*
         this.fetchedPosts = [
             { date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{ category: "Taste", grade: 5 }, { category: "Serving", grade: 5 }, { category: "Atmosphere", grade: 5 }], taggedRestaurantId: 0 },
             {
@@ -68,41 +67,7 @@ export class ActivityPageComponent implements OnInit {
                 grades: [{ category: "Taste", grade: 5 }, { category: "Atmosphere", grade: 5 }, { category: "Service", grade: 5 }, { category: "Price", grade: 4 }, { category: "Serving", grade: 5 }], taggedRestaurantId: 0
             }
         ]
-        
-        dtos.forEach(d =>
-        {
-            console.log(d);
-            if(d.appRestaurantId != 0)
-            {
-                this.fetchedPosts.push({
-                    imageURL: this.postBlobBaseURL + d.id + '.webp',
-                    user: null,
-                    date: d.date,
-                    likes: d.likes,
-                    taggedRestaurant: d.name,
-                    taggedRestaurantId: d.appRestaurantId,
-                    description: d.description,
-                    grades: null
-                    //    
-                    
-                })
-            }
-            else if(d.appUserId != 0)
-            {
-                this.fetchedPosts.push({
-                    imageURL: this.postBlobBaseURL + d.id + '.webp',
-                    user: d.username,
-                    date: d.date,
-                    likes: d.likes,
-                    taggedRestaurant: null,
-                    taggedRestaurantId: null,
-                    description: d.description,
-                    grades: null
-                })
-            }
-            
-        })
-        
+        */
         
         
         // this.reccomendations = [

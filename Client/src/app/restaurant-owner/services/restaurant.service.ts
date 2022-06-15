@@ -58,6 +58,28 @@ export class RestaurantService {
             }));
     }
 
+    /**
+     * Method used to update information contained within post.
+     * @param id Identifier of restaurant owning the post
+     * @param postID Updated post ID
+     * @param model Model with information about updates
+     * @returns Response
+     */
+    editPost(id: number, postID: number, model: PostDTO) {
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            userToken = user.token;
+        })
+
+        return this.http.put<PostDTO>(this.postURL + id + "/posts/" + postID, model, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
+            map((Response: PostDTO) => {
+                return Response;
+            }, error => {
+                console.log(error);
+            }));
+    }
+
     removeDish(dishID: number, restaurantID: number) {
 
         // Obtain user token for authentication

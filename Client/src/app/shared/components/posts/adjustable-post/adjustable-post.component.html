@@ -32,7 +32,14 @@
 <!-- REGULAR POST -->
 <div *ngIf="this.type == 2" class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden shadow-xl">
 
-    <div class="w-[31%] aspect-square flex">
+    <input hidden #fileInput type="file" requiredFileType="image/webp" id="file"/>
+
+    <div *ngIf="this.editModeRegular" (click)="fileInput.click()" class="w-[31%] aspect-square flex cursor-pointer hover:animate-pulse">
+        <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r" [src]="this.postImageURL"
+            (error)="updateUrlWithDefault()">
+    </div>
+
+    <div *ngIf="!this.editModeRegular" class="w-[31%] aspect-square flex">
         <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r" [src]="this.postImageURL"
             (error)="updateUrlWithDefault()">
     </div>
@@ -70,18 +77,36 @@
                 
             </div>
 
-            <div *ngIf="this.isOwner == true" class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
-                <button (click)='this.cancelEditAction()'
-                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-green-900 hover:border-green-800 border-green-900">Edit</button>
+            <div *ngIf="this.isOwner && !this.editModeRegular" class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
+                <button (click)='this.editRegularAction()'
+                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
 
-                <button (click)='this.cancelEditAction()'
-                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Delete</button>
+                <button (click)='this.deleteRegularAction()'
+                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
+            </div>
+
+            <div *ngIf="this.isOwner && this.editModeRegular" class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
+                <button (click)='this.submitEditRegular(fileInput.files)'
+                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Apply</button>
+
+                <button (click)='this.cancelEditRegular(fileInput.files)'
+                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Cancel</button>
             </div>
         </div>
 
-        <div class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">
+        <div *ngIf="!this.editModeRegular" class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">
             <p class="text-base font-light text-left text-gray-900">{{model.description}}</p>
         </div>
+
+        <div *ngIf="this.isOwner && this.editModeRegular" class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">
+            <textarea matInput [(ngModel)]="this.editModelRegular.description" rows="4" minlength="1" maxlength="250"
+                name="description" required
+                class="flex w-full h-full resize-none text-base text-center align-middle font-light text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 py-1 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                placeholder="{{this.editModelRegular.description}}">
+            </textarea>
+        </div>
+
+        
     </div>
 
 </div>

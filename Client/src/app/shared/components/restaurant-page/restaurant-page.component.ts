@@ -200,7 +200,6 @@ export class RestaurantPageComponent implements OnInit {
 
 
     async ngOnInit() {
-
         console.log("Using ID from ActivatedRoute");
         // Obtain restaurant ID from ActivatedRouter.
         this.restaurantID = this.activatedRoute.snapshot.params['id'];

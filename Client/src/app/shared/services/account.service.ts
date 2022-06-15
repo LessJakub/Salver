@@ -80,6 +80,7 @@ export class AccountService {
     logoutUser() {
         localStorage.removeItem("user");
         this.currentUserSource.next(null);
+        this.currentUser$ = null;
         this.loggedInStatus = false;
     }
 

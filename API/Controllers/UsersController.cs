@@ -88,7 +88,7 @@ namespace API.Controllers
         {
             var userId = GetRequesterId();
             var user = await context.Users.FindAsync(userId);
-            if(user == null) return BadRequest($"There is no user with id {userId}");
+            if(user is null) return false;
 
             var restaurant = user.FollowedRestaurants.FirstOrDefault(f => f.FollowedId == id);
             if(restaurant is null) return false;
@@ -181,7 +181,7 @@ namespace API.Controllers
         /// <response code="204"></response>
         /// <response code="400"></response>
         /// <response code="401"></response>
-        [HttpGet("{id}/followed")]
+        [HttpGet("{id}/followed-users")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -320,10 +320,12 @@ namespace API.Controllers
             if(user is null) return BadRequest($"User with id {userId} does not exist");
 
             var activities = new List<Tuple<PostDto, DateTime>>();
+        
+            
 
 
             foreach(var post in context.Posts.
-                                Where(p => user.FollowedRestaurants.Select(f => f.FollowedId).Contains(p.Id)).
+                                Where(p => user.FollowedRestaurants.Select(f => f.FollowedId).Contains((int)p.AppRestaurantId)).
                                 OrderByDescending(p => p.Date).
                                 ToList())
             {
@@ -331,7 +333,7 @@ namespace API.Controllers
             }
 
             foreach(var post in context.Posts.
-                                Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains(p.Id)).
+                                Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
                                 OrderByDescending(p => p.Date).
                                 ToList())
             {

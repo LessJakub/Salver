@@ -77,11 +77,15 @@
                 
             </div>
 
+            <app-delete-dish-overlay *ngIf="(this.showDeleteOverlay) == true" [modelRegPost]="model" [deleteType]="this.deletionTypes.REGULAR_POST"
+                (closeOverlayEventEmitter)="this.disableDeleteOverlay($event)" (reloadEventEmitter)="this.reloadEventEmitter.emit($event)">
+            </app-delete-dish-overlay>
+
             <div *ngIf="this.isOwner && !this.editModeRegular" class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
                 <button (click)='this.editRegularAction()'
                         class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
 
-                <button (click)='this.deleteRegularAction()'
+                <button (click)='this.showDeleteOverlay = true'
                         class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
             </div>
 

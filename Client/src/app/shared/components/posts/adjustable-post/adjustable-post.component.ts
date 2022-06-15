@@ -3,6 +3,7 @@ import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.
 import { PostDTO } from 'src/app/shared/models/PostDTO';
 import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 import { SearchService } from 'src/app/shared/services/search.service';
+import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-overlay.component';
 
 export enum POST_TYPE {
     REST_REVIEW = 0,
@@ -16,12 +17,16 @@ export enum POST_TYPE {
 })
 export class AdjustablePostComponent implements OnInit {
 
+    public deletionTypes = DELETION_TYPE;    
+
     @Input() public type: POST_TYPE = POST_TYPE.REGULAR_POST;
     @Input() model: PostDTO;
 
     @Output() reloadEventEmitter = new EventEmitter();
 
     @Input() isOwner = false;
+
+    showDeleteOverlay = false;
 
     postBlobBaseURL = "https://salver.blob.core.windows.net/posts/";
     routerLink: string = '';
@@ -30,6 +35,10 @@ export class AdjustablePostComponent implements OnInit {
 
     updateUrlWithDefault() {
 
+    }
+
+    disableDeleteOverlay(eventFlag: boolean) {
+        this.showDeleteOverlay = eventFlag;
     }
 
     public prettyTimeFromDate(time: Date): string {

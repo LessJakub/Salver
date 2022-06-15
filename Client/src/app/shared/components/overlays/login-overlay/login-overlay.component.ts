@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AccountService } from 'src/app/shared/services/account.service';
@@ -13,7 +14,7 @@ export class LoginOverlayComponent implements OnInit {
 
     model: any = {}
 
-    error: string = null;
+    error: Array<string> = new Array<string>();
 
     constructor(public service: AccountService, private router: Router) { }
 
@@ -36,10 +37,36 @@ export class LoginOverlayComponent implements OnInit {
             }
 
 
-        }, error => {
-            this.error = error.error;
-            console.log(error);
+        }, (error: HttpErrorResponse) => {
+            this.handleError(error)
         })
+    }
+
+    registerAction(){
+        this.service.registerRequest(this.model).subscribe(Response => {
+            console.log("Register action used.");
+            this.closeOverlayAction();
+
+            if (this.service.ownerID != 0) {
+                this.router.navigate(['overview']);
+            }
+            else {
+                this.router.navigate(['activity']);
+            }
+
+
+        }, (error: HttpErrorResponse) => {
+            this.handleError(error)
+        })
+    }
+
+    private handleError(error: HttpErrorResponse)
+    {
+        this.error = new Array<string>();
+            for(var e in error.error.errors)
+            {
+                this.error.push(error.error.errors[e]);
+            }
     }
 
 }

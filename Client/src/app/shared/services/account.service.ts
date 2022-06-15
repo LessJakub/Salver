@@ -13,6 +13,7 @@ export class AccountService {
     // Obtain true hostname URL (fixes issue where we need to connect to API on non-local host)
     private baseUrl: string = "http://" + location.hostname;
     private loginUrl: string = this.baseUrl + ":8080/api/account/login"
+    private registerUrl: string = this.baseUrl + ":8080/api/account/register"
     private followURL: string = this.baseUrl + ":8080/api/Restaurants/"
 
     private loggedInStatus: boolean = false;
@@ -46,6 +47,22 @@ export class AccountService {
 
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe (
+            map((Response: User) => {
+                const user = Response
+
+                if (user) {
+                    localStorage.setItem("user", JSON.stringify(user));
+                    this.currentUserSource.next(user);
+                    this.loggedInStatus = true;
+                    this.ownerID = user.isRestaurantOwner;
+                }
+                console.log(user);
+            })
+        )
+    }
+
+    registerRequest(model: any) {
+        return this.http.post(this.registerUrl, model).pipe (
             map((Response: User) => {
                 const user = Response
 

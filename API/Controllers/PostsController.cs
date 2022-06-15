@@ -107,7 +107,7 @@ namespace API.Controllers
             if(restaurant == null) return BadRequest($"Restaurant with {restaurantId} id does not exist");
 
             var resPosts = new List<PostDto>();
-            foreach(var post in restaurant.Posts.ToList()) resPosts.Add(new PostDto(post));
+            foreach(var post in restaurant.Posts.OrderByDescending(p => p.Date).ToList()) resPosts.Add(new PostDto(post));
 
             return resPosts;
         }
@@ -130,7 +130,7 @@ namespace API.Controllers
             if(user == null) return BadRequest($"User with {userId} id does not exist");
 
             var usrPosts = new List<PostDto>();
-            foreach(var post in user.Posts.ToList()) usrPosts.Add(new PostDto(post));
+            foreach(var post in user.Posts.OrderByDescending(p => p.Date).ToList()) usrPosts.Add(new PostDto(post));
 
             return usrPosts;
         }

@@ -63,10 +63,18 @@ export class LoginOverlayComponent implements OnInit {
     private handleError(error: HttpErrorResponse)
     {
         this.error = new Array<string>();
+        if(error.error.errors != null)
+        {
             for(var e in error.error.errors)
             {
                 this.error.push(error.error.errors[e]);
             }
+        }
+        else
+        {
+            this.error.push(error.error)
+        }
+        
     }
 
 }

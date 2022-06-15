@@ -57,6 +57,7 @@ export class RestaurantPageComponent implements OnInit {
         console.log("Obtained event:", eventFlag);
         if (eventFlag == true) {
             this.getDishes();
+            this.getPosts();
         }
     }
 
@@ -73,7 +74,7 @@ export class RestaurantPageComponent implements OnInit {
     }
 
 
-    selectedTabID: number = 0;
+    selectedTabID: number = 1;
 
     async followButtonAction() {
         console.log("Is following: " + this.isFollowing);

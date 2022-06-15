@@ -6,6 +6,8 @@ import { map } from 'rxjs/operators';
 import { AccountService } from 'src/app/shared/services/account.service';
 import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
 import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
+import { PostDTO } from 'src/app/shared/models/PostDTO';
+import { Post } from 'src/app/models/post';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +18,7 @@ export class RestaurantService {
     private baseUrl: string = "http://" + location.hostname;
     private addDishURL: string = this.baseUrl + ":8080/api/Dishes/Restaurants/"
     private restaurantsURL: string = this.baseUrl + ":8080/api/Restaurants/"
+    private postURL: string = this.baseUrl + ":8080/api/Posts/Restaurants/"
 
     constructor(private http: HttpClient, private accountService: AccountService) { }
 
@@ -29,6 +32,26 @@ export class RestaurantService {
         })
         return this.http.post<DishDTO>(this.addDishURL + id + "/dishes", model,{headers: new HttpHeaders().set('Authorization', 'Bearer ' + idontcare)}).pipe(
             map((Response: DishDTO) => {
+                return Response;
+            }, error => {
+                console.log(error);
+            }));
+    }
+
+    /**
+     * Method used to add post to restaurant with given ID.
+     * @param id Restaurant ID
+     * @param model Model of Post to be added
+     */
+    addPost(id: number, model: PostDTO) {
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            userToken = user.token;
+        })
+
+        return this.http.post<PostDTO>(this.postURL + id + "/posts", model, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
+            map((Response: PostDTO) => {
                 return Response;
             }, error => {
                 console.log(error);

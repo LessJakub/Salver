@@ -80,6 +80,28 @@ export class RestaurantService {
             }));
     }
 
+    /**
+     * Method used to remove restaurant post.
+     * @param id Identifier of restaurant owning the post
+     * @param postID Post ID
+     * @returns Response
+     */
+     deletePost(id: number, postID: number) {
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            userToken = user.token;
+        })
+
+        return this.http.delete(this.postURL + id + "/posts/" + postID, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
+            map((Response: Response) => {
+                return Response;
+            }, error => {
+                console.log(error);
+            })
+        );
+    }
+
     removeDish(dishID: number, restaurantID: number) {
 
         // Obtain user token for authentication

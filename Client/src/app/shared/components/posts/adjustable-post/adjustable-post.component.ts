@@ -54,7 +54,7 @@ export class AdjustablePostComponent implements OnInit {
     constructor(private searchService: SearchService,
                 private uploadService: BlobUploadService,
                 private restaurantService: RestaurantService,
-                private reviewsService: ReviewsService) { }
+                private reviewsService: ReviewsService) {}
 
     ngOnInit() {
         this.postImageURL = this.postBlobBaseURL + this.model.id + ".webp";
@@ -158,10 +158,10 @@ export class AdjustablePostComponent implements OnInit {
         }
         else {
             this.dishName = "Wrong ID";
-        }   
+        }  
     }
 
-    
+
     getUserNameFromID(id: number) {
         console.log("Get username for ID: " + id);
         if (id != null || id != NaN) {

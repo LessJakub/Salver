@@ -187,29 +187,13 @@
 
             </div>
 
-            <app-delete-dish-overlay *ngIf="(this.showDeleteOverlay) == true" [modelRegPost]="model"
-                [deleteType]="this.deletionTypes.REGULAR_POST"
-                (closeOverlayEventEmitter)="this.disableDeleteOverlay($event)"
-                (reloadEventEmitter)="this.reloadEventEmitter.emit($event)">
-            </app-delete-dish-overlay>
-
-            <div *ngIf="this.isReviewer && !this.editModeDishRev"
+            <div *ngIf="!this.editModeDishRev"
                 class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
-                <button (click)='this.editRegularAction()'
-                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
-
-                <button (click)='this.showDeleteOverlay = true'
-                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
+                <app-grade-tile [name]="'taste'" [grade]="this.model.ratings[2]['item2']"></app-grade-tile>
+                <app-grade-tile [name]="'price'" [grade]="this.model.ratings[0]['item2']"></app-grade-tile>
+                <app-grade-tile [name]="'service'" [grade]="this.model.ratings[1]['item2']"></app-grade-tile>
             </div>
 
-            <div *ngIf="this.isReviewer && this.editModeDishRev"
-                class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
-                <button (click)='this.submitEditRegular(fileInput.files)'
-                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Apply</button>
-
-                <button (click)='this.cancelEditRegular(fileInput.files)'
-                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Cancel</button>
-            </div>
         </div>
 
         <div *ngIf="!this.editModeDishRev" class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">

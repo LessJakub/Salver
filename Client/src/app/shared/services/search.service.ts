@@ -40,7 +40,7 @@ export class SearchService {
      */
     async getRestaurantNameByID(id: number) {
         var restaurant: RestaurantDTO;
-        await this.http.get<RestaurantDTO>(this.restaurantDetailURL + id).toPromise().then((restModel) => {
+        this.http.get<RestaurantDTO>(this.restaurantDetailURL + id).toPromise().then((restModel) => {
             restaurant = restModel;
         });
 

@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { DishDTO } from '../models/DishDTO';
 import { DishReviewDTO } from '../models/DishReviewDTO';
 import { PostDTO } from '../models/PostDTO';
+import { RestaurantDTO } from '../models/RestaurantDTO';
 import { RestReviewDTO } from '../models/RestReviewDTO';
 import { User } from '../models/UserDTO';
 import { AccountService } from './account.service';
@@ -120,5 +121,22 @@ export class ReviewsService {
 
         var url = this.baseUrl + ":8080/api/Users/" + id;
         return await this.http.get<User>(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
+    }
+
+    /**
+     * 
+     * @param id Method used to obtain restaurant name based on passed ID.
+     * @returns Promise of RestaurantDTO.
+     */
+     async getRestaurantNameFromID(id: number) {
+
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            userToken = user.token;
+        })
+
+        var url = this.baseUrl + ":8080/api/Restaurants/" + id;
+        return await this.http.get<RestaurantDTO>(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
     }
 }

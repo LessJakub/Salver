@@ -57,30 +57,31 @@ export class AdjustablePostComponent implements OnInit {
                 private reviewsService: ReviewsService) {}
 
     ngOnInit() {
-        this.postImageURL = this.postBlobBaseURL + this.model.id + ".webp";
-        //If post was created by restaurant
-        if(this.model.appRestaurantId != 0) 
-        {
-            this.routerLink = '/restaurant/' + this.model.appRestaurantId
-            this.creatorName = this.model.name
-        }
-        else
-        {
-            this.routerLink = '/activity/'
-            this.creatorName = this.model.username
-        }
-
-
+        
         if (this.type == 1) {
             this.dishReviewImageURL = this.dishReviewBaseURL + this.model.id + ".webp";
 
             this.getDishNameFromID(this.model.topicId);
             this.getUserNameFromID(this.model.creatorId);
         }
+        else if (this.type == 2) {
+            this.postImageURL = this.postBlobBaseURL + this.model.id + ".webp";
+
+            if (this.model.name != null) {
+                this.postName = this.model.name;
+                this.postLink = this.routerLink = '/restaurant/' + this.model.appRestaurantId;
+            }
+            else {
+                this.postLink = this.routerLink = '/restaurant/' + this.model.creatorId;
+                this.getRestaurantNameFromID(this.model.creatorId);
+            }
+        }
     }
 
 
     // REGULAR
+    postName: string = "..."
+    postLink: string = this.routerLink = '/**';
     editModelRegular: PostDTO;
     editModeRegular = false;
     deleteOverlayRegular = false;
@@ -91,6 +92,23 @@ export class AdjustablePostComponent implements OnInit {
 
     deleteRegularAction() {
         this.deleteOverlayRegular = true;
+    }
+
+    getRestaurantNameFromID(id: number) {
+        console.log("Get restaurant name for ID: " + id);
+        if (id != null || id != NaN) {
+            this.reviewsService.getRestaurantNameFromID(id).then((restaurant) => {
+                console.log("Returned username: " + restaurant.name);
+                this.postName = restaurant.name;
+            }).catch((error) => {
+                console.log("Get restaurant - Error:");
+                console.log(error);
+                this.postName = "Unknown";
+            });
+        }
+        else {
+            this.postName = "Invalid ID";
+        }   
     }
 
     submitEditRegular(files) {

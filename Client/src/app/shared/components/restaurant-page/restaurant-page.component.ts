@@ -1,7 +1,7 @@
 import { Component, Input, IterableDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
-import { ActivityDTO } from '../../models/ActivityDTO';
+import { ActivityDTO, ActivityType } from '../../models/ActivityDTO';
 import { DishDTO } from '../../models/DishDTO';
 import { PostDTO } from '../../models/PostDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
@@ -19,7 +19,8 @@ import { POST_TYPE } from '../posts/adjustable-post/adjustable-post.component';
 })
 export class RestaurantPageComponent implements OnInit {
 
-    public postTypes = POST_TYPE;        
+    public postTypes = POST_TYPE; 
+    public activityTypes = ActivityType;        
 
     restaurantID: number = null;
     model: RestaurantDTO | null;
@@ -74,7 +75,7 @@ export class RestaurantPageComponent implements OnInit {
     }
 
 
-    selectedTabID: number = 1;
+    selectedTabID: number = 2;
 
     async followButtonAction() {
         console.log("Is following: " + this.isFollowing);

@@ -1,8 +1,7 @@
 <!-- Overflow hidden prevents image from overflowing -->
 
 <!-- REVIEW PROTOTYPE -->
-<div *ngIf="this.type == 0 || this.type == 1"
-    class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden">
+<div *ngIf="this.type == 0" class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden">
 
     <div class="bg-fuchsia-300 w-[31%] aspect-square">
 
@@ -30,18 +29,20 @@
 
 
 <!-- REGULAR POST -->
-<div *ngIf="this.type == 2" class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden shadow-xl">
+<div *ngIf="this.type == 2"
+    class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden shadow-xl">
 
-    <input hidden #fileInput type="file" requiredFileType="image/webp" id="file"/>
+    <input hidden #fileInput type="file" requiredFileType="image/webp" id="file" />
 
-    <div *ngIf="this.editModeRegular" (click)="fileInput.click()" class="w-[31%] aspect-square flex cursor-pointer hover:animate-pulse">
-        <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r" [src]="this.postImageURL"
-            (error)="updateUrlWithDefault()">
+    <div *ngIf="this.editModeRegular" (click)="fileInput.click()"
+        class="w-[31%] aspect-square flex cursor-pointer hover:animate-pulse">
+        <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r"
+            [src]="this.postImageURL" (error)="updateUrlWithDefault()">
     </div>
 
     <div *ngIf="!this.editModeRegular" class="w-[31%] aspect-square flex">
-        <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r" [src]="this.postImageURL"
-            (error)="updateUrlWithDefault()">
+        <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r"
+            [src]="this.postImageURL" (error)="updateUrlWithDefault()">
     </div>
 
     <div class="w-[69%] p-1">
@@ -49,8 +50,7 @@
         <div class="w-full h-1/2 rounded-2xl flex">
             <div class="flex flex-col w-1/2 h-full rounded-2xl p-2 justify-evenly">
 
-                <a [routerLink]="[this.routerLink]"
-                    class="group flex w-full h-fit gap-2 items-center">
+                <a [routerLink]="[this.routerLink]" class="group flex w-full h-fit gap-2 items-center">
                     <svg class="fill-gray-50 stroke-green-900 w-10 -ml-2 h-auto aspect-square" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -61,7 +61,8 @@
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
 
-                    <div class="text-xl font-bold truncate text-green-900 group-hover:animate-pulse"> {{this.creatorName}}</div>
+                    <div class="text-xl font-bold truncate text-green-900 group-hover:animate-pulse">
+                        {{this.creatorName}}</div>
                 </a>
 
                 <div class="group flex w-full h-fit space-x-2">
@@ -74,27 +75,31 @@
 
                     <p class="text-base font-light text-left text-green-900"> {{ prettyTimeFromDate(model.date) }}</p>
                 </div>
-                
+
             </div>
 
-            <app-delete-dish-overlay *ngIf="(this.showDeleteOverlay) == true" [modelRegPost]="model" [deleteType]="this.deletionTypes.REGULAR_POST"
-                (closeOverlayEventEmitter)="this.disableDeleteOverlay($event)" (reloadEventEmitter)="this.reloadEventEmitter.emit($event)">
+            <app-delete-dish-overlay *ngIf="(this.showDeleteOverlay) == true" [modelRegPost]="model"
+                [deleteType]="this.deletionTypes.REGULAR_POST"
+                (closeOverlayEventEmitter)="this.disableDeleteOverlay($event)"
+                (reloadEventEmitter)="this.reloadEventEmitter.emit($event)">
             </app-delete-dish-overlay>
 
-            <div *ngIf="this.isOwner && !this.editModeRegular" class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
+            <div *ngIf="this.isOwner && !this.editModeRegular"
+                class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
                 <button (click)='this.editRegularAction()'
-                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
 
                 <button (click)='this.showDeleteOverlay = true'
-                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
             </div>
 
-            <div *ngIf="this.isOwner && this.editModeRegular" class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
+            <div *ngIf="this.isOwner && this.editModeRegular"
+                class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
                 <button (click)='this.submitEditRegular(fileInput.files)'
-                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Apply</button>
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Apply</button>
 
                 <button (click)='this.cancelEditRegular(fileInput.files)'
-                        class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Cancel</button>
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Cancel</button>
             </div>
         </div>
 
@@ -102,7 +107,8 @@
             <p class="text-base font-light text-left text-gray-900">{{model.description}}</p>
         </div>
 
-        <div *ngIf="this.isOwner && this.editModeRegular" class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">
+        <div *ngIf="this.isOwner && this.editModeRegular"
+            class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">
             <textarea matInput [(ngModel)]="this.editModelRegular.description" rows="4" minlength="1" maxlength="250"
                 name="description" required
                 class="flex w-full h-full resize-none text-base text-center align-middle font-light text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 py-1 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
@@ -110,7 +116,116 @@
             </textarea>
         </div>
 
-        
+
+    </div>
+
+</div>
+
+
+
+
+<!-- DISH REVIEW POST -->
+<div *ngIf="this.type == 1"
+    class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden shadow-xl">
+
+    <input hidden #fileInput type="file" requiredFileType="image/webp" id="file" />
+
+    <div *ngIf="this.editModeDishRev" (click)="fileInput.click()"
+        class="w-[31%] aspect-square flex cursor-pointer hover:animate-pulse">
+        <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r"
+            [src]="this.postImageURL" (error)="updateUrlWithDefault()">
+    </div>
+
+    <div *ngIf="!this.editModeDishRev" class="w-[31%] aspect-square flex">
+        <img class="flex w-full h-auto object-cover hover:saturate-200 transition rounded-l-2xl border-green-900 border-r"
+            [src]="this.dishReviewImageURL" (error)="updateUrlWithDefault()">
+    </div>
+
+    <div class="w-[69%] p-1">
+
+        <div class="w-full h-1/2 rounded-2xl flex">
+            <div class="flex flex-col w-1/2 h-full rounded-2xl p-2 justify-evenly">
+
+                <a [routerLink]="[this.routerLink]" class="group flex w-full h-fit gap-2 items-center">
+
+                    <svg class="fill-gray-50 stroke-green-900 stroke-2 aspect-square" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M5.121 17.804C7.21942 16.6179 9.58958 15.9963 12 16C14.5 16 16.847 16.655 18.879 17.804M15 10C15 10.7956 14.6839 11.5587 14.1213 12.1213C13.5587 12.6839 12.7956 13 12 13C11.2044 13 10.4413 12.6839 9.87868 12.1213C9.31607 11.5587 9 10.7956 9 10C9 9.20435 9.31607 8.44129 9.87868 7.87868C10.4413 7.31607 11.2044 7 12 7C12.7956 7 13.5587 7.31607 14.1213 7.87868C14.6839 8.44129 15 9.20435 15 10ZM21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+
+                    <div class="text-xl font-normal truncate text-green-900 group-hover:animate-pulse">
+                        {{this.userName}}</div>
+                </a>
+
+                <a [routerLink]="[this.routerLink]" class="group flex w-full h-fit gap-2 items-center">
+
+                    <svg class="fill-gray-50 stroke-green-900 aspect-square stroke-2" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M7 7H7.01M7 3H12C12.512 3 13.024 3.195 13.414 3.586L20.414 10.586C20.7889 10.9611 20.9996 11.4697 20.9996 12C20.9996 12.5303 20.7889 13.0389 20.414 13.414L13.414 20.414C13.0389 20.7889 12.5303 20.9996 12 20.9996C11.4697 20.9996 10.9611 20.7889 10.586 20.414L3.586 13.414C3.4 13.2285 3.25249 13.0081 3.15192 12.7655C3.05136 12.5228 2.99973 12.2627 3 12V7C3 5.93913 3.42143 4.92172 4.17157 4.17157C4.92172 3.42143 5.93913 3 7 3Z"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+
+                    <div class="text-xl font-light truncate text-green-900 group-hover:animate-pulse">
+                        {{this.dishName}}</div>
+                </a>
+
+                <div class="group flex w-full h-fit space-x-2">
+                    <svg class="fill-gray-50 stroke-green-900" width="24" height="24" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 8V12L15 15M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+
+                    <p class="text-base font-light text-left text-green-900"> {{ prettyTimeFromDate(model.date) }}</p>
+                </div>
+
+            </div>
+
+            <app-delete-dish-overlay *ngIf="(this.showDeleteOverlay) == true" [modelRegPost]="model"
+                [deleteType]="this.deletionTypes.REGULAR_POST"
+                (closeOverlayEventEmitter)="this.disableDeleteOverlay($event)"
+                (reloadEventEmitter)="this.reloadEventEmitter.emit($event)">
+            </app-delete-dish-overlay>
+
+            <div *ngIf="this.isReviewer && !this.editModeDishRev"
+                class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
+                <button (click)='this.editRegularAction()'
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
+
+                <button (click)='this.showDeleteOverlay = true'
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
+            </div>
+
+            <div *ngIf="this.isReviewer && this.editModeDishRev"
+                class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
+                <button (click)='this.submitEditRegular(fileInput.files)'
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Apply</button>
+
+                <button (click)='this.cancelEditRegular(fileInput.files)'
+                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Cancel</button>
+            </div>
+        </div>
+
+        <div *ngIf="!this.editModeDishRev" class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">
+            <p class="text-base font-light text-left text-gray-900">{{model.description}}</p>
+        </div>
+
+        <div *ngIf="this.isReviewer && this.editModeDishRev"
+            class="flex w-full h-1/2 rounded-2xl overflow-hidden items-center p-2">
+            <textarea matInput [(ngModel)]="this.editModelRegular.description" rows="4" minlength="1" maxlength="250"
+                name="description" required
+                class="flex w-full h-full resize-none text-base text-center align-middle font-light text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 py-1 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                placeholder="{{this.editModelRegular.description}}">
+            </textarea>
+        </div>
+
+
     </div>
 
 </div>

@@ -9,7 +9,7 @@ export interface ActivityDTO {
     topicId: number
 }
 
-enum ActivityType{
+export enum ActivityType{
     DISH_REVIEW,
     RESTAURANT_REVIEW,
     RESTAURANT_POST

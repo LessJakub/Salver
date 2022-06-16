@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { PostDTO } from 'src/app/shared/models/PostDTO';
 import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
+import { ReviewsService } from 'src/app/shared/services/reviews.service';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-overlay.component';
 
@@ -20,7 +21,7 @@ export class AdjustablePostComponent implements OnInit {
     public deletionTypes = DELETION_TYPE;    
 
     @Input() public type: POST_TYPE = POST_TYPE.REGULAR_POST;
-    @Input() model: PostDTO;
+    @Input() model: any;
 
     @Output() reloadEventEmitter = new EventEmitter();
 
@@ -52,7 +53,8 @@ export class AdjustablePostComponent implements OnInit {
 
     constructor(private searchService: SearchService,
                 private uploadService: BlobUploadService,
-                private restaurantService: RestaurantService) { }
+                private restaurantService: RestaurantService,
+                private reviewsService: ReviewsService) { }
 
     ngOnInit() {
         this.postImageURL = this.postBlobBaseURL + this.model.id + ".webp";
@@ -66,6 +68,14 @@ export class AdjustablePostComponent implements OnInit {
         {
             this.routerLink = '/activity/'
             this.creatorName = this.model.username
+        }
+
+
+        if (this.type == 1) {
+            this.dishReviewImageURL = this.dishReviewBaseURL + this.model.id + ".webp";
+
+            this.getDishNameFromID(this.model.topicId);
+            this.getUserNameFromID(this.model.creatorId);
         }
     }
 
@@ -124,4 +134,48 @@ export class AdjustablePostComponent implements OnInit {
         this.editModeRegular = false;
     }
 
+
+    // DISH REVIEW
+    editModeDishRev: boolean = false;
+    isReviewer: boolean = false;
+    dishReviewBaseURL: string = "https://salver.blob.core.windows.net/dishreviews/"
+    dishReviewImageURL: string;
+    dishName: string = "...";
+    userName: string = "...";
+
+
+    getDishNameFromID(id: number) {
+        console.log("Get name for ID: " + id);
+        if (id != null || id != NaN) {
+            this.reviewsService.getDishNameFromID(id).then((dish) => {
+                console.log("Returned name: " + dish.name);
+                this.dishName = dish.name;
+            }).catch((error) => {
+                console.log("Get Dish Name - Error:");
+                console.log(error);
+                this.dishName = "Not found";
+            });
+        }
+        else {
+            this.dishName = "Wrong ID";
+        }   
+    }
+
+    
+    getUserNameFromID(id: number) {
+        console.log("Get username for ID: " + id);
+        if (id != null || id != NaN) {
+            this.reviewsService.getUserNameFromID(id).then((user) => {
+                console.log("Returned username: " + user.username);
+                this.userName = user.username;
+            }).catch((error) => {
+                console.log("Get userName - Error:");
+                console.log(error);
+                this.userName = "Unknown";
+            });
+        }
+        else {
+            this.userName = "Invalid ID";
+        }   
+    }
 }

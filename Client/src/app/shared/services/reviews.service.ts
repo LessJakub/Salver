@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { DishDTO } from '../models/DishDTO';
 import { DishReviewDTO } from '../models/DishReviewDTO';
 import { PostDTO } from '../models/PostDTO';
 import { RestReviewDTO } from '../models/RestReviewDTO';
@@ -91,5 +92,33 @@ export class ReviewsService {
      async getRestaurantPosts(id: number) {
         var url = this.baseUrl + ":8080/api/Posts/Restaurants/" + id + "/posts";
         return await this.http.get<PostDTO[]>(url).toPromise();
+    }
+
+
+    /**
+     * 
+     * @param id Method used to obtain dish based on passed ID.
+     * @returns Promise of DishDTO.
+     */
+    async getDishNameFromID(id: number) {
+        var url = this.baseUrl + ":8080/api/Dishes/" + id;
+        return await this.http.get<DishDTO>(url).toPromise();
+    }
+
+    /**
+     * 
+     * @param id Method used to obtain reviewers name based on passed ID.
+     * @returns Promise of User.
+     */
+     async getUserNameFromID(id: number) {
+
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            userToken = user.token;
+        })
+
+        var url = this.baseUrl + ":8080/api/Users/" + id;
+        return await this.http.get<User>(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
     }
 }

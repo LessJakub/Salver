@@ -231,11 +231,10 @@ export class RestaurantPageComponent implements OnInit {
         }
 
         // Obtain restaurant based on fetched ID.
-        await this.getDetails();
+        this.getDetails();
         
         // Fetch dishes data.
-        await this.getDishes();
-        console.log("test?");
+        this.getDishes();
 
         // this.fetchedPosts = [
         //     { date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{ category: "Taste", grade: 5 }, { category: "Serving", grade: 5 }, { category: "Atmosphere", grade: 5 }] },

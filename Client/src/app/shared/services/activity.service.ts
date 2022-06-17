@@ -33,7 +33,10 @@ export class ActivityService {
   {
     var user: User;
     this.accountService.currentUser$.subscribe( (usr: User) => {
-        user = usr;
+        if(usr != null)
+        {
+          user = usr;
+        }
     }, error => {
       console.error(error);
     })

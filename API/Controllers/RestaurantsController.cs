@@ -26,7 +26,7 @@ namespace API.Controllers
         /// <response code="200"> Ok, new restaurant is created. </response>
         /// <response code="204"> NoContent, id in users token is invalid. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -47,7 +47,6 @@ namespace API.Controllers
                 Name = restaurantRegisterDto.Name,
                 Description = restaurantRegisterDto.Description,
                 Address = restaurantRegisterDto.Address,
-                //Price = 0.0f
                 PhoneNumber = restaurantRegisterDto.PhoneNumber,
                 Email = restaurantRegisterDto.Email
             };
@@ -108,7 +107,7 @@ namespace API.Controllers
         /// <response code="200"></response>
         /// <response code="204"></response>
         /// <response code="400"></response>
-        [AllowAnonymous]
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id}/follow")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -256,7 +255,7 @@ namespace API.Controllers
         /// <response code="200"> Ok, new restaurant is created. </response>
         /// <response code="204"> NoContent, id in users token is invalid. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -293,7 +292,7 @@ namespace API.Controllers
         /// <response code="200"> Ok, new restaurant is created. </response>
         /// <response code="204"> NoContent, id in users token is invalid. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

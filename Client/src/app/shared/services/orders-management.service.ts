@@ -18,7 +18,10 @@ export class OrdersManagementService {
   {
     var user: User;
     this.accountService.currentUser$.subscribe( (usr: User) => {
+      if(usr != null)
+      {
         user = usr;
+      }
     }, error => {
       console.error(error);
     })
@@ -51,7 +54,11 @@ export class OrdersManagementService {
   {
     var user: User;
     this.accountService.currentUser$.subscribe( (usr: User) => {
+      if(usr != null)
+      {
         user = usr;
+      }
+        
     }, error => {
       console.error(error);
     })
@@ -77,7 +84,10 @@ export class OrdersManagementService {
   {
     var user: User;
     this.accountService.currentUser$.subscribe( (usr: User) => {
+      if(usr != null)
+      {
         user = usr;
+      }
     }, error => {
       console.error(error);
     })
@@ -100,7 +110,10 @@ export class OrdersManagementService {
   {
     var user: User;
     this.accountService.currentUser$.subscribe( (usr: User) => {
+      if(usr != null)
+      {
         user = usr;
+      }
     }, error => {
       console.error(error);
     })

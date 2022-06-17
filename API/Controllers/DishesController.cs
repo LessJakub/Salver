@@ -26,7 +26,7 @@ namespace API.Controllers
         /// <returns>DishDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPost("Restaurants/{restaurantId}/dishes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -114,7 +114,7 @@ namespace API.Controllers
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPut("Restaurants/{restaurantId}/dishes/{dishId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -148,7 +148,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpDelete("Restaurants/{restaurantId}/dishes/{dishId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

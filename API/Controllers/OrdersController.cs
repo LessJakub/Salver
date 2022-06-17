@@ -30,7 +30,7 @@ namespace API.Controllers
         /// <returns>OrderDTO from created order</returns>
         /// <response code="200"> Returns a new created order</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize("Customer")]
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -101,7 +101,7 @@ namespace API.Controllers
         /// <returns>List of OrderDtos created from user orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize("Customer")]
+        [Authorize(Roles = "Customer")]
         [HttpGet("user")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -136,13 +136,13 @@ namespace API.Controllers
         /// <returns>List of OrderDtos created from restaurant orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize("RestaurantOwner")]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpGet("restaurant")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<OrderDTO>>> ReadAllRestaurantOrders(int startingIndex = 0, int endIndex = 12)
         {
-            var restaurantId = GetRestaurantsId().First();
+            var restaurantId = GetRestaurantsId();
 
             var restaurant = await context.Restaurants.FindAsync(restaurantId);
             if(restaurant == null) return BadRequest($"Restaurant with {restaurantId} id does not exist");
@@ -168,7 +168,7 @@ namespace API.Controllers
         /// <returns>List of OrderDtos created from restaurant orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize("AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("orders/{orderId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -215,7 +215,7 @@ namespace API.Controllers
         /// <returns>List of OrderDtos created from restaurant orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize("RestaurantOwner")]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPut("restaurant/{orderId}/accept")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -297,7 +297,7 @@ namespace API.Controllers
         /// <returns>List of OrderDtos created from restaurant orders</returns>
         /// <response code="200"> Returns list of orders with matching parameters</response>
         /// <response code="400"> Bad request, invalid input</response>
-        [Authorize("RestaurantOwner")]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPut("{orderId}/finish")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

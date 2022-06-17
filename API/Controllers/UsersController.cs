@@ -26,7 +26,7 @@ namespace API.Controllers
         /// <response code="400">Bard request, invalid input </response>
         /// <response code="401">Unauthorized, wrong credentials </response>
         [HttpGet]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -135,7 +135,7 @@ namespace API.Controllers
         /// <response code="400"></response>
         /// <response code="401"></response>
         [HttpPost("{id}/follow")]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -244,7 +244,7 @@ namespace API.Controllers
         /// <response code="400"></response>
         /// <response code="401"></response>
         [HttpDelete("{id}/unfollow")]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -307,7 +307,7 @@ namespace API.Controllers
         /// <response code="200"></response>
         /// <response code="204"></response>
         /// <response code="400"></response>
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("activity")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

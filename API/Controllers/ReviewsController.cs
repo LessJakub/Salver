@@ -27,7 +27,7 @@ namespace API.Controllers
         /// <response code="200">New review was created</response>
         /// <response code="400">Nothing created, proper messeage should appear with error.</response>
         /// <response code="401">User does not exist in the database.</response>
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("Restaurants/{restaurantId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -110,7 +110,7 @@ namespace API.Controllers
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpPut("Restaurants/{restaurantId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -151,7 +151,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpDelete("Restaurants/{restaurantId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -192,7 +192,7 @@ namespace API.Controllers
         /// <returns>DishReviewDto from created dish review</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("dishes/{dishId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -269,7 +269,7 @@ namespace API.Controllers
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpPut("dishes/{dishId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -309,7 +309,7 @@ namespace API.Controllers
         /// <returns>Status code</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpDelete("dishes/{dishId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

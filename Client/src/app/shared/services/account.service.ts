@@ -86,7 +86,6 @@ export class AccountService {
         this.currentUser$ = this.currentUserSource.asObservable();
         this.loggedInStatus = false;
         this.ownerID = 0;
-        //this.init();
     }
 
     isLoggedIn(): boolean {

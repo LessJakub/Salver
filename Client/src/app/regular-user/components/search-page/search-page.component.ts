@@ -104,5 +104,4 @@ export class SearchPageComponent implements OnInit {
 
         this.filteredSearchResults = tempArray;
     }
-
 }

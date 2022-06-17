@@ -29,8 +29,12 @@ export class OrdersService {
   {
     var token;
     var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            console.log(user);
+      if(user != null)
+      {
+        console.log(user);
             token = user.token;
+      }
+            
     })
 
     var model: any = {}

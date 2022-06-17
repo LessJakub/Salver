@@ -53,19 +53,15 @@ namespace API.Controllers
             return StatusCodes.Status200OK;
         }
 
-        protected List<int> GetRestaurantsId()
+        protected int GetRestaurantsId()
         {
             var principal = HttpContext.User;
-            if (principal?.Claims == null) return null;
+            if (principal?.Claims == null) return 0;
 
-            var idClaims = principal.FindAll(claim => claim.Type.Contains("RestaurantId"));
-            if (idClaims == null) return null;
+            var idClaims = principal.FindFirst(claim => claim.Type.Contains("Restaurant"));
+            if (idClaims == null) return 0;
 
-            var ids = new List<int>();
-
-            foreach(var resId in idClaims) ids.Add(Int32.Parse(resId.Value));
-
-            return ids;
+            return Int32.Parse(idClaims.Value);
         }
 
         protected async Task<(int, string)> OwnsRestaurant(int restaurantId)
@@ -75,8 +71,8 @@ namespace API.Controllers
                 return (StatusCodes.Status400BadRequest, "User does not have any claims");
             
             var resIdsClaims = GetRestaurantsId();
-            
-            if(resIdsClaims == null || !resIdsClaims.Contains(restaurantId)) 
+            Console.WriteLine(resIdsClaims);
+            if(resIdsClaims != restaurantId)
                 return (StatusCodes.Status401Unauthorized, $"User token does not claim to own restaurant with {restaurantId} id");
 
             var usrId = GetRequesterId();

@@ -31,8 +31,12 @@ export class ReviewsService {
 
         // Obtain user token for authentication
         var userToken;
-        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+        this.accountService.currentUser$.subscribe((user: User) => {
+            if(user != null)
+            {
+                userToken = user.token;
+            }
+            
         })
 
         return this.http.post<DishReviewDTO>(this.dishReviewURL + id + "/reviews", model, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).pipe(
@@ -54,8 +58,11 @@ export class ReviewsService {
 
         // Obtain user token for authentication
         var userToken;
-        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+        this.accountService.currentUser$.subscribe((user: User) => {
+            if(user != null)
+            {
+                userToken = user.token;
+            }
         })
 
         return this.http.post<RestReviewDTO>(this.restReviewURL + id + "/reviews", model, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).pipe(
@@ -110,8 +117,11 @@ export class ReviewsService {
 
         // Obtain user token for authentication
         var userToken;
-        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+        this.accountService.currentUser$.subscribe((user: User) => {
+            if(user != null)
+            {
+                userToken = user.token;
+            }
         })
 
         var url = this.baseUrl + ":8080/api/Users/" + id;
@@ -127,8 +137,11 @@ export class ReviewsService {
 
         // Obtain user token for authentication
         var userToken;
-        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+        this.accountService.currentUser$.subscribe((user: User) => {
+            if(user != null)
+            {
+                userToken = user.token;
+            }
         })
 
         var url = this.baseUrl + ":8080/api/Restaurants/" + id;

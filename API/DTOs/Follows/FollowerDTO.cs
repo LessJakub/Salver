@@ -14,7 +14,7 @@ namespace API.DTOs
 
         public FollowerDTO(RestaurantFollower follower)
         {
-            Id = follower.FollowerId;
+            Id = (int)follower.FollowerId;
             Name = follower.Follower.UserName;
         }
 

@@ -53,7 +53,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restaurants");
+                    b.ToTable("Restaurants", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
@@ -81,7 +81,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Dish", b =>
@@ -120,7 +120,7 @@ namespace API.Migrations
 
                     b.HasIndex("AppRestaurantId");
 
-                    b.ToTable("Dishes");
+                    b.ToTable("Dishes", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Dish_Review", b =>
@@ -158,7 +158,7 @@ namespace API.Migrations
 
                     b.HasIndex("DishId");
 
-                    b.ToTable("Dish_Review");
+                    b.ToTable("Dish_Review", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.DishInOrder", b =>
@@ -181,7 +181,7 @@ namespace API.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("DishesInOrder");
+                    b.ToTable("DishesInOrder", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Order", b =>
@@ -222,7 +222,7 @@ namespace API.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Post", b =>
@@ -254,7 +254,7 @@ namespace API.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Restaurant_Owner", b =>
@@ -277,7 +277,7 @@ namespace API.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("User_Res_Relation");
+                    b.ToTable("User_Res_Relation", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Restaurant_Review", b =>
@@ -312,7 +312,7 @@ namespace API.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Res_Review");
+                    b.ToTable("Res_Review", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.RestaurantFollower", b =>
@@ -335,7 +335,7 @@ namespace API.Migrations
 
                     b.HasIndex("FollowerId");
 
-                    b.ToTable("RestaurantFollowers");
+                    b.ToTable("RestaurantFollowers", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.UserFollower", b =>
@@ -358,7 +358,7 @@ namespace API.Migrations
 
                     b.HasIndex("FollowerId");
 
-                    b.ToTable("UserFollowers");
+                    b.ToTable("UserFollowers", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Dish", b =>

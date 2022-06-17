@@ -308,6 +308,24 @@ namespace API.Controllers
             var adminCheckStatusCode = AuthorizedByRole(Roles.Admin.ToString());
             if(owner == null && adminCheckStatusCode != StatusCodes.Status200OK) return Unauthorized("User is not an admin or does not own the restaurant");
 
+            foreach(var o in restaurant.Orders.ToList())
+            {
+                foreach(var dio in o.DishesInOrder.ToList())
+                {
+                    dio.Dish = null;
+                    dio.DishId = 0;
+                }
+            }
+
+            foreach(var f in restaurant.Followers.ToList())
+            {
+                f.Follower = null;
+                f.FollowerId = 0;
+                f.Followed = null;
+                f.FollowedId = 0;
+                context.Remove(f);
+            }
+
             context.Remove(restaurant);
 
             await context.SaveChangesAsync();

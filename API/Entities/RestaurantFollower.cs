@@ -7,12 +7,12 @@ namespace API.Entities
     {
         public int Id { get; set; }
 
-        public int FollowerId { get; set; }
+        public int? FollowerId { get; set; }
 
-        public virtual AppUser Follower { get; set; }
+        public virtual AppUser? Follower { get; set; }
 
-        public virtual AppRestaurant Followed { get; set; }
+        public virtual AppRestaurant? Followed { get; set; }
 
-        public int FollowedId { get; set; }
+        public int? FollowedId { get; set; }
     }
 }

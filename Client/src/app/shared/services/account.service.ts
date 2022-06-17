@@ -20,7 +20,10 @@ export class AccountService {
     ownerID: number = 0;
 
     constructor(private http: HttpClient) {
+        this.init();
+    }
 
+    private init(){
         const localUserString = localStorage.getItem("user");
         console.log(localUserString)
         if (localUserString != null && localUserString.length > 0) {
@@ -46,7 +49,7 @@ export class AccountService {
     public currentUser$ = this.currentUserSource.asObservable();
 
     loginRequest(model: any) {
-        return this.http.post(this.loginUrl, model).pipe (
+        return this.http.post(this.loginUrl, model).pipe(
             map((Response: User) => {
                 const user = Response
 
@@ -62,7 +65,7 @@ export class AccountService {
     }
 
     registerRequest(model: any) {
-        return this.http.post(this.registerUrl, model).pipe (
+        return this.http.post(this.registerUrl, model).pipe(
             map((Response: User) => {
                 const user = Response
 
@@ -77,11 +80,13 @@ export class AccountService {
         )
     }
 
-    logoutUser() {
+    async logoutUser() {
         localStorage.removeItem("user");
         this.currentUserSource.next(null);
-        this.currentUser$ = null;
+        this.currentUser$ = this.currentUserSource.asObservable();
         this.loggedInStatus = false;
+        this.ownerID = 0;
+        //this.init();
     }
 
     isLoggedIn(): boolean {
@@ -94,20 +99,22 @@ export class AccountService {
      * @param id Restaurant ID
      * @returns Request response
      */
-    followRestaurant(id: number) {
+    async followRestaurant(id: number) {
 
         if (id == null || id == NaN) {
-            return
+            return false
         }
         else {
             // Obtain user token for authentication
             var userToken;
             var authToken = this.currentUser$.subscribe((user: User) => {
-                userToken = user.token;
+                if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
             })
             console.log(userToken);
-            var response = this.http.get(this.followURL + id + "/follow", { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) });
-            return response.toPromise();
+            return await this.http.get(this.followURL + id + "/follow", { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
         }
     }
 
@@ -116,7 +123,7 @@ export class AccountService {
      * @param id Restaurant ID
      * @returns Request response
      */
-     unfollowRestaurant(id: number) {
+    async unfollowRestaurant(id: number) {
 
         if (id == null || id == NaN) {
             return
@@ -125,25 +132,34 @@ export class AccountService {
             // Obtain user token for authentication
             var userToken;
             var authToken = this.currentUser$.subscribe((user: User) => {
-                userToken = user.token;
+                if(user != null && user.token != null){
+                    userToken = user.token;
+                }
             })
-            var response = this.http.delete(this.followURL + id + "/unfollow", { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) });
-            return response.toPromise();
+            var res;
+            var response = await this.http.delete(this.followURL + id + "/unfollow", { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise().then(Response => {
+                res = Response;
+            });
+            return res;
         }
     }
 
     async followsRestaurant(id : number) {
-        if (id == null || id == NaN) {
-            return
+        if (id == null || id == NaN || this.currentUser$ == null) {
+            return false
         }
         else {
             var returnedFlag = false;
             // Obtain user token for authentication
             var userToken;
             var authToken = this.currentUser$.subscribe((user: User) => {
+                if(user != null && user.token != null)
+                {
                 userToken = user.token;
+                }
+                
             })
-            var response = await this.http.get<boolean>(this.baseUrl + ":8080/api/Users/follows-restaurant?id=" + id, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise().then((resp) => {
+            var response = await this.http.get<boolean>(this.baseUrl + ":8080/api/Users/follows-restaurant?id=" + id, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise().then((resp : boolean) => {
                 returnedFlag = resp;
             })
             return returnedFlag;

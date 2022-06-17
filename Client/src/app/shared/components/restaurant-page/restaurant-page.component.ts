@@ -91,12 +91,16 @@ export class RestaurantPageComponent implements OnInit {
         }
         else {
             console.log("Follow action");
-            await this.accountService.followRestaurant(this.restaurantID).then((response) => {
-                this.isFollowing = true;
-                console.log(response);
-            }).catch((error) => {
-                console.log(error);
-            })
+            // await this.accountService.followRestaurant(this.restaurantID).then((response) => {
+            //     this.isFollowing = true;
+            //     console.log(response);
+            // }).catch((error) => {
+            //     console.log(error);
+            // })
+            await this.accountService.followRestaurant(this.restaurantID).then((Response : boolean) =>{
+                this.isFollowing = Response;
+            }   
+            );
         }
         this.getDetails();
     }
@@ -119,8 +123,11 @@ export class RestaurantPageComponent implements OnInit {
 
     private async getDetails() {
         // Obtain restaurant from DB based on ID.
-        this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
-            this.model = restaurant;
+        await this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
+            if(restaurant != null)
+            {
+                this.model = restaurant;
+            }
             //console.log(this.restaurant)
         })
 
@@ -205,9 +212,17 @@ export class RestaurantPageComponent implements OnInit {
         // Obtain restaurant ID from ActivatedRouter.
         this.restaurantID = this.activatedRoute.snapshot.params['id'];
 
-        this.accountService.currentUser$.subscribe((usr) => {
-            this.userID = usr.isRestaurantOwner;
-        });
+        if(this.accountService.currentUser$ != null)
+        {
+            this.accountService.currentUser$.subscribe((usr) => {
+                if(usr != null)
+                {
+                    this.userID = usr.isRestaurantOwner;
+                }
+                
+            });
+        }
+        
 
         this.isOwner = (this.userID == this.restaurantID);
 
@@ -216,10 +231,11 @@ export class RestaurantPageComponent implements OnInit {
         }
 
         // Obtain restaurant based on fetched ID.
-        this.getDetails();
+        await this.getDetails();
         
         // Fetch dishes data.
-        this.getDishes();
+        await this.getDishes();
+        console.log("test?");
 
         // this.fetchedPosts = [
         //     { date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{ category: "Taste", grade: 5 }, { category: "Serving", grade: 5 }, { category: "Atmosphere", grade: 5 }] },

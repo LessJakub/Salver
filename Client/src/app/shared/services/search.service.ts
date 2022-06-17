@@ -99,7 +99,11 @@ export class SearchService {
             return [];
         }
         else {
-            return await this.http.get<DishDTO[]>(this.dishSearchByIDURL + id + "/dishes").toPromise();
+            var res;
+            await this.http.get<DishDTO[]>(this.dishSearchByIDURL + id + "/dishes").toPromise().then(Response => {
+                res = Response;
+            });
+            return res;
         }
     }
 }

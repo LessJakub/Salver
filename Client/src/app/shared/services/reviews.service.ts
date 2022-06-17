@@ -74,14 +74,9 @@ export class ReviewsService {
      * @param id Dish id for which review should be added
      * @returns Response as a promise
      */
-     getDishReviews(id: number) {
+    async getDishReviews(id: number) {
         var url = this.baseUrl + ":8080/api/Reviews/dishes/" + id + "/reviews";
-        return this.http.get<DishReviewDTO[]>(url).pipe(
-            map((Response: DishReviewDTO[]) => {
-                return Response;
-            }, error => {
-                console.log(error);
-        }));
+        return await this.http.get<DishReviewDTO[]>(url).toPromise();
     }
 
 

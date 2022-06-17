@@ -75,7 +75,7 @@ export class RestaurantPageComponent implements OnInit {
     }
 
 
-    selectedTabID: number = 2;
+    selectedTabID: number = 0;
 
     async followButtonAction() {
         console.log("Is following: " + this.isFollowing);

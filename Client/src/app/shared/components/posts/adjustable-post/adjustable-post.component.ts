@@ -4,7 +4,9 @@ import { PostDTO } from 'src/app/shared/models/PostDTO';
 import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 import { ReviewsService } from 'src/app/shared/services/reviews.service';
 import { SearchService } from 'src/app/shared/services/search.service';
+import { DishReviewDTO } from 'src/app/shared/models/DishReviewDTO';
 import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-overlay.component';
+import { ActivityDTO, ActivityType } from 'src/app/shared/models/ActivityDTO';
 
 export enum POST_TYPE {
     REST_REVIEW = 0,
@@ -18,7 +20,8 @@ export enum POST_TYPE {
 })
 export class AdjustablePostComponent implements OnInit {
 
-    public deletionTypes = DELETION_TYPE;    
+    public deletionTypes = DELETION_TYPE; 
+    public activityTypes = ActivityType;
 
     @Input() public type: POST_TYPE = POST_TYPE.REGULAR_POST;
     @Input() model: any;
@@ -51,6 +54,8 @@ export class AdjustablePostComponent implements OnInit {
         });
     }
 
+    test: [string: number][];
+
     constructor(private searchService: SearchService,
                 private uploadService: BlobUploadService,
                 private restaurantService: RestaurantService,
@@ -59,6 +64,31 @@ export class AdjustablePostComponent implements OnInit {
     ngOnInit() {
         
         if (this.type == 1) {
+            if (this.isDishReview(this.model)) {
+                let tempModel = {...this.model};
+                this.compactMode = true;
+
+                let newModel: ActivityDTO = {
+                    id: tempModel.id,
+                    type: this.activityTypes.DISH_REVIEW,
+                    ratings: [],
+                    date: undefined,
+                    likes: undefined,
+                    description: tempModel.description,
+                    creatorId: tempModel.userId,
+                    topicId: tempModel.dishId
+                }
+                this.grades[0] = tempModel.tasteRating;
+                this.grades[1] = tempModel.priceRating;
+                this.grades[2] = tempModel.serviceRating;
+                this.model = newModel;
+            }
+            else {
+                this.compactMode = false;
+                this.grades[0] = this.model.ratings[2]['item2']
+                this.grades[1] = this.model.ratings[0]['item2']
+                this.grades[2] = this.model.ratings[1]['item2']
+            }
             this.dishReviewImageURL = this.dishReviewBaseURL + this.model.id + ".webp";
 
             this.getDishNameFromID(this.model.topicId);
@@ -82,6 +112,11 @@ export class AdjustablePostComponent implements OnInit {
             this.restReviewImageURL = this.restReviewBaseURL + this.model.id + ".webp";
 
         }
+    }
+
+    isDishReview(arg: any): arg is DishReviewDTO {
+        console.log("Check type")
+        return typeof arg?.tasteRating === "number";
     }
 
 
@@ -160,12 +195,14 @@ export class AdjustablePostComponent implements OnInit {
 
 
     // DISH REVIEW
+    compactMode: boolean = false;
     editModeDishRev: boolean = false;
     isReviewer: boolean = false;
     dishReviewBaseURL: string = "https://salver.blob.core.windows.net/dishreviews/"
     dishReviewImageURL: string;
     dishName: string = "...";
     userName: string = "...";
+    grades: number[] = [];
 
 
     getDishNameFromID(id: number) {

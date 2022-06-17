@@ -26,7 +26,7 @@ export class DishOverlayComponent implements OnInit {
     public postTypes = POST_TYPE; 
     public activityTypes = ActivityType; 
 
-    reviews: DishReviewDTO[] = [];
+    public reviews: DishReviewDTO[] = [];
 
     tabs: string[] = ["Overview", "Reviews"];
 
@@ -60,13 +60,12 @@ export class DishOverlayComponent implements OnInit {
 
         switch(this.selectedTabID) {
             case 1:
-
         }
     }
 
-    fetchReviews() {
-        this.reviewsService.getDishReviews(this.model.id).toPromise().then((dishRevs: [DishReviewDTO]) => {
-            this.reviews = {...dishRevs};
+    async fetchReviews() {
+        await this.reviewsService.getDishReviews(this.model.id).then((dishRevs) => {
+            this.reviews = dishRevs;
         })
     }
 

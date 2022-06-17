@@ -10,7 +10,7 @@
             <!-- Upper half content -->
             <div class="flex h-1/2 w-full rounded-2xl overflow-hidden p-4">
                 <!-- Left half width content -->
-                <div class="w-1/2 h-full rounded-2xl overflow-hidden flex overflow-x-scroll snap-x snap-mandatory">
+                <div class="w-1/2 h-full rounded-2xl overflow-hidden flex">
                     <!-- Image carousel -->
                     <img class="min-w-full object-cover resize snap-start snap-always" [src]="this.modelImageURL" (error)="updateUrlWithDefault()">   
                 </div>
@@ -101,7 +101,7 @@
 
                 <div class="h-1/5 w-full px-4 py-1">
                     <div class="w-full h-full">
-                        <app-tab-switcher [tabNames]="this.tabs" (tabSelectEvent)="selectNewTab($event)"></app-tab-switcher>
+                        <app-tab-switcher [default]="this.selectedTabID" [tabNames]="this.tabs" (tabSelectEvent)="selectNewTab($event)"></app-tab-switcher>
                     </div>
                 </div>
 
@@ -131,18 +131,16 @@
                 </div>
 
                 <!-- Reviews contents -->
-                <div *ngIf="(this.selectedTabID) == 1" class="h-4/5 w-full px-4 overflow-hidden overflow-y-scroll">
-                    <div class="w-full h-72 snap-start" *ngFor="let review of this.reviews">
-                        <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postTypes.DISH_REVIEW" [model]="review" [isOwner]="this.isOwner"></app-adjustable-post>
+                <div *ngIf="(this.selectedTabID) == 1 && this.reviews.length != 0" class="flex flex-col gap-4 h-4/5 w-full px-4 overflow-hidden overflow-y-scroll">
+                    <div class="w-full h-fit" *ngFor="let rev of this.reviews">
+                        <app-adjustable-post [type]="this.postTypes.DISH_REVIEW" [model]="rev" [isOwner]="this.isOwner"></app-adjustable-post>
                     </div>
+                </div>
 
-                    <!-- <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
+                <div *ngIf="(this.selectedTabID) == 1 && this.reviews.length == 0" class="flex flex-col gap-4 h-4/5 w-full px-4 overflow-hidden overflow-y-scroll">
+                    <div class="flex items-center justify-center w-full h-full">
+                        <p class="text-center text-2xl font-light">No reviews.</p>
                     </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div> -->
                 </div>
             </div>
            

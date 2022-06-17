@@ -62,7 +62,7 @@ export class DishTileComponent implements OnInit {
 
     defaultIMG = "/assets/images/dishHldr.webp";
     imgBaseURL = "https://salver.blob.core.windows.net/dishimages/";
-    modelImageURL;
+    modelImageURL = "";
 
     averageTotalGrade: number = 0;
 

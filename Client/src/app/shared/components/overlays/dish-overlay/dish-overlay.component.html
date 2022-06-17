@@ -132,8 +132,8 @@
 
                 <!-- Reviews contents -->
                 <div *ngIf="(this.selectedTabID) == 1" class="h-4/5 w-full px-4 overflow-hidden overflow-y-scroll">
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post [model]="this.reviews[0]"></app-review-post>
+                    <div class="w-full h-72 snap-start" *ngFor="let review of this.reviews">
+                        <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postTypes.DISH_REVIEW" [model]="review" [isOwner]="this.isOwner"></app-adjustable-post>
                     </div>
 
                     <!-- <div class="w-full h-72 snap-start">

@@ -76,6 +76,12 @@ export class AdjustablePostComponent implements OnInit {
                 this.getRestaurantNameFromID(this.model.creatorId);
             }
         }
+        else if (this.type == 0) {
+            this.getUserNameFromID(this.model.creatorId);
+            this.getRestaurantNameFromID(this.model.topicId);
+            this.restReviewImageURL = this.restReviewBaseURL + this.model.id + ".webp";
+
+        }
     }
 
 
@@ -196,4 +202,14 @@ export class AdjustablePostComponent implements OnInit {
             this.userName = "Invalid ID";
         }   
     }
+
+
+    // RESTAURANT REVIEW
+    restReviewBaseURL: string = "https://salver.blob.core.windows.net/resimages/";
+    restReviewImageURL: string = "";
+    
+    
+    // SHARED
+    ownsReview: boolean = false;
+
 }

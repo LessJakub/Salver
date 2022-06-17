@@ -43,6 +43,10 @@
 
         <div class="flex flex-col gap-2 w-full h-fit px-6">
             <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Followers: {{model.followers}}</p>
+
+            <p *ngIf="(this.model.price != null)" class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Range: {{model.minPrice}}$ -
+                    {{model.maxPrice}}$</p>
+            
             <app-grade-tile [name]="'atmosphere'" [grade]="this.model.atmosphereRating"></app-grade-tile>
             <app-grade-tile [name]="'service'" [grade]="this.model.serviceRating"></app-grade-tile>
         </div>
@@ -54,10 +58,6 @@
         <p *ngIf="(model.phoneNumber != '')" class="text-center font-light mx-4">{{model.phoneNumber}}</p>
 
         <p *ngIf="(model.email != '')" class="text-center font-light mx-4">{{model.email}}</p>
-
-        <p *ngIf="(this.model.priceRange != null)" class="text-center mx-4">Price range: {{model.minPrice}} -
-            {{model.maxPrice}</p>
-        <p *ngIf="(this.model.priceRange == null)" class="text-center font-semibold mx-4">Price range: Unavailable</p>
 
     </div>
 </div>
@@ -188,6 +188,8 @@
                 <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_POST" [type]="this.postTypes.REGULAR_POST" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
             
                 <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postTypes.DISH_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_REVIEW" [type]="this.postTypes.REST_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
             
             </div>
             

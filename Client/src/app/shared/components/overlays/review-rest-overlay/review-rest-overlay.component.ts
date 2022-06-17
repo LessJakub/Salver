@@ -81,7 +81,7 @@ export class ReviewRestOverlayComponent implements OnInit {
         if (files[0]) {
             formData.append(files[0].filename, files[0]);
             formData.append("fileID", filename)
-            formData.append("blobContainer", "dishreviews");
+            formData.append("blobContainer", "resimages");
         }
 
         this.uploadService

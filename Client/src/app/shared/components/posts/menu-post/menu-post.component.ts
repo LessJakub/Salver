@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
+import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-overlay.component';
 
 @Component({
     selector: 'app-menu-post',
@@ -17,6 +18,12 @@ export class MenuPostComponent implements OnInit {
     showDeleteOverlay: boolean = false;
     showNewDishOverlay: boolean = false;
     showNewReviewOverlay: boolean = false;
+
+    public deletionTypes = DELETION_TYPE;
+
+    deleteAction() {
+        this.showDeleteOverlay = true;
+    }
 
     @Input() model: DishDTO;
     @Input() isOwner: boolean = false;

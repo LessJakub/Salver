@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ActivityType } from 'src/app/shared/models/ActivityDTO';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
 import { DishReviewDTO } from 'src/app/shared/models/DishReviewDTO';
 import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 import { OrdersService } from 'src/app/shared/services/orders.service';
 import { ReviewsService } from 'src/app/shared/services/reviews.service';
 import { SearchService } from 'src/app/shared/services/search.service';
+import { POST_TYPE } from '../../posts/adjustable-post/adjustable-post.component';
 
 @Component({
     selector: 'app-dish-overlay',
@@ -20,6 +22,9 @@ export class DishOverlayComponent implements OnInit {
 
     averageTotalGrade: number = 0;
     modelImageURL: string;
+
+    public postTypes = POST_TYPE; 
+    public activityTypes = ActivityType; 
 
     reviews: DishReviewDTO[] = [];
 
@@ -42,6 +47,8 @@ export class DishOverlayComponent implements OnInit {
         {
             this.orderCount = this.orderService.dishAmountInOrder(this.model);
         }
+
+        this.fetchReviews();
     }
 
     incrementCount() {

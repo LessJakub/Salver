@@ -135,7 +135,7 @@
                         {{this.userName}}</div>
                 </a>
 
-                <a *ngIf="!this.compactMode" [routerLink]="[this.routerLink]" class="group flex w-full h-fit gap-2 items-center">
+                <div *ngIf="!this.compactMode" class="group flex w-full h-fit gap-2 items-center">
 
                     <svg class="fill-gray-50 stroke-green-900 aspect-square stroke-2" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -147,7 +147,7 @@
                     <div class="text-xl font-light truncate text-green-900 group-hover:animate-pulse">
                         {{this.dishName}}
                     </div>
-                </a>
+                </div>
 
                 <div *ngIf="!this.compactMode" class="group flex w-full h-fit space-x-2">
                     <svg class="fill-gray-50 stroke-green-900" width="24" height="24" viewBox="0 0 24 24"

@@ -4,26 +4,57 @@
         <app-dish-tile [model]="model" [showDescription]="false"></app-dish-tile>
     </div>
 
-    <div class="flex flex-col flex-grow w-2/4 m-8 overflow-hidden ml-16">
+    <div class="flex flex-col flex-grow justify-evenly w-2/4 overflow-hidden ml-12 gap-4">
+        <div>
+            <div class="flex items-center gap-2">
+                <svg class="fill-gray-50 stroke-green-900 aspect-square stroke-2" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M7 7H7.01M7 3H12C12.512 3 13.024 3.195 13.414 3.586L20.414 10.586C20.7889 10.9611 20.9996 11.4697 20.9996 12C20.9996 12.5303 20.7889 13.0389 20.414 13.414L13.414 20.414C13.0389 20.7889 12.5303 20.9996 12 20.9996C11.4697 20.9996 10.9611 20.7889 10.586 20.414L3.586 13.414C3.4 13.2285 3.25249 13.0081 3.15192 12.7655C3.05136 12.5228 2.99973 12.2627 3 12V7C3 5.93913 3.42143 4.92172 4.17157 4.17157C4.92172 3.42143 5.93913 3 7 3Z"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
 
-        <p class="text-2xl font-bold truncate text-green-900">{{model.name}}</p>
-        <p class="text-base text-gray-900">{{model.description}}</p>
+                <p class="text-2xl font-bold text-green-900">{{model.name}}</p>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <svg class="fill-gray-50 stroke-green-900 aspect-square stroke-2" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 8C10.343 8 9 8.895 9 10C9 11.105 10.343 12 12 12C13.657 12 15 12.895 15 14C15 15.105 13.657 16 12 16M12 8V16M12 8C13.11 8 14.08 8.402 14.599 9M12 8V7M12 16V17M12 16C10.89 16 9.92 15.598 9.401 15M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+
+                <p class="text-xl font-semibold text-green-900">{{model.price}}$</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="flex flex-col items-left px-2">
+                <p class="text-base text-gray-900">{{model.description}}</p>
+            </div>
+        </div>
+
+        <div>
+            <div class="flex flex-col items-left px-2">
+                <p class="text-base text-gray-900">{{model.ingredients}}</p>
+            </div>
+        </div>
     </div>
+
 
     <div class="flex flex-col w-1/4 h-full overflow-clip">
 
-        <app-review-dish-overlay *ngIf="(showNewReviewOverlay) == true" 
-                      [model]="model" 
-                      (closeOverlayEventEmitter)="this.disableReviewOverlay($event)"
-                      (reloadEventEmitter)="this.handleReload($event)"></app-review-dish-overlay>
+        <app-review-dish-overlay *ngIf="(showNewReviewOverlay) == true" [model]="model"
+            (closeOverlayEventEmitter)="this.disableReviewOverlay($event)"
+            (reloadEventEmitter)="this.handleReload($event)"></app-review-dish-overlay>
 
-        <div class="flex flex-col flex-grow w-full h-1/2 gap-2 mt-8">
-
-            
-            <!-- <div (click)="invertReviewOverlayFlag()" class="flex w-full h-fit justify-center items-center content-center flex-col cursor-pointer group"></div> -->
-
-            <button *ngIf="(this.isOwner == false)" (click)='this.addReviewAction()'
+        <div *ngIf="(this.isOwner == false)" class="flex flex-col flex-grow w-full h-1/2 gap-2 justify-between">
+            <button (click)='this.addReviewAction()'
                 class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Review</button>
+        </div>
+
+        <div *ngIf="(this.isOwner == true)" class="flex flex-col flex-grow w-full h-1/2 gap-2">
 
             <button *ngIf="(this.isOwner == true)" (click)='this.editButtonAction()'
                 class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Edit</button>
@@ -34,8 +65,8 @@
                 (reloadEventEmitter)="this.reloadEventEmitter.emit($event)">
             </app-delete-dish-overlay>
 
-                <button *ngIf="(this.isOwner == true)" (click)='this.deleteAction()'
-                    class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
+            <button *ngIf="(this.isOwner == true)" (click)='this.deleteAction()'
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-800 hover:text-gray-50 hover:border-red-800 border-green-900">Delete</button>
 
         </div>
 
@@ -43,9 +74,92 @@
 
 </div>
 
+<form *ngIf="this.editMode == true"
+    class="flex w-full h-full bg-gray-50 border p-4 border-green-900 rounded-2xl overflow-hidden shadow-xl">
+    <div class="flex flex-grow w-fit h-full">
+        <app-dish-tile [model]="model" [showDescription]="false" [imageUploader]="this.editMode"></app-dish-tile>
+    </div>
+
+    <div class="flex flex-col flex-grow justify-evenly w-2/4 overflow-hidden ml-12 gap-4 pr-4">
+        <div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+                <svg class="fill-gray-50 stroke-green-900 aspect-square stroke-2" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M7 7H7.01M7 3H12C12.512 3 13.024 3.195 13.414 3.586L20.414 10.586C20.7889 10.9611 20.9996 11.4697 20.9996 12C20.9996 12.5303 20.7889 13.0389 20.414 13.414L13.414 20.414C13.0389 20.7889 12.5303 20.9996 12 20.9996C11.4697 20.9996 10.9611 20.7889 10.586 20.414L3.586 13.414C3.4 13.2285 3.25249 13.0081 3.15192 12.7655C3.05136 12.5228 2.99973 12.2627 3 12V7C3 5.93913 3.42143 4.92172 4.17157 4.17157C4.92172 3.42143 5.93913 3 7 3Z"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+
+                <textarea matInput [(ngModel)]="this.editModel.name" rows="1" minlength="1" maxlength="20" name="name"
+                    required
+                    class="flex w-full h-full resize-none text-2xl text-green-900 font-bold appearance-none rounded-2xl bg-gray-200 border border-gray-200 py-1 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                    placeholder="{{this.model.name}}"></textarea>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <svg class="fill-gray-50 stroke-green-900 aspect-square stroke-2" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 8C10.343 8 9 8.895 9 10C9 11.105 10.343 12 12 12C13.657 12 15 12.895 15 14C15 15.105 13.657 16 12 16M12 8V16M12 8C13.11 8 14.08 8.402 14.599 9M12 8V7M12 16V17M12 16C10.89 16 9.92 15.598 9.401 15M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+
+                <textarea matInput [(ngModel)]="this.editModel.price" rows="1" minlength="1" maxlength="5" name="price"
+                    required
+                    class="flex w-1/3 h-full resize-none text-xl text-green-900 font-bold appearance-none rounded-2xl bg-gray-200 border border-gray-200 py-1 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                    placeholder="{{this.model.price}}"></textarea>
+            </div>
+        </div>
+
+        <div>
+            <div class="flex flex-col items-left">
+                <textarea matInput [(ngModel)]="this.editModel.description" rows="4" minlength="1" maxlength="249" name="description"
+                required
+                class="w-full resize-none text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                placeholder="{{this.model.description}}"></textarea>
+            </div>
+        </div>
+
+        <div>
+            <div class="flex flex-col items-left">
+                <textarea matInput [(ngModel)]="this.editModel.ingredients" rows="3" minlength="1" maxlength="150" name="ingredients"
+                required
+                class="w-full resize-none text-sm appearance-none rounded-2xl bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
+                placeholder="{{this.model.ingredients}}"></textarea>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="flex flex-col w-1/4 h-full overflow-clip">
+
+        <app-review-dish-overlay *ngIf="(showNewReviewOverlay) == true" [model]="model"
+            (closeOverlayEventEmitter)="this.disableReviewOverlay($event)"
+            (reloadEventEmitter)="this.handleReload($event)"></app-review-dish-overlay>
+
+        <div *ngIf="(this.isOwner == false)" class="flex flex-col flex-grow w-full h-1/2 gap-2 justify-between">
+            <button (click)='this.addReviewAction()'
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Review</button>
+        </div>
+
+        <div *ngIf="(this.isOwner == true)" class="flex flex-col flex-grow w-full h-1/2 gap-2">
+
+            <button *ngIf="(this.isOwner == true)" (click)='this.submitEditAction()'
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Apply</button>
+
+
+            <button *ngIf="(this.isOwner == true)" (click)='this.cancelEditAction()'
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:text-red-800 hover:border-red-800 border-green-900">Cancel</button>
+
+        </div>
+
+    </div>
+
+</form>
+
 
 <!-- Edit mode -->
-<form *ngIf="this.editMode == true" (ngSubmit)="this.submitEditAction()"
+<form *ngIf="this.editMode == null" (ngSubmit)="this.submitEditAction()"
     class="flex w-full h-full bg-gray-50 border p-4 border-green-900 rounded-2xl overflow-hidden shadow-xl">
 
     <div class="flex flex-grow w-fit h-full">
@@ -54,7 +168,8 @@
 
     <div class="flex flex-col w-2/4 h-full p-4 ml-4 space-y-2 overflow-clip">
         <mat-form-field>
-            <textarea matInput [(ngModel)]="this.editModel.name" minlength="1" maxlength="20" name="name" required
+            <textarea matInput [(ngModel)]="this.editModel.name" rows="1" minlength="1" maxlength="20" name="name"
+                required
                 class="flex w-full h-full resize-none text-xl text-green-900 font-bold appearance-none rounded-2xl bg-gray-200 border border-gray-200 py-1 px-4 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700"
                 placeholder="{{this.model.name}}"></textarea>
         </mat-form-field>

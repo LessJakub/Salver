@@ -343,7 +343,7 @@ namespace API.Controllers
                 if(restaurant == null) continue;
                 var order = restaurant.Orders.FirstOrDefault(o => o.Id == orderId);
                 if(order == null) continue;
-                if(order.Status != Status.CANCELLED) return BadRequest($"Order is already in state: {order.Status.ToString()}");
+                if(order.Status != Status.IN_PROGRESS) return BadRequest($"Order is already in state: {order.Status.ToString()}");
                 order.Status = Status.FINISHED;
                 order.RealizationTime = DateTime.Now;
                 await context.SaveChangesAsync();

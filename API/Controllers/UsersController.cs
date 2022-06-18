@@ -337,7 +337,7 @@ namespace API.Controllers
                 activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(post), post.Date));
             }
 
-            foreach(var followed in context.Users.Where(u => user.FollowedUsers.Select(f => f.Id).Contains(u.Id)))
+            foreach(var followed in await context.Users.Where(u => user.FollowedUsers.Select(f => f.Id).Contains(u.Id)).ToListAsync())
             {
                 foreach(var dish_review in followed.Dish_Review.OrderByDescending(dr => dr.CreationDate).ToList())
                 {

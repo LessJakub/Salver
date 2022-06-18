@@ -13,6 +13,8 @@ import { POST_TYPE } from '../posts/adjustable-post/adjustable-post.component';
 import { UserProfileDTO } from "../../models/UserProfileDTO"
 import { ProfileService } from "../../services/profile.service"
 import { ADD_POST_TYPE } from '../posts/add-rest-post/add-rest-post.component';
+import { OrderDTO } from '../../models/OrderDTO';
+import { OrdersManagementService } from '../../services/orders-management.service';
 
 
 @Component({
@@ -31,6 +33,7 @@ export class UserPageComponent implements OnInit {
     profileImageURL: string;
 
     fetchedActivity: ActivityDTO[] = null;
+    fetchedOrders: Array<OrderDTO> = new Array<OrderDTO>();
 
     isFollowing: boolean = false;
     followButtonText = this.isFollowing ? "Unfollow" : "Follow";
@@ -40,7 +43,8 @@ export class UserPageComponent implements OnInit {
         public accountService: AccountService,
         public activityService: ActivityService,
         private router: Router,
-        private profileService: ProfileService) { }
+        private profileService: ProfileService,
+        private managementService: OrdersManagementService) { }
 
     updateData(eventFlag: boolean) {
         console.log("Obtained event:", eventFlag);
@@ -84,6 +88,7 @@ export class UserPageComponent implements OnInit {
                 this.getActivity();
                 return;
             case 1:
+                this.getOrders();
                 return;
         }
     }
@@ -147,6 +152,12 @@ export class UserPageComponent implements OnInit {
 
         this.evaluateIfPlural();
     }
+
+    private async getOrders() {
+        console.log("Restaurant - Orders Getter")
+        this.fetchedOrders = await this.managementService.GetOrders(0, 99);
+    }
+
 
     async ngOnInit() {
         console.log("Using ID from ActivatedRoute");

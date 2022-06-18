@@ -11,6 +11,7 @@ export class OrderPostComponent implements OnInit {
 
     public statusType = Status;
 
+    @Input() canManage: boolean = false;
     @Input() model: OrderDTO = null;
     fetchedDishes: Array<[DishDTO, number]> = new Array<[DishDTO, number]>();
     

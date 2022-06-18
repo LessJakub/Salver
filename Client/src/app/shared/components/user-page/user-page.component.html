@@ -81,5 +81,16 @@
             
         </div>
 
+        <!-- Activity -->
+        <div *ngIf="(this.selectedTabID) == 1 && this.isProfileOwner"
+            class="w-full flex flex-col items-center justify-center space-y-5 absolute top-0 left-0">
+            <div class="w-5/6 h-full" *ngFor="let order of fetchedOrders">
+            
+                <app-order-post [model]="order" [canManage]="false"></app-order-post>
+            
+            </div>
+            
+        </div>
+
     </div>
 </div>

@@ -116,7 +116,6 @@ export class OrdersManagementService {
 
         var head = new HttpHeaders().set('Authorization', 'Bearer ' + user.token);
 
-
         var url = this.ordersUrl + orderId + '/cancel';
         var res: any;
         await this.http.put(url, {}, { headers: head }).toPromise().then(response => {

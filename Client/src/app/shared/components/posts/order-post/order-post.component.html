@@ -107,19 +107,24 @@
 
             </div>
 
-            <div class="flex gap-2 w-1/3 px-4 py-4 h-full rounded-2xl justify-center">
-                <button *ngIf="this.model.status == this.statusType.NEW" (click)="this.acceptButtonAction()"
+            <div class="flex gap-2 w-1/3 px-4 py-4 h-full rounded-2xl justify-end">
+                <button *ngIf="this.model.status == this.statusType.NEW && this.canManage" (click)="this.acceptButtonAction()"
                     class="w-1/2 h-fit py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                     Accept
                 </button>
 
-                <button *ngIf="this.model.status == this.statusType.IN_PROGRESS" (click)="this.finishButtonAction()"
+                <button *ngIf="this.model.status == this.statusType.IN_PROGRESS && this.canManage" (click)="this.finishButtonAction()"
                     class="w-1/2 h-fit py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                     Finish
                 </button>
 
-                <button *ngIf="this.model.status != this.statusType.FINISHED" (click)="this.cancelButtonAction()"
+                <button *ngIf="this.model.status != this.statusType.FINISHED && this.canManage" (click)="this.cancelButtonAction()"
                     class="w-1/2 h-fit py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                    Cancel
+                </button>
+
+                <button *ngIf="this.model.status != this.statusType.FINISHED && !this.canManage" (click)="this.cancelButtonAction()"
+                    class="w-full h-fit py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                     Cancel
                 </button>
             </div>

@@ -104,7 +104,6 @@ namespace API.Controllers
                 Id = user.Id,
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user, resId),
-                //UsersRestaurants = (await GetRestaurantsOfUser(user)).Count()
                 IsRestaurantOwner = resId
             };
         }

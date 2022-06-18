@@ -1,5 +1,5 @@
 <!-- REGULAR POST -->
-<div *ngIf="this.type == 2"
+<div *ngIf="this.type == 2 || this.type == 3"
     class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden shadow-xl">
 
     <input hidden #fileInput type="file" requiredFileType="image/webp" id="file" />
@@ -31,8 +31,11 @@
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
 
-                    <div class="text-xl font-bold truncate text-green-900 group-hover:animate-pulse">
+                    <div *ngIf="this.type == 2" class="text-xl font-bold truncate text-green-900 group-hover:animate-pulse">
                         {{this.postName}}</div>
+
+                    <div *ngIf="this.type == 3" class="text-xl font-bold truncate text-green-900 group-hover:animate-pulse">
+                        {{this.userName}}</div>
                 </a>
 
                 <div class="group flex w-full h-fit space-x-2">
@@ -48,8 +51,8 @@
 
             </div>
 
-            <app-delete-dish-overlay *ngIf="(this.showDeleteOverlay) == true" [modelRegPost]="model"
-                [deleteType]="this.deletionTypes.REGULAR_POST"
+            <app-delete-dish-overlay *ngIf="(this.showDeleteOverlay) == true" [modelRegPost]="model" [modelActivity]="model"
+                [deleteType]="this.postDeletionType"
                 (closeOverlayEventEmitter)="this.disableDeleteOverlay($event)"
                 (reloadEventEmitter)="this.reloadEventEmitter.emit($event)">
             </app-delete-dish-overlay>

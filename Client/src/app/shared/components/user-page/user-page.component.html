@@ -63,11 +63,14 @@
         <div *ngIf="(this.selectedTabID) == 0"
             class="w-full flex flex-col items-center justify-center space-y-5 absolute top-0 left-0">
 
-            <app-add-rest-post class="w-5/6 h-fit" *ngIf="(this.isOwner)" [model]="this.model" [postType]="this.addPostTypes.USER"
+            <app-add-rest-post class="w-5/6 h-fit" *ngIf="(this.isProfileOwner)" [model]="this.profileModel" [postType]="this.addPostTypes.USER"
                 (reloadEventEmitter)="this.updateData($event)"></app-add-rest-post>
+
 
             <div class="w-5/6 h-full" *ngFor="let activity of fetchedActivity">
             
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.USER_POST" [type]="this.postTypes.USER_POST" [model]="activity" [isOwner]="this.isProfileOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+
                 <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_POST" [type]="this.postTypes.REGULAR_POST" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
             
                 <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postTypes.DISH_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>

@@ -12,6 +12,7 @@ import { POST_TYPE } from '../posts/adjustable-post/adjustable-post.component';
 
 import { UserProfileDTO } from "../../models/UserProfileDTO"
 import { ProfileService } from "../../services/profile.service"
+import { ADD_POST_TYPE } from '../posts/add-rest-post/add-rest-post.component';
 
 
 @Component({
@@ -21,29 +22,25 @@ import { ProfileService } from "../../services/profile.service"
 })
 export class UserPageComponent implements OnInit {
 
+    public addPostTypes = ADD_POST_TYPE;
     public postTypes = POST_TYPE;
     public activityTypes = ActivityType;
 
+    selectedTabID: number = 0;
+
     profileImageURL: string;
 
-    fetchedDishes: DishDTO[] = null;
-    fetchedPosts: PostDTO[] = null;
     fetchedActivity: ActivityDTO[] = null;
 
     isFollowing: boolean = false;
     followButtonText = this.isFollowing ? "Unfollow" : "Follow";
 
     constructor(private activatedRoute: ActivatedRoute,
-        private searchService: SearchService,
         private uploadService: BlobUploadService,
         public accountService: AccountService,
-        private reviewsService: ReviewsService,
         public activityService: ActivityService,
         private router: Router,
         private profileService: ProfileService) { }
-
-
-    user = this.accountService.currentUser$;
 
     updateData(eventFlag: boolean) {
         console.log("Obtained event:", eventFlag);
@@ -52,17 +49,11 @@ export class UserPageComponent implements OnInit {
         }
     }
 
-    handleRestReviewReload() {
-        // this.getDetails();
-    }
-
     updateUrlWithDefault() {
         this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
     }
 
-
-    selectedTabID: number = 0;
-
+    
     async followButtonAction() {
         console.log("Is following: " + this.isFollowing);
         if (!this.isFollowing) {
@@ -83,7 +74,6 @@ export class UserPageComponent implements OnInit {
                 console.log(error);
             })
         }
-
         this.getProfileDetails();
     }
 
@@ -94,22 +84,8 @@ export class UserPageComponent implements OnInit {
                 this.getActivity();
                 return;
             case 1:
-                this.getPosts();
-                return;
-            case 2:
-                this.getActivity();
                 return;
         }
-    }
-
-    private async getDishes() {
-        console.log("Restaurant - Dishes Getter");
-        // this.fetchedDishes = await this.searchService.searchDishesByID(this.restaurantID);
-    }
-
-    private async getPosts() {
-        console.log("Restaurant - Posts Getter");
-        // this.fetchedPosts = await this.reviewsService.getRestaurantPosts(this.restaurantID);
     }
 
     private async getActivity() {

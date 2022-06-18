@@ -79,6 +79,58 @@ export class ProfileService {
 
 
     /**
+     * Method used to update information contained within post.
+     * @param id Identifier of user owning the post
+     * @param postID Updated post ID
+     * @param model Model with information about updates
+     * @returns Response
+     */
+     editPost(id: number, postID: number, model: PostDTO) {
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
+        })
+
+        var url = this.baseURL + ":8080/api/Posts/Users/" + id + "/posts/" + postID
+        return this.http.put<PostDTO>(url, model, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
+            map((Response: PostDTO) => {
+                return Response;
+            }, error => {
+                console.log(error);
+            }));
+    }
+
+    /**
+     * Method used to remove user post.
+     * @param id Identifier of user owning the post
+     * @param postID Post ID
+     * @returns Response
+     */
+     deletePost(id: number, postID: number) {
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
+        })
+
+        var url = this.baseURL + ":8080/api/Posts/Users/" + id + "/posts/" + postID
+        return this.http.delete(url, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
+            map((Response: PostDTO) => {
+                return Response;
+            }, error => {
+                console.log(error);
+            }));
+    }
+
+
+    /**
      * Method used for evaluation whether currently logged in user follows user with ID.
      * @param id User ID which can be followed by the user.
      * @returns Boolean response whether logged user follows user identified with ID.

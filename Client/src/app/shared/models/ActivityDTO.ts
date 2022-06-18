@@ -12,5 +12,6 @@ export interface ActivityDTO {
 export enum ActivityType{
     DISH_REVIEW,
     RESTAURANT_REVIEW,
-    RESTAURANT_POST
+    RESTAURANT_POST,
+    USER_POST
 }

@@ -21,9 +21,11 @@ export class AddRestPostComponent implements OnInit {
                 public restaurantService: RestaurantService,
                 public profileService: ProfileService) { }
 
-    @Input() model: RestaurantDTO;
+    @Input() model: any;
     @Input() postType: ADD_POST_TYPE = ADD_POST_TYPE.RESTAURANT;
     @Output() reloadEventEmitter = new EventEmitter();
+
+    types = ADD_POST_TYPE;
 
     extended = false;
 

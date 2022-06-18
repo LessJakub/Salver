@@ -3,15 +3,16 @@ import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.
 import { PostDTO } from 'src/app/shared/models/PostDTO';
 import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 import { ReviewsService } from 'src/app/shared/services/reviews.service';
-import { SearchService } from 'src/app/shared/services/search.service';
 import { DishReviewDTO } from 'src/app/shared/models/DishReviewDTO';
 import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-overlay.component';
 import { ActivityDTO, ActivityType } from 'src/app/shared/models/ActivityDTO';
+import { ProfileService } from 'src/app/shared/services/profile.service';
 
 export enum POST_TYPE {
     REST_REVIEW = 0,
     DISH_REVIEW = 1,
-    REGULAR_POST = 2
+    REGULAR_POST = 2,
+    USER_POST = 3,
 }
 
 @Component({
@@ -56,7 +57,7 @@ export class AdjustablePostComponent implements OnInit {
 
     test: [string: number][];
 
-    constructor(private searchService: SearchService,
+    constructor(private profileService: ProfileService,
                 private uploadService: BlobUploadService,
                 private restaurantService: RestaurantService,
                 private reviewsService: ReviewsService) {}
@@ -110,6 +111,22 @@ export class AdjustablePostComponent implements OnInit {
                 this.postLink = this.routerLink = '/restaurant/' + this.model.creatorId;
                 this.getRestaurantNameFromID(this.model.creatorId);
             }
+            this.postDeletionType = this.deletionTypes.REGULAR_POST;
+        }
+
+        else if (this.type == 3) {
+            this.postImageURL = this.postBlobBaseURL + this.model.id + ".webp";
+
+            if (this.model.username != null) {
+                this.postName = this.model.username;
+                this.postLink = this.routerLink = '/user/' + this.model.creatorId;
+            }
+            else {
+                this.postLink = this.routerLink = '/user/' + this.model.creatorId;
+                this.getUserNameFromID(this.model.creatorId);
+                this.postName = this.userName;
+            }
+            this.postDeletionType = this.deletionTypes.USER_POST;
         }
 
         else if (this.type == 0) {
@@ -162,7 +179,9 @@ export class AdjustablePostComponent implements OnInit {
     submitEditRegular(files) {
         console.log("Edit Action: ID - " + this.model.id);
 
-        var response = this.restaurantService.editPost(this.model.appRestaurantId, this.model.id, this.editModelRegular).toPromise().then((updatedPost) => {
+        var service = (this.type == POST_TYPE.USER_POST) ? this.profileService : this.restaurantService;
+        var postCreator = (this.model.appRestaurantId == null) ? this.model.creatorId : this.model.appRestaurantId;
+        var response = service.editPost(postCreator, this.model.id, this.editModelRegular).toPromise().then((updatedPost) => {
             console.log("Edit Post - Positive response:");
             console.log(updatedPost);
 
@@ -257,5 +276,8 @@ export class AdjustablePostComponent implements OnInit {
     
     // SHARED
     ownsReview: boolean = false;
+    postDeletionType: DELETION_TYPE;
+
+    // USER POST
 
 }

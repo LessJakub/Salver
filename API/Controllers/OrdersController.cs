@@ -114,9 +114,9 @@ namespace API.Controllers
             if(user == null) return BadRequest($"User with {userId} id does not exist");
 
             var usrOrders = new List<OrderDTO>();
-            foreach(var order in context.Orders.
+            foreach(var order in user.Orders.
                 OrderByDescending(o => o.SubmitTime).
-                OrderByDescending(o => o.Status).
+                OrderBy(o => o.Status).
                 Skip(startingIndex).
                 Take(endIndex).
                 ToList()) 
@@ -152,7 +152,7 @@ namespace API.Controllers
                 Skip(startingIndex).
                 Take(endIndex).
                 OrderByDescending(o => o.SubmitTime).
-                OrderByDescending(o => o.Status).
+                OrderBy(o => o.Status).
                 ToList()) 
                     resOrders.Add(new OrderDTO(order));
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
 import { OrderDTO, Status } from 'src/app/shared/models/OrderDTO';
 import { OrdersManagementService } from 'src/app/shared/services/orders-management.service';
@@ -13,6 +13,9 @@ export class OrderPostComponent implements OnInit {
 
     @Input() canManage: boolean = false;
     @Input() model: OrderDTO = null;
+    @Output() reloadEventEmitter = new EventEmitter();
+
+    
     fetchedDishes: Array<[DishDTO, number]> = new Array<[DishDTO, number]>();
     
     constructor(private managementService: OrdersManagementService) { }
@@ -38,14 +41,17 @@ export class OrderPostComponent implements OnInit {
 
     async cancelButtonAction() {
         await this.managementService.CancelOrder(this.model.id);
+        this.reloadEventEmitter.emit(true);
     }
 
     async acceptButtonAction() {
         await this.managementService.AcceptOrder(this.model.id);
+        this.reloadEventEmitter.emit(true);
     }
 
     async finishButtonAction() {
         await this.managementService.FinishOrder(this.model.id);
+        this.reloadEventEmitter.emit(true);
     }
 
 }

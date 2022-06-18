@@ -49,7 +49,7 @@ export class UserPageComponent implements OnInit {
     updateData(eventFlag: boolean) {
         console.log("Obtained event:", eventFlag);
         if (eventFlag == true) {
-            this.getActivity();
+            this.selectNewTab(this.selectedTabID);
         }
     }
 

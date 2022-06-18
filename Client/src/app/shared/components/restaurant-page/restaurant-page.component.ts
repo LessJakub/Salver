@@ -64,8 +64,7 @@ export class RestaurantPageComponent implements OnInit {
     updateData(eventFlag: boolean) {
         console.log("Obtained event:", eventFlag);
         if (eventFlag == true) {
-            this.getDishes();
-            this.getPosts();
+            this.selectNewTab(this.selectedTabID)
         }
     }
 

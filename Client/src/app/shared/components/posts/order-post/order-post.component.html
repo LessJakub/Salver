@@ -118,12 +118,12 @@
                     Finish
                 </button>
 
-                <button *ngIf="this.model.status != this.statusType.FINISHED && this.canManage" (click)="this.cancelButtonAction()"
+                <button *ngIf="this.model.status < 2 && this.canManage" (click)="this.cancelButtonAction()"
                     class="w-1/2 h-fit py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                     Cancel
                 </button>
 
-                <button *ngIf="this.model.status != this.statusType.FINISHED && !this.canManage" (click)="this.cancelButtonAction()"
+                <button *ngIf="this.model.status == this.statusType.NEW && !this.canManage" (click)="this.cancelButtonAction()"
                     class="w-full h-fit py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                     Cancel
                 </button>

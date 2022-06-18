@@ -86,7 +86,7 @@
             class="w-full flex flex-col items-center justify-center space-y-5 absolute top-0 left-0">
             <div class="w-5/6 h-full" *ngFor="let order of fetchedOrders">
             
-                <app-order-post [model]="order" [canManage]="false"></app-order-post>
+                <app-order-post [model]="order" [canManage]="false" (reloadEventEmitter)="this.updateData($event)"></app-order-post>
             
             </div>
             

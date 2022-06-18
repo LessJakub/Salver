@@ -10,7 +10,7 @@ namespace API.DTOs
         DISH_REVIEW,
         RESTAURANT_REVIEW,
         RESTAURANT_POST,
-        USET_POST
+        USER_POST
     }
     public class ActivityDTO
     {

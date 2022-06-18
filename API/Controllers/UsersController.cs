@@ -384,7 +384,7 @@ namespace API.Controllers
             {
                 listToRet.Add(new ActivityDTO{
                     Id = p.Id,
-                    Type = ActivityType.USET_POST,
+                    Type = ActivityType.USER_POST,
                     Date = p.Date,
                     Description = p.Description,
                     Likes = p.Likes,

@@ -160,6 +160,33 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Gets list of all orders created by a certain user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="dishesInOrderDTO"></param>
+        /// <remarks></remarks>
+        /// <returns>List of OrderDtos created from user orders</returns>
+        /// <response code="200"> Returns list of orders with matching parameters</response>
+        /// <response code="400"> Bad request, invalid input</response>
+        [AllowAnonymous]
+        [HttpPost("/dishes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<DishDto>>> GetDishesInOrder(DishesInOrderDTO dishesInOrderDTO)
+        {
+            var dishesInOrder = new List<DishDto>();
+            var dishes = context.Dishes.Where(d => dishesInOrderDTO.DishesIds.Contains(d.Id)).
+                                        ToList();
+
+            foreach(var d in dishes)
+            {
+                dishesInOrder.Add(new DishDto(d));
+            }
+
+            return dishesInOrder;
+        }
+
+        /// <summary>
         /// DEBUG FUNCTION
         /// </summary>
         /// <param name="orderId">Id of the restaurant</param>
@@ -242,6 +269,8 @@ namespace API.Controllers
 
             return Ok();
         }
+
+
 
 
         /// <summary>

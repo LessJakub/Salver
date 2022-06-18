@@ -5,6 +5,7 @@ import { AccountService } from './account.service';
 import { User } from '../models/UserDTO';
 import { map } from 'rxjs/operators';
 import { OrderDTO } from '../models/OrderDTO';
+import { dishesInOrderDTO } from '../models/DishesInOrderDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class OrdersService {
 
 
   dishesInOrder : Array<DishDTO> = new Array<DishDTO>();
+  Cart: Array<[DishDTO, number]> = new Array<[DishDTO, number]>();
   currentRestaurant: number = 0;
   currentPrice: number = 0;
 
@@ -24,18 +26,40 @@ export class OrdersService {
 
   public address: string = "My address"
 
+  private onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+  }
+
+  public async UpdateCart()
+  {
+    var uniqueDishes = this.dishesInOrder.filter(this.onlyUnique);
+
+    var dishesIds = {} as dishesInOrderDTO
+    dishesIds.dishesIds = new Array<number>();
+
+    uniqueDishes.forEach(d => {
+      dishesIds.dishesIds.push(d.id)
+    })
+
+    await this.http.post<DishDTO[]>(this.baseUrl + ':8080/dishes', dishesIds).toPromise().then((Response: DishDTO[]) => {
+        this.Cart = new Array<[DishDTO, number]>();
+        Response.forEach((dish:DishDTO) => {
+            this.Cart.push([dish, this.dishAmountInOrder(dish)])
+        });
+
+        console.log(this.Cart)
+    });
+  }
+
 
   public async order() : Promise<boolean>
   {
     var token;
-    var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+    this.accountService.currentUser$.subscribe((user: User) => {
       if(user != null)
       {
-        console.log(user);
-            token = user.token;
-      }
-            
-    })
+          token = user.token;
+      }})
 
     var model: any = {}
     model.address = this.address;
@@ -48,7 +72,7 @@ export class OrdersService {
     })
     model.dishes = dishes;
     var head = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    var response = await this.http.post<OrderDTO>(this.ordersUrl , model, {headers: head}).pipe(
+    await this.http.post<OrderDTO>(this.ordersUrl , model, {headers: head}).pipe(
             map((Response:OrderDTO) =>{
               const order = Response;
               console.log(order);
@@ -58,6 +82,7 @@ export class OrdersService {
           )).toPromise();
 
     this.dishesInOrder = new Array<DishDTO>();
+    this.Cart = new Array<[DishDTO, number]>();
     this.calculateOrderPrice();
     this.currentRestaurant = 0;
     return true;

@@ -392,10 +392,16 @@ namespace API.Controllers
                 });
             }
 
-            foreach(var dr in user.Res_Review.OrderByDescending(e => e.CreationDate).
+            foreach(var dr in user.Dish_Review.OrderByDescending(e => e.CreationDate).
                                             ToList())
             {
                 listToRet.Add(new ActivityDTO(dr));
+            }
+            
+            foreach(var rr in user.Res_Review.OrderByDescending(e => e.CreationDate).
+                                            ToList())
+            {
+                listToRet.Add(new ActivityDTO(rr));
             }
 
             return listToRet.OrderByDescending(a => a.Date).

@@ -9,10 +9,15 @@ namespace API.DTOs
     public enum ActivityType {
         DISH_REVIEW,
         RESTAURANT_REVIEW,
-        RESTAURANT_POST
+        RESTAURANT_POST,
+        USET_POST
     }
     public class ActivityDTO
     {
+        public ActivityDTO()
+        {
+        }
+
         public ActivityDTO(Dish_Review review)
         {
             Id = review.Id;

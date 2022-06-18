@@ -372,12 +372,36 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<UserProfileDto>>> GetActivityOfUserWithId(int id, int startingIndex = 0, int endIndex = 12)
+        public async Task<ActionResult<List<ActivityDTO>>> GetActivityOfUserWithId(int id, int startingIndex = 0, int endIndex = 12)
         {
             var user = await context.Users.FindAsync(id);
             if(user is null) return NoContent();
 
-            return null;
+            var listToRet = new List<ActivityDTO>();
+
+            foreach(var p in user.Posts.OrderByDescending(e => e.Date).
+                                        ToList())
+            {
+                listToRet.Add(new ActivityDTO{
+                    Id = p.Id,
+                    Type = ActivityType.USET_POST,
+                    Date = p.Date,
+                    Description = p.Description,
+                    Likes = p.Likes,
+                    CreatorId = (int)p.AppUserId
+                });
+            }
+
+            foreach(var dr in user.Res_Review.OrderByDescending(e => e.CreationDate).
+                                            ToList())
+            {
+                listToRet.Add(new ActivityDTO(dr));
+            }
+
+            return listToRet.OrderByDescending(a => a.Date).
+                            Skip(startingIndex).
+                            Take(endIndex).
+                            ToList();
         }
     }
 }

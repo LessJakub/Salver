@@ -31,9 +31,14 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserProfileDto>>> GetUsers()
         {
-            return await context.Users.ToListAsync();
+            var listToRet = new List<UserProfileDto>();
+            foreach(var u in await context.Users.OrderByDescending(e => e.Id).ToListAsync())
+            {
+                listToRet.Add(new UserProfileDto(u));
+            }
+            return listToRet;
         }
 
         // Finding user by Id i.e. with api/users/3
@@ -59,12 +64,7 @@ namespace API.Controllers
 
             if(user == null) return NoContent();
 
-            return new UserProfileDto {
-                Id = user.Id,
-                Username = user.UserName,
-                Verified = user.Verified,
-                Followers = 0 //Should be implemented properly after follow table is implemented
-            };
+            return new UserProfileDto(user);
         }
 
 

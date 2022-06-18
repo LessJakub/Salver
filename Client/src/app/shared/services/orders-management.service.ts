@@ -14,6 +14,7 @@ export class OrdersManagementService {
   private baseUrl: string = "http://" + location.hostname;
   private ordersUrl: string = this.baseUrl + ":8080/api/Orders/"
 
+
   public async GetOrders(start: number = 0, end: number = 12) : Promise<Array<OrderDTO>>
   {
     var user: User;

@@ -162,7 +162,7 @@ namespace API.Controllers
         /// <summary>
         /// Gets list of all orders created by a certain user
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="dishesInOrderDTO"></param>
         /// <param name="dishesInOrderDTO"></param>
         /// <remarks></remarks>
         /// <returns>List of OrderDtos created from user orders</returns>

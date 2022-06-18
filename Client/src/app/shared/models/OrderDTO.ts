@@ -1,9 +1,17 @@
 import { Time } from "@angular/common";
 
+enum Status 
+    {
+        NEW,
+        IN_PROGRESS,
+        CANCELLED,
+        FINISHED
+    }
+
 export interface OrderDTO {
     id: number,
     address: string,
-    status: number,
+    status: Status,
     submitTime: Date,
     expectedTime: Time,
     realizationTime: Date,

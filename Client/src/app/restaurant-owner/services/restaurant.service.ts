@@ -24,13 +24,14 @@ export class RestaurantService {
 
     addDish(id: number, model: DishDTO) {
 
-        var idontcare;
+        var userToken;
         var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            console.log(user);
-            idontcare = user.token;
-            console.log(idontcare);
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
         })
-        return this.http.post<DishDTO>(this.addDishURL + id + "/dishes", model,{headers: new HttpHeaders().set('Authorization', 'Bearer ' + idontcare)}).pipe(
+        return this.http.post<DishDTO>(this.addDishURL + id + "/dishes", model,{headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
             map((Response: DishDTO) => {
                 return Response;
             }, error => {
@@ -47,7 +48,10 @@ export class RestaurantService {
         // Obtain user token for authentication
         var userToken;
         var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
         })
 
         return this.http.post<PostDTO>(this.postURL + id + "/posts", model, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
@@ -69,7 +73,10 @@ export class RestaurantService {
         // Obtain user token for authentication
         var userToken;
         var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
         })
 
         return this.http.put<PostDTO>(this.postURL + id + "/posts/" + postID, model, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
@@ -90,7 +97,10 @@ export class RestaurantService {
         // Obtain user token for authentication
         var userToken;
         var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
         })
 
         return this.http.delete(this.postURL + id + "/posts/" + postID, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
@@ -107,7 +117,10 @@ export class RestaurantService {
         // Obtain user token for authentication
         var userToken;
         var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
         })
 
         return this.http.delete(this.addDishURL + restaurantID + "/dishes/" + dishID, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
@@ -123,7 +136,10 @@ export class RestaurantService {
         // Obtain user token for authentication
         var userToken;
         var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
         })
 
         var response = await this.http.put<DishDTO>(this.addDishURL + restaurantID + "/dishes/" + dishID, updatedModel, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
@@ -144,7 +160,10 @@ export class RestaurantService {
         // Obtain user token for authentication
         var userToken;
         var authToken = this.accountService.currentUser$.subscribe((user: User) => {
-            userToken = user.token;
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
         })
 
         var response = await this.http.put<RestaurantDTO>(this.restaurantsURL + restaurantID, updatedModel, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(

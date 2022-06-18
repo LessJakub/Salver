@@ -311,7 +311,7 @@ namespace API.Controllers
         [HttpGet("activity")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<PostDto>>> GetActivitiesOfUser(int startingIndex = 0, int endIndex = 20)
+        public async Task<ActionResult<List<ActivityDTO>>> GetActivitiesOfUser(int startingIndex = 0, int endIndex = 20)
         {
             var userId = GetRequesterId();
             if(userId == -1) return BadRequest("You be signed in to get you activities");
@@ -319,17 +319,14 @@ namespace API.Controllers
             var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if(user is null) return BadRequest($"User with id {userId} does not exist");
 
-            var activities = new List<Tuple<PostDto, DateTime>>();
-        
-            
-
+            var activities = new List<Tuple<ActivityDTO, DateTime>>();
 
             foreach(var post in context.Posts.
                                 Where(p => user.FollowedRestaurants.Select(f => f.FollowedId).Contains((int)p.AppRestaurantId)).
                                 OrderByDescending(p => p.Date).
                                 ToList())
             {
-                activities.Add(new Tuple<PostDto, DateTime>(new PostDto(post), post.Date));
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(post), post.Date));
             }
 
             foreach(var post in context.Posts.
@@ -337,10 +334,37 @@ namespace API.Controllers
                                 OrderByDescending(p => p.Date).
                                 ToList())
             {
-                activities.Add(new Tuple<PostDto, DateTime>(new PostDto(post), post.Date));
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(post), post.Date));
             }
 
-            var listToRet = new List<PostDto>();
+            foreach(var followed in context.Users.Where(u => user.FollowedUsers.Select(f => f.Id).Contains(u.Id)))
+            {
+                foreach(var dish_review in followed.Dish_Review.OrderByDescending(dr => dr.CreationDate).ToList())
+                {
+                    activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(dish_review), dish_review.CreationDate));
+                }
+
+                foreach(var rest_review in followed.Res_Review.OrderByDescending(rr => rr.CreationDate).ToList())
+                {
+                    activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(rest_review), rest_review.CreationDate));
+                }
+
+                foreach(var post in followed.Posts.OrderByDescending(p => p.Date).ToList())
+                {
+                    activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO{
+                                                                        Id = post.Id,
+                                                                        Type = ActivityType.USER_POST,
+                                                                        Date = post.Date,
+                                                                        Description = post.Description,
+                                                                        Likes = post.Likes,
+                                                                        CreatorId = (int)post.AppUserId },
+                                                                        post.Date));
+                }
+            }
+
+             
+
+            var listToRet = new List<ActivityDTO>();
 
             foreach(var activity in activities.
                                     OrderByDescending(a => a.Item2).

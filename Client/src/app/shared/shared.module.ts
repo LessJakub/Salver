@@ -28,6 +28,7 @@ import { ReviewRestOverlayComponent } from './components/overlays/review-rest-ov
 import { AdjustablePostComponent } from './components/posts/adjustable-post/adjustable-post.component';
 import { AddRestPostComponent } from './components/posts/add-rest-post/add-rest-post.component';
 import { UserPageComponent } from './components/user-page/user-page.component';
+import { OrderPostComponent } from './components/posts/order-post/order-post.component';
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import { UserPageComponent } from './components/user-page/user-page.component';
         AdjustablePostComponent,
         AddRestPostComponent,
         UserPageComponent,
+        OrderPostComponent,
     ],
     imports: [
         CommonModule,
@@ -84,6 +86,7 @@ import { UserPageComponent } from './components/user-page/user-page.component';
         AdjustablePostComponent,
         AddRestPostComponent,
         UserPageComponent,
+        OrderPostComponent,
     ]
 })
 export class SharedModule { }

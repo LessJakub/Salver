@@ -3,15 +3,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { ActivityDTO, ActivityType } from '../../models/ActivityDTO';
 import { DishDTO } from '../../models/DishDTO';
+import { OrderDTO } from '../../models/OrderDTO';
 import { PostDTO } from '../../models/PostDTO';
 import { RestaurantDTO } from '../../models/RestaurantDTO';
 import { AccountService } from '../../services/account.service';
 import { ActivityService } from '../../services/activity.service';
 import { BlobUploadService } from '../../services/blob-upload.service';
+import { OrdersManagementService } from '../../services/orders-management.service';
 import { ReviewsService } from '../../services/reviews.service';
 import { SearchService } from '../../services/search.service';
 import { ADD_POST_TYPE } from '../posts/add-rest-post/add-rest-post.component';
 import { POST_TYPE } from '../posts/adjustable-post/adjustable-post.component';
+import { OrderPostComponent } from "../posts/order-post/order-post.component"
 
 @Component({
     selector: 'app-restaurant-page',
@@ -31,6 +34,7 @@ export class RestaurantPageComponent implements OnInit {
     fetchedDishes: DishDTO[] = null;
     fetchedPosts: PostDTO[] = null;
     fetchedActivity: ActivityDTO[] = null;
+    fetchedOrders: OrderDTO[] = null;
 
     showRestReviewOverlay: boolean = false;
 
@@ -49,7 +53,8 @@ export class RestaurantPageComponent implements OnInit {
                 private restaurantService: RestaurantService,
                 private reviewsService: ReviewsService,
                 public activityService: ActivityService,
-                private router: Router) { 
+                private router: Router,
+                private managementService: OrdersManagementService) { 
 
                     this.editModel = {...this.model};
                 }
@@ -77,7 +82,7 @@ export class RestaurantPageComponent implements OnInit {
     }
 
 
-    selectedTabID: number = 0;
+    selectedTabID: number = 3;
 
     async followButtonAction() {
         console.log("Is following: " + this.isFollowing);
@@ -120,6 +125,9 @@ export class RestaurantPageComponent implements OnInit {
             case 2:
                 this.getActivity();
                 return;
+            case 3:
+                this.getOrders();
+                return;
         }
     }
 
@@ -158,6 +166,11 @@ export class RestaurantPageComponent implements OnInit {
     private async getActivity() {
         console.log("Restaurant - Activity Getter")
         this.fetchedActivity = await this.activityService.getRestaurantActivities(this.restaurantID);
+    }
+
+    private async getOrders() {
+        console.log("Restaurant - Orders Getter")
+        this.fetchedOrders = await this.managementService.GetOrders(0, 99);
     }
 
     private userID;

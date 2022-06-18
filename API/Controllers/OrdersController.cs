@@ -148,7 +148,7 @@ namespace API.Controllers
             if(restaurant == null) return BadRequest($"Restaurant with {restaurantId} id does not exist");
 
             var resOrders = new List<OrderDTO>();
-            foreach(var order in context.Orders.
+            foreach(var order in restaurant.Orders.
                 Skip(startingIndex).
                 Take(endIndex).
                 OrderByDescending(o => o.SubmitTime).

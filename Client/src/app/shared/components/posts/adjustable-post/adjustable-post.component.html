@@ -121,7 +121,7 @@
         <div class="w-full h-1/2 rounded-2xl flex">
             <div class="flex flex-col w-1/2 h-full rounded-2xl p-2 justify-evenly">
 
-                <a [routerLink]="[this.routerLink]" class="group flex w-full h-fit gap-2 items-center">
+                <a [routerLink]="[this.userProfileLink]" class="group flex w-full h-fit gap-2 items-center">
 
                     <svg class="fill-gray-50 stroke-green-900 stroke-2 aspect-square" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -207,7 +207,7 @@
 <div *ngIf="this.type == 0"
     class="flex w-full bg-gray-50 border border-green-900 rounded-2xl overflow-hidden shadow-xl">
 
-    <input hidden #fileInput type="file" requiredFileType="image/webp" id="file" />
+    <input hidden #fileInput type="file" requiredFileType="image/webp" id="file"/>
 
     <div *ngIf="this.editModeDishRev" (click)="fileInput.click()"
         class="w-[31%] aspect-square flex cursor-pointer hover:animate-pulse">
@@ -225,7 +225,7 @@
         <div class="w-full h-1/2 rounded-2xl flex">
             <div class="flex flex-col w-1/2 h-full rounded-2xl p-2 justify-evenly">
 
-                <a [routerLink]="[this.routerLink]" class="group flex w-full h-fit gap-2 items-center">
+                <a [routerLink]="[this.userProfileLink]" class="group flex w-full h-fit gap-2 items-center">
 
                     <svg class="fill-gray-50 stroke-green-900 stroke-2 aspect-square" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -239,7 +239,7 @@
                         {{this.userName}}</div>
                 </a>
 
-                <a [routerLink]="[this.routerLink]" class="group flex w-full h-fit gap-2 items-center">
+                <a [routerLink]="[this.restProfileLink]" class="group flex w-full h-fit gap-2 items-center">
 
                     <svg class="fill-gray-50 stroke-green-900 aspect-square stroke-2" width="24" height="24"
                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

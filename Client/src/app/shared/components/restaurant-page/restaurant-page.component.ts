@@ -10,6 +10,7 @@ import { ActivityService } from '../../services/activity.service';
 import { BlobUploadService } from '../../services/blob-upload.service';
 import { ReviewsService } from '../../services/reviews.service';
 import { SearchService } from '../../services/search.service';
+import { ADD_POST_TYPE } from '../posts/add-rest-post/add-rest-post.component';
 import { POST_TYPE } from '../posts/adjustable-post/adjustable-post.component';
 
 @Component({
@@ -19,8 +20,9 @@ import { POST_TYPE } from '../posts/adjustable-post/adjustable-post.component';
 })
 export class RestaurantPageComponent implements OnInit {
 
-    public postTypes = POST_TYPE; 
-    public activityTypes = ActivityType;        
+    public postTypes = POST_TYPE;
+    public activityTypes = ActivityType;  
+    public addPostTypes = ADD_POST_TYPE;      
 
     restaurantID: number = null;
     model: RestaurantDTO | null;

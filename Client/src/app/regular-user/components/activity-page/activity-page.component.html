@@ -8,10 +8,15 @@
     <!-- Post list -->
     <div class="grow w-full flex flex-col items-center space-y-20 mb-10">
 
-        <!-- Post -->
-        <ng-container *ngFor="let PoPost of fetchedPosts">
-            <app-adjustable-post [model]="PoPost"></app-adjustable-post>
-        </ng-container>
+        <div class="w-5/6 h-full" *ngFor="let activity of fetchedActivity">
+            
+            <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_POST" [type]="this.postTypes.REGULAR_POST" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+        
+            <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postTypes.DISH_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+
+            <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_REVIEW" [type]="this.postTypes.REST_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+        
+        </div>
 
     </div>
 

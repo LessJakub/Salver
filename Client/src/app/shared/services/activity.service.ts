@@ -29,7 +29,7 @@ export class ActivityService {
       return act;
   }
 
-  public async getUserActivities() : Promise<PostDTO[]>
+  public async getUserActivities() : Promise<ActivityDTO[]>
   {
     var user: User;
     this.accountService.currentUser$.subscribe( (usr: User) => {
@@ -44,7 +44,7 @@ export class ActivityService {
     var head = new HttpHeaders().set('Authorization', 'Bearer ' + user.token);
 
     var act;
-      await this.http.get<Array<PostDTO>>(this.userUrl + 'activity', {headers: head}).toPromise().then((response: Array<PostDTO>) => {
+      await this.http.get<Array<ActivityDTO>>(this.userUrl + 'activity', {headers: head}).toPromise().then((response: Array<ActivityDTO>) => {
         act = response;
       }, error => {
         console.error(error);

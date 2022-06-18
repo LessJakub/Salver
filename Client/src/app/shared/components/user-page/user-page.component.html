@@ -1,0 +1,82 @@
+<div class="basis-1/4 min-w-[25rem] max-w-1/4 h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
+    <div *ngIf="profileModel != null"  class="h-full w-full pt-4 flex flex-col justify-start absolute gap-4 top-0">
+        
+        <div class="min-w-full aspect-square flex justify-center items-center">
+            <div class="w-5/6 aspect-square rounded-full shadow-2xl overflow-hidden">
+                <img [src]="this.profileImageURL" (error)="updateUrlWithDefault()"
+                    class="w-full object-cover aspect-square">
+            </div>
+        </div>
+
+        <div class="w-full h-fit -mt-5">
+            <h2 class="flex text-3xl font-light text-gray-900 items-center justify-center uppercase">{{profileModel.username}}</h2>
+            <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Followers: {{profileModel.followers}}</p>
+
+            <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Follows: {{profileModel.followedUsers}} User{{this.countEndings[0]}}</p>
+            <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Follows: {{profileModel.followedRestaurants}} Restaurant{{this.countEndings[1]}}</p>
+        </div>
+
+        <div *ngIf="this.isProfileOwner == false" class="w-full h-fit flex items-center justify-start px-4 gap-2">
+            <button (click)='this.followButtonAction()' *ngIf="(this.isFollowing == false)"
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">{{
+                this.followButtonText }}
+            </button>
+            <button (click)='this.followButtonAction()' *ngIf="(this.isFollowing)"
+                class="w-full py-2 rounded-xl text-gray-50 border bg-green-900 hover:bg-red-800 hover:text-gray-50 border-green-900 hover:border-red-900">{{
+                this.followButtonText }}
+            </button>
+        </div>
+
+        <div *ngIf="this.isProfileOwner == true" class="w-full h-fit flex flex-col items-center justify-start px-8 gap-2">
+            <button class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                Edit
+            </button>
+            <button class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                Create Restaurant Profile
+            </button>
+        </div>
+
+        <div class="flex flex-col gap-2 w-full h-fit px-6">
+           
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Main area -->
+<div class="grow h-full flex flex-col pt-4">
+
+    <div class="flex w-full h-[10%] content-center justify-center items-center">
+        <div class="w-1/2 h-full">
+            <app-tab-switcher *ngIf="this.isProfileOwner" (tabSelectEvent)="selectNewTab($event)" [default]="this.selectedTabID"
+                [tabNames]="['Activity', 'Orders']"></app-tab-switcher>
+
+            <app-tab-switcher *ngIf="this.isProfileOwner == false" (tabSelectEvent)="selectNewTab($event)" [default]="this.selectedTabID"
+            [tabNames]="['Activity']"></app-tab-switcher>
+        </div>
+    </div>
+
+    <div class="overflow-y-auto relative w-full grow mb-1">
+
+        <!-- Activity -->
+        <div *ngIf="(this.selectedTabID) == 0"
+            class="w-full flex flex-col items-center justify-center space-y-5 absolute top-0 left-0">
+
+            <app-add-rest-post class="w-5/6 h-fit" *ngIf="(this.isOwner)" [model]="this.model" [postType]="this.addPostTypes.USER"
+                (reloadEventEmitter)="this.updateData($event)"></app-add-rest-post>
+
+            <div class="w-5/6 h-full" *ngFor="let activity of fetchedActivity">
+            
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_POST" [type]="this.postTypes.REGULAR_POST" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+            
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postTypes.DISH_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_REVIEW" [type]="this.postTypes.REST_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+            
+            </div>
+            
+        </div>
+
+    </div>
+</div>

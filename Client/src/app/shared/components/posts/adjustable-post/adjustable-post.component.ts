@@ -91,9 +91,14 @@ export class AdjustablePostComponent implements OnInit {
             }
             this.dishReviewImageURL = this.dishReviewBaseURL + this.model.id + ".webp";
 
+            this.postLink = this.routerLink = '/restaurant/' + this.model.appRestaurantId;
+
+            this.userProfileLink = "/user/" + this.model.creatorId;
+
             this.getDishNameFromID(this.model.topicId);
             this.getUserNameFromID(this.model.creatorId);
         }
+
         else if (this.type == 2) {
             this.postImageURL = this.postBlobBaseURL + this.model.id + ".webp";
 
@@ -106,11 +111,13 @@ export class AdjustablePostComponent implements OnInit {
                 this.getRestaurantNameFromID(this.model.creatorId);
             }
         }
+
         else if (this.type == 0) {
+            this.userProfileLink = "/user/" + this.model.creatorId;
             this.getUserNameFromID(this.model.creatorId);
             this.getRestaurantNameFromID(this.model.topicId);
             this.restReviewImageURL = this.restReviewBaseURL + this.model.id + ".webp";
-
+            this.restProfileLink = "/restaurant/" + this.model.topicId; 
         }
     }
 
@@ -203,6 +210,7 @@ export class AdjustablePostComponent implements OnInit {
     dishName: string = "...";
     userName: string = "...";
     grades: number[] = [];
+    userProfileLink: string;
 
 
     getDishNameFromID(id: number) {
@@ -244,6 +252,7 @@ export class AdjustablePostComponent implements OnInit {
     // RESTAURANT REVIEW
     restReviewBaseURL: string = "https://salver.blob.core.windows.net/resimages/";
     restReviewImageURL: string = "";
+    restProfileLink: string = "*";
     
     
     // SHARED

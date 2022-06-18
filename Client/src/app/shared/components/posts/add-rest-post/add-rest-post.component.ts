@@ -3,6 +3,13 @@ import { RestaurantService } from "src/app/restaurant-owner/services/restaurant.
 import { PostDTO } from "src/app/shared/models/PostDTO";
 import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
 import { BlobUploadService } from "src/app/shared/services/blob-upload.service";
+import { ProfileService } from "src/app/shared/services/profile.service";
+import { POST_TYPE } from "../adjustable-post/adjustable-post.component";
+
+export enum ADD_POST_TYPE {
+    USER = 0,
+    RESTAURANT = 1,
+}
 
 @Component({
     selector: 'app-add-rest-post',
@@ -11,9 +18,11 @@ import { BlobUploadService } from "src/app/shared/services/blob-upload.service";
 export class AddRestPostComponent implements OnInit {
 
     constructor(public uploadService: BlobUploadService,
-                public restaurantService: RestaurantService) { }
+                public restaurantService: RestaurantService,
+                public profileService: ProfileService) { }
 
     @Input() model: RestaurantDTO;
+    @Input() postType: ADD_POST_TYPE = ADD_POST_TYPE.RESTAURANT;
     @Output() reloadEventEmitter = new EventEmitter();
 
     extended = false;
@@ -33,7 +42,8 @@ export class AddRestPostComponent implements OnInit {
 
         if (this.editModel.description != null && this.editModel.description != "") {
             
-            var response = this.restaurantService.addPost(this.model.id, this.editModel).toPromise().then((newPost) => {
+            var choosenService = (this.postType == ADD_POST_TYPE.RESTAURANT) ? this.restaurantService : this.profileService;
+            var response = choosenService.addPost(this.model.id, this.editModel).toPromise().then((newPost) => {
                 console.log("Add Post - Positive response. Added:");
                 console.log(newPost);
 

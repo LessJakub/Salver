@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Post } from 'src/app/models/post';
+import { POST_TYPE } from 'src/app/shared/components/posts/adjustable-post/adjustable-post.component';
+import { ActivityDTO, ActivityType } from 'src/app/shared/models/ActivityDTO';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
 import { PostDTO } from 'src/app/shared/models/PostDTO';
 import { ActivityService } from 'src/app/shared/services/activity.service';
@@ -15,8 +17,11 @@ export class ActivityPageComponent implements OnInit {
 
     constructor(private searchService: SearchService, private activityService: ActivityService) { }
 
-    fetchedPosts: PostDTO[] | null;
+    fetchedActivity: ActivityDTO[] | null;
     recommendations: DishDTO[] = [];
+
+    public postTypes = POST_TYPE;
+    public activityTypes = ActivityType;  
 
     async generateRecommendations() {
         await this.searchService.searchDishes(null);
@@ -49,8 +54,8 @@ export class ActivityPageComponent implements OnInit {
     async ngOnInit() {
 
         this.generateRecommendations();
-        //this.fetchedPosts = 
-        this.fetchedPosts = await this.activityService.getUserActivities();
+        this.fetchedActivity = await this.activityService.getUserActivities();
+        console.log(this.fetchedActivity);
         /*
         this.fetchedPosts = [
             { date: new Date(2022, 4, 16), likes: 13, imageURL: "/assets/images/3W2A0606@0.5x.webp", description: "Great sushy!", taggedRestaurant: "SushiDoo", user: "Daniel Hankel", grades: [{ category: "Taste", grade: 5 }, { category: "Serving", grade: 5 }, { category: "Atmosphere", grade: 5 }], taggedRestaurantId: 0 },

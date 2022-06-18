@@ -11,6 +11,7 @@ import { TeamPageComponent } from './shared/components/team-page/team-page.compo
 import { LandingPageComponent } from './shared/components/landing-page/landing-page.component';
 import { RestaurantPageComponent } from './shared/components/restaurant-page/restaurant-page.component';
 import { DebugUploadPageComponent } from './shared/components/debug-upload-page/debug-upload-page.component';
+import { UserPageComponent } from './shared/components/user-page/user-page.component';
 
 // Imports from User module
 import { SearchPageComponent } from './regular-user/components/search-page/search-page.component';
@@ -33,6 +34,9 @@ const routes: Routes = [
     //canActivate: [LoggedInGuard]
   },
   { path: 'restaurant/:id', component: RestaurantPageComponent,
+    //canActivate: [LoggedInGuard]
+  },
+  { path: 'user/:id', component: UserPageComponent,
     //canActivate: [LoggedInGuard]
   },
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route

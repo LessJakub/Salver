@@ -328,30 +328,13 @@ namespace API.Controllers
             {
                 activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(post), post.Date));
             }
-
+           
             foreach(var post in context.Posts.
                                 Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
                                 OrderByDescending(p => p.Date).
                                 ToList())
             {
-                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(post), post.Date));
-            }
-
-            foreach(var followed in await context.Users.Where(u => user.FollowedUsers.Select(f => f.Id).Contains(u.Id)).ToListAsync())
-            {
-                foreach(var dish_review in followed.Dish_Review.OrderByDescending(dr => dr.CreationDate).ToList())
-                {
-                    activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(dish_review), dish_review.CreationDate));
-                }
-
-                foreach(var rest_review in followed.Res_Review.OrderByDescending(rr => rr.CreationDate).ToList())
-                {
-                    activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(rest_review), rest_review.CreationDate));
-                }
-
-                foreach(var post in followed.Posts.OrderByDescending(p => p.Date).ToList())
-                {
-                    activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO{
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO{
                                                                         Id = post.Id,
                                                                         Type = ActivityType.USER_POST,
                                                                         Date = post.Date,
@@ -359,10 +342,23 @@ namespace API.Controllers
                                                                         Likes = post.Likes,
                                                                         CreatorId = (int)post.AppUserId },
                                                                         post.Date));
-                }
             }
 
-             
+            foreach(var dish_review in context.DishReviews.
+                                Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
+                                OrderByDescending(p => p.CreationDate).
+                                ToList())
+            {
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(dish_review), dish_review.CreationDate));
+            }
+
+            foreach(var rest_review in context.RestaurantReviews.
+                                Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
+                                OrderByDescending(p => p.CreationDate).
+                                ToList())
+            {
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(rest_review), rest_review.CreationDate));
+            }
 
             var listToRet = new List<ActivityDTO>();
 

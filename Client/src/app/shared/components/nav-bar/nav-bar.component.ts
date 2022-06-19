@@ -1,20 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../services/account.service';
 import { OrdersService } from '../../services/orders.service';
 
 @Component({
-  selector: 'app-nav-bar',
-  templateUrl: './nav-bar.component.html',
-  host: {'class': 'sticky top-0 z-50'},
+    selector: 'app-nav-bar',
+    templateUrl: './nav-bar.component.html',
+    host: { 'class': 'sticky top-0 z-50' },
 })
 
-export class NavBarComponent {
+export class NavBarComponent implements OnInit {
 
     showLoginOverlay: Boolean
+    userProfBlobBaseURL = "https://salver.blob.core.windows.net/userprof/";
 
-    constructor(public accountService: AccountService, public orderService : OrdersService) {
-    // Set to true to see login overlay
+    profileImageURL = this.userProfBlobBaseURL;
+    useSVG: boolean = false;
+
+    constructor(public accountService: AccountService, public orderService: OrdersService) {
         this.showLoginOverlay = false
+    }
+
+    ngOnInit() {
+        this.accountService.currentUser$.subscribe((user) => {
+            if (user == null) {
+                this.useSVG = true;
+                this.profileImageURL = "";
+            }
+            else {
+                this.useSVG = false;
+                this.profileImageURL = this.userProfBlobBaseURL + user.id + ".webp";
+            }
+        })
+    }
+
+    noProfileImage: boolean = false
+
+
+    updateURLWithDefault() {
+
     }
 
     enableLoginOverlay() {
@@ -25,9 +48,9 @@ export class NavBarComponent {
         this.accountService.logoutUser();
     }
 
-    disableLoginOverlay(eventFlag:boolean) {
+    disableLoginOverlay(eventFlag: boolean) {
         this.showLoginOverlay = eventFlag;
     }
-  
+
 }
 

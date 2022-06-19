@@ -36,7 +36,7 @@
             <button (click)="this.editAction()" class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                 Edit
             </button>
-            <button class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+            <button (click)="this.newRestProfileAction()" class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                 Create Restaurant Profile
             </button>
         </div>
@@ -107,10 +107,6 @@
             <button (click)="this.cancelEditAction(fileInput)" class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                 Cancel
             </button>
-        </div>
-
-        <div class="flex flex-col gap-2 w-full h-fit px-6">
-           
         </div>
 
     </div>

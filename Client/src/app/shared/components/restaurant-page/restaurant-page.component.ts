@@ -23,6 +23,43 @@ import { OrderPostComponent } from "../posts/order-post/order-post.component"
 })
 export class RestaurantPageComponent implements OnInit {
 
+    // New restaurant mode
+    newRestMode = false;
+    newRestModel: RestaurantDTO = {} as RestaurantDTO;
+    newRestError: string = null;
+    confirmLogout = false;
+
+    newRestCreateAction() {
+        console.log(this.newRestModel);
+
+        this.accountService.createNewRestaurant(this.newRestModel).toPromise().then((response) => {
+            this.newRestError = "New restaurant created. Confirm reload.";
+            this.confirmLogout = true;
+        },((error) => {
+            console.log("NEW REST");
+            console.log(error);
+            this.newRestError = error.description;
+        }));
+    }
+
+    newRestCancelAction() {
+        if(this.accountService.currentUser$ != null)
+        {
+            this.accountService.currentUser$.subscribe((usr) => {
+                if(usr != null)
+                {
+                    this.router.navigate(['/user/' + usr.id]);
+                }   
+            });
+        }
+    }
+
+    newRestLogoutAction() {
+        this.accountService.logoutUser();
+        this.router.navigate(['/landing-page']);
+    }
+    // --------------------------------
+
     public postTypes = POST_TYPE;
     public activityTypes = ActivityType;  
     public addPostTypes = ADD_POST_TYPE;      
@@ -112,6 +149,9 @@ export class RestaurantPageComponent implements OnInit {
     }
 
     selectNewTab(selectedID: number) {
+        if (this.newRestMode) {
+            return;
+        }
         this.selectedTabID = selectedID;
         this.isOwner = (this.userID == this.restaurantID);
         switch (this.selectedTabID) {
@@ -240,6 +280,11 @@ export class RestaurantPageComponent implements OnInit {
         
 
         this.isOwner = (this.userID == this.restaurantID);
+
+        if (this.restaurantID == 0 && this.userID == 0) {
+            this.newRestMode = true;
+            return;
+        }
 
         if (this.restaurantID == NaN) {
             this.router.navigate(['*']);

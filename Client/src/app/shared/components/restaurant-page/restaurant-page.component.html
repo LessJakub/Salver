@@ -5,7 +5,7 @@
                       (reloadEventEmitter)="this.handleRestReviewReload($event)"></app-review-rest-overlay>
 
 
-<div *ngIf="this.editMode == false"
+<div *ngIf="this.editMode == false && this.newRestMode == false"
     class="basis-1/4 min-w-[25rem] h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
     <div *ngIf="model != null" class="h-full pt-4 flex flex-col items-center justify-start space-y-5 absolute top-0 left-0">
         <div class="w-full h-[10%] py-0.5">
@@ -66,7 +66,7 @@
 
 
 
-<form *ngIf="this.editMode == true" (ngSubmit)="this.submitEditAction()"
+<form *ngIf="this.editMode == true && this.newRestMode == false" (ngSubmit)="this.submitEditAction()"
     class="basis-1/4 min-w-[25rem] h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
     <div class="h-full pt-4 flex flex-col items-center justify-start space-y-5 absolute top-0 left-0">
 
@@ -140,7 +140,7 @@
 
 
 <!-- Main area -->
-<div class="grow h-full flex flex-col pt-4">
+<div *ngIf="this.newRestMode == false" class="grow h-full flex flex-col pt-4">
 
     <div *ngIf="this.isOwner" class="flex w-full h-[10%] content-center justify-center items-center">
         <div class="w-1/2 h-full">
@@ -216,4 +216,104 @@
         </div>
 
     </div>
+</div>
+
+
+
+
+<!-- NEW RESTAURANT MODE -->
+<form *ngIf="this.newRestMode == true" class="basis-1/4 min-w-[25rem] h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
+    <div class="h-full pt-4 flex flex-col items-center justify-start space-y-5 absolute top-0 left-0">
+
+        <div class="flex w-full h-[10%] px-4 justify-center">
+            <mat-form-field class="w-full items-center">
+                <textarea matInput [(ngModel)]="this.newRestModel.name" rows="1" minlength="1" maxlength="20"
+                    name="name" required
+                    class="flex text-3xl font-semibold w-full h-fit text-center resize-none text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700 focus:invalid:border-red-800"
+                    placeholder="Name"></textarea>
+            </mat-form-field>
+        </div>
+
+        <div class="h-56 flex justify-center px-4">
+            <input (change)="this.uploadFiles(fileInput.files)" hidden #fileInput type="file" requiredFileType="image/webp" id="file"/>
+            <img [src]="this.profileImageURL" (error)="updateUrlWithDefault()" (click)="fileInput.click()"
+                class="w-fit object-cover aspect-square rounded-2xl hover:animate-pulse cursor-pointer">
+        </div>
+
+        <div *ngIf="this.confirmLogout == false" class="w-full h-fit flex items-center justify-start px-4 gap-2">
+            <button (click)='this.newRestCreateAction()'
+                class="w-1/2 py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                Create
+            </button>
+
+            <button (click)='this.newRestCancelAction()'
+                class="w-1/2 py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                Cancel
+            </button>
+        </div>
+
+        <div *ngIf="this.confirmLogout == true" class="w-full h-fit flex items-center justify-start px-4 gap-2">
+            <button (click)='this.newRestLogoutAction()'
+                class="w-full py-2 rounded-xl text-gray-50 border bg-green-900 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                Confirm reload
+            </button>
+        </div>
+
+        <div class="flex w-full px-4">
+            <mat-form-field class="w-full items-center">
+                <textarea matInput [(ngModel)]="this.newRestModel.description" rows="3" minlength="1" maxlength="150"
+                    name="description" required
+                    class="flex w-full h-fit text-center resize-none font-light text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700 focus:invalid:border-red-800"
+                    placeholder="Description"></textarea>
+            </mat-form-field>
+        </div>
+
+        <div class="flex w-full px-4">
+            <mat-form-field class="w-full">
+                <textarea matInput [(ngModel)]="this.newRestModel.address" rows="2" minlength="1" maxlength="150"
+                    name="address" required
+                    class="flex w-full h-fit text-center resize-none font-light text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700 focus:invalid:border-red-800"
+                    placeholder="Address"></textarea>
+            </mat-form-field>
+        </div>
+
+        <div class="flex w-full px-4">
+            <mat-form-field class="w-full">
+                <textarea matInput [(ngModel)]="this.newRestModel.phoneNumber" rows="1" minlength="1" maxlength="150"
+                    name="phoneNumber" required
+                    class="flex w-full h-fit text-center resize-none font-light py-1 text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700 focus:invalid:border-red-800"
+                    placeholder="Phone number"></textarea>
+            </mat-form-field>
+        </div>
+
+        <div class="flex w-full px-4">
+            <mat-form-field class="w-full">
+                <textarea matInput [(ngModel)]="this.newRestModel.email" rows="1" minlength="1" maxlength="40" name="email"
+                    required
+                    class="flex w-full h-fit text-center resize-none font-light py-1 text-gray-900 appearance-none rounded-2xl bg-gray-200 border border-gray-200 leading-tight focus:outline-none focus:bg-gray-200 focus:border-green-700 focus:invalid:border-red-800"
+                    placeholder="Email"></textarea>
+            </mat-form-field>
+        </div>
+
+    </div>
+</form>
+
+
+<div *ngIf="this.newRestMode == true" class="grow h-full flex flex-col pt-4">
+
+    <div class="flex flex-col w-full h-[10%] content-center justify-center items-center">
+        <div class="w-1/2 h-full">
+            <app-tab-switcher (tabSelectEvent)="selectNewTab($event)" [default]="this.selectedTabID"
+                [tabNames]="['Menu', 'Posts', 'Activity', 'Orders']"></app-tab-switcher>
+        </div>
+    </div>
+
+    <div class="flex w-full h-full justify-center items-center">
+        <div class="w-fit h-fit flex items-center justify-center flex-col line-clamp-6">
+            <p *ngIf="this.newRestError == null" class="text-3xl text-gray-900">Nothing to see here yet.</p>
+
+            <p *ngIf="this.newRestError != null" class="text-3xl text-gray-900">{{this.newRestError}}</p>
+        </div>
+    </div>
+
 </div>

@@ -232,4 +232,24 @@ export class AccountService {
         }
     }
 
+
+    createNewRestaurant(model: RestaurantDTO) {
+        // Obtain user token for authentication
+        var userToken;
+        this.currentUser$.subscribe((user: User) => {
+            if(user != null)
+            {
+                userToken = user.token;
+            } 
+        })
+
+        var url = this.restaurantDetailURL + "register";
+        return this.http.post<RestaurantDTO>(url, model, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).pipe(
+            map((Response: RestaurantDTO) => {
+                return Response;
+            }, error => {
+                console.log(error);
+        }));
+    }
+
 }

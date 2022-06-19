@@ -161,6 +161,10 @@ export class UserPageComponent implements OnInit {
     loggedUserID: number;
     isProfileOwner: boolean;
 
+    newRestProfileAction() {
+        this.router.navigate(['/restaurant/0']);
+    }
+
     countEndings: string[] = ["", ""]
 
     evaluateIfPlural() {

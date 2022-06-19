@@ -33,7 +33,7 @@ const routes: Routes = [
     // canActivate: [LoggedInGuard]
   },
   { path: 'activity', component: ActivityPageComponent,
-    canActivate: [LoggedInGuard]
+    // canActivate: [LoggedInGuard]
   },
   { path: 'restaurant/:id', component: RestaurantPageComponent,
     //canActivate: [LoggedInGuard]

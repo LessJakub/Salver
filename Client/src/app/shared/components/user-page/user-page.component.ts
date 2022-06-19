@@ -76,6 +76,7 @@ export class UserPageComponent implements OnInit {
             this.getProfileDetails();
             this.updateData(true);
             this.accountService.evaluateUsername(response.username);
+
         }).catch((error) =>{
             console.log(error);
         });

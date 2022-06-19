@@ -284,6 +284,11 @@
                     <button (click)="this.markAsSpam()" 
                         class="w-full py-1 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Report</button>
                 </div>
+
+                <div *ngIf="this.isReviewer">
+                    <button (click)="this.deleteReview()"
+                        class="w-full py-1 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Delete</button>
+                </div>
             </div>
 
         </div>

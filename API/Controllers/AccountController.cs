@@ -201,6 +201,12 @@ namespace API.Controllers
                 _context.Remove(f);
             }
 
+            foreach(var r in user.User_Res_Relation.ToList())
+            {
+                context.Remove(r.AppRestaurant);
+                context.Remove(r);
+            }
+
             _context.Remove(user);
             await _context.SaveChangesAsync();
             return Ok();

@@ -228,5 +228,40 @@ export class ProfileService {
         }
     }
 
+    /**
+     * Method used to delete user dish review.
+     * @returns Response
+     */
+     deleteDishReview(dishID: number, reviewID: number) {
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
+        })
+
+        var url = this.baseURL + ":8080/api/Reviews/dishes/" + dishID + "/reviews/" + reviewID
+        return this.http.delete(url, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).toPromise();
+    }
+
+    /**
+     * Method used to delete user dish review.
+     * @returns Response
+     */
+     deleteRestaurantReview(dishID: number, reviewID: number) {
+        // Obtain user token for authentication
+        var userToken;
+        var authToken = this.accountService.currentUser$.subscribe((user: User) => {
+            if(user != null && user.token != null)
+                {
+                    userToken = user.token;
+                }
+        })
+
+        var url = this.baseURL + ":8080/api/Reviews/Restaurants/" + dishID + "/reviews/" + reviewID
+        return this.http.delete(url, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).toPromise();
+    }
 
 }

@@ -31,6 +31,7 @@ export class AdjustablePostComponent implements OnInit {
     @Output() reloadEventEmitter = new EventEmitter();
 
     @Input() isOwner = false;
+    @Input() isReviewer: boolean = false;
 
     showDeleteOverlay = false;
 
@@ -166,6 +167,18 @@ export class AdjustablePostComponent implements OnInit {
         this.deleteOverlayRegular = true;
     }
 
+    async deleteReview(type: number) {
+        if (type == 1) {
+            console.log("Dish review - Delete");
+            await this.profileService.deleteDishReview(this.model.topicId, this.model.id);
+        }
+        if (type == 0) {
+            console.log("Restaurant review - Delete");
+            await this.profileService.deleteRestaurantReview(this.model.topicId, this.model.id);
+        }
+        this.reloadEventEmitter.emit(true);
+    }
+
     getRestaurantNameFromID(id: number) {
         console.log("Get restaurant name for ID: " + id);
         if (id != null || id != NaN) {
@@ -230,7 +243,6 @@ export class AdjustablePostComponent implements OnInit {
     // DISH REVIEW
     compactMode: boolean = false;
     editModeDishRev: boolean = false;
-    isReviewer: boolean = false;
     dishReviewBaseURL: string = "https://salver.blob.core.windows.net/dishreviews/"
     dishReviewImageURL: string;
     dishName: string = "...";

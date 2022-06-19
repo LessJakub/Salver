@@ -69,7 +69,7 @@ export class RestaurantPageComponent implements OnInit {
     }
 
     handleRestReviewReload(event: boolean) {
-        this.getDetails();
+        this.updateData(true)
     }
 
     updateUrlWithDefault() {

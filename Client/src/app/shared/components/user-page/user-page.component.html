@@ -146,13 +146,13 @@
 
             <div class="w-5/6 h-full" *ngFor="let activity of fetchedActivity">
             
-                <app-adjustable-post *ngIf="activity.type == this.activityTypes.USER_POST" [type]="this.postTypes.USER_POST" [model]="activity" [isOwner]="this.isProfileOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.USER_POST" [type]="this.postTypes.USER_POST" [model]="activity" [isOwner]="this.isProfileOwner" [isReviewer]="this.isProfileOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
 
-                <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_POST" [type]="this.postTypes.REGULAR_POST" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_POST" [type]="this.postTypes.REGULAR_POST" [model]="activity" [isOwner]="this.isOwner" [isReviewer]="this.isProfileOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
             
-                <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postTypes.DISH_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postTypes.DISH_REVIEW" [model]="activity" [isOwner]="this.isOwner" [isReviewer]="this.isProfileOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
 
-                <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_REVIEW" [type]="this.postTypes.REST_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+                <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_REVIEW" [type]="this.postTypes.REST_REVIEW" [model]="activity" [isOwner]="this.isOwner" [isReviewer]="this.isProfileOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
             
             </div>
             

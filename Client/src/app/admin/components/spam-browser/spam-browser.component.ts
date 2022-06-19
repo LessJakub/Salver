@@ -25,6 +25,13 @@ export class SpamBrowserComponent implements OnInit {
         });
     }
 
+    isEmpty() {
+        if (this.fetchedSpam == null || this.fetchedSpam.length == 0) {
+            return true;
+        }
+        return false;
+    }
+
     async deleteAction(id: number, type: any) {
         await this.adminService.DeleteReview(id, type);
         await this.getSpam();

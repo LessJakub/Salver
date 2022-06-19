@@ -1,21 +1,21 @@
-<div class="w-full flex flex-col mt-5 h-full">
+<div class="w-full flex flex-col mt-5 h-full px-4">
 
     <!-- Post list -->
-    <div class="w-flex ml-5 mr-5 h-fit flex gap-8 items-center">
+    <div class="w-full h-fit flex flex-col gap-8 items-center">
 
         <div class="w-full h-full" *ngFor="let activity of fetchedSpam">
             <div class="flex">
                 <div class="w-full">
-                    <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.activityTypes.DISH_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+                    <app-adjustable-post *ngIf="activity.type == this.activityTypes.DISH_REVIEW" [type]="this.postType.DISH_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
 
-                    <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_REVIEW" [type]="this.activityTypes.REST_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
+                    <app-adjustable-post *ngIf="activity.type == this.activityTypes.RESTAURANT_REVIEW" [type]="this.postType.REST_REVIEW" [model]="activity" [isOwner]="this.isOwner" (reloadEventEmitter)="this.updateData($event)"></app-adjustable-post>
                 </div>
 
                 <div class="w-1/5 ml-2 flex justify-center gap-2 flex-col">
 
-                    <button (click)="adminService.DeleteReview(activity.id, activity.type)"
+                    <button (click)="deleteAction(activity.id, activity.type)"
                         class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-red-700 hover:text-gray-50 border-green-900">Delete</button>
-                    <button (click)="adminService.ClearSpamMark(activity.id, activity.type)" 
+                    <button (click)="clearAction(activity.id, activity.type)" 
                         class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Clear</button>
 
                 </div>

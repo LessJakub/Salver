@@ -169,6 +169,11 @@
                 <app-grade-tile [name]="'taste'" [grade]="this.grades[0]"></app-grade-tile>
                 <app-grade-tile [name]="'price'" [grade]="this.grades[1]"></app-grade-tile>
                 <app-grade-tile [name]="'service'" [grade]="this.grades[2]"></app-grade-tile>
+
+                <div *ngIf="this.isOwner">
+                    <button (click)="this.markAsSpam()" 
+                        class="w-full py-1 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Report</button>
+                </div>
             </div>
 
             <div *ngIf="!this.editModeDishRev && this.compactMode" class="flex flex-col gap-2 w-2/3 px-4 h-full rounded-2xl justify-center">
@@ -274,6 +279,11 @@
             <div class="flex flex-col gap-2 w-1/2 px-4 h-full rounded-2xl justify-center">
                 <app-grade-tile [name]="'atmosphere'" [grade]="this.model.ratings[0]['item2']"></app-grade-tile>
                 <app-grade-tile [name]="'service'" [grade]="this.model.ratings[1]['item2']"></app-grade-tile>
+
+                <div *ngIf="this.isOwner">
+                    <button (click)="this.markAsSpam()" 
+                        class="w-full py-1 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">Report</button>
+                </div>
             </div>
 
         </div>

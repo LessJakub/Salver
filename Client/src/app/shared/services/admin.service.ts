@@ -132,7 +132,7 @@ export class AdminService {
     return await this.markAsSpam(id, ActivityType.RESTAURANT_REVIEW);
   }
 
-  private async markAsSpam(id: number, type: ActivityType)
+  public async markAsSpam(id: number, type: ActivityType)
   {
     var token;
     this.accountService.currentUser$.subscribe((user: User) => {

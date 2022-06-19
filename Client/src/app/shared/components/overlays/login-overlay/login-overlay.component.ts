@@ -33,7 +33,12 @@ export class LoginOverlayComponent implements OnInit {
                 this.router.navigate(['overview']);
             }
             else {
-                this.router.navigate(['activity']);
+                if (this.service.IsAdmin) {
+                    this.router.navigate(['spam']);
+                }
+                else {
+                    this.router.navigate(['activity']);
+                }
             }
 
 
@@ -51,7 +56,12 @@ export class LoginOverlayComponent implements OnInit {
                 this.router.navigate(['overview']);
             }
             else {
-                this.router.navigate(['activity']);
+                if (this.service.IsAdmin) {
+                    this.router.navigate(['spam']);
+                }
+                else {
+                    this.router.navigate(['activity']);
+                }
             }
 
 

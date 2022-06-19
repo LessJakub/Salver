@@ -7,6 +7,7 @@ import { DishReviewDTO } from 'src/app/shared/models/DishReviewDTO';
 import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-overlay.component';
 import { ActivityDTO, ActivityType } from 'src/app/shared/models/ActivityDTO';
 import { ProfileService } from 'src/app/shared/services/profile.service';
+import { AdminService } from 'src/app/shared/services/admin.service';
 
 export enum POST_TYPE {
     REST_REVIEW = 0,
@@ -42,6 +43,11 @@ export class AdjustablePostComponent implements OnInit {
 
     }
 
+    async markAsSpam() {
+        await this.adminService.markAsSpam(this.model.id, this.model.type)
+        this.reloadEventEmitter.emit(true);
+    }
+
     disableDeleteOverlay(eventFlag: boolean) {
         this.showDeleteOverlay = eventFlag;
     }
@@ -60,7 +66,8 @@ export class AdjustablePostComponent implements OnInit {
     constructor(private profileService: ProfileService,
                 private uploadService: BlobUploadService,
                 private restaurantService: RestaurantService,
-                private reviewsService: ReviewsService) {}
+                private reviewsService: ReviewsService,
+                private adminService: AdminService) {}
 
     ngOnInit() {
         

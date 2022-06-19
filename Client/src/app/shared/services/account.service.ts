@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BaseRouteReuseStrategy } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { RestaurantDTO } from '../models/RestaurantDTO';
 import { User } from '../models/UserDTO';
 
 @Injectable({
@@ -15,6 +16,7 @@ export class AccountService {
     private loginUrl: string = this.baseUrl + ":8080/api/account/login"
     private registerUrl: string = this.baseUrl + ":8080/api/account/register"
     private followURL: string = this.baseUrl + ":8080/api/Restaurants/"
+    private restaurantDetailURL: string = this.baseUrl + ":8080/api/Restaurants/"
 
     private loggedInStatus: boolean = false;
     ownerID: number = 0;
@@ -35,6 +37,7 @@ export class AccountService {
                     this.currentUserSource.next(localUser);
                     this.loggedInStatus = true;
                     this.ownerID = localUser.isRestaurantOwner;
+                    this.evaluateUsername();
                 }
             }
             catch{
@@ -45,8 +48,10 @@ export class AccountService {
     }
 
     private currentUserSource = new ReplaySubject<User>()
-
     public currentUser$ = this.currentUserSource.asObservable();
+
+    private currentUsernameSource = new ReplaySubject<string>();
+    public currentUsername$ = this.currentUsernameSource.asObservable();
 
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe(
@@ -58,6 +63,7 @@ export class AccountService {
                     this.currentUserSource.next(user);
                     this.loggedInStatus = true;
                     this.ownerID = user.isRestaurantOwner;
+                    this.evaluateUsername();
                 }
                 console.log(user);
             })
@@ -74,6 +80,7 @@ export class AccountService {
                     this.currentUserSource.next(user);
                     this.loggedInStatus = true;
                     this.ownerID = user.isRestaurantOwner;
+                    this.evaluateUsername();
                 }
                 console.log(user);
             })
@@ -83,13 +90,50 @@ export class AccountService {
     async logoutUser() {
         localStorage.removeItem("user");
         this.currentUserSource.next(null);
+        this.currentUsernameSource.next(null);
         this.currentUser$ = this.currentUserSource.asObservable();
+        this.currentUsername$ = this.currentUsernameSource.asObservable();
         this.loggedInStatus = false;
         this.ownerID = 0;
     }
 
     isLoggedIn(): boolean {
         return this.loggedInStatus;
+    }
+
+    /**
+     * Returns name of restaurant for given ID.
+     * @param id Restaurant ID
+     * @returns Name of restaurant (string)
+     */
+    async getRestaurantNameByID(id: number) {
+        var restaurant: RestaurantDTO;
+        await this.http.get<RestaurantDTO>(this.restaurantDetailURL + id).toPromise().then((restModel) => {
+            restaurant = restModel;
+        });
+
+        return restaurant.name;
+    }
+
+    async evaluateUsername() {
+        console.log("Evaluating username")
+        var restID: number = 0;
+        this.currentUser$.subscribe((user) => {
+            if (user != null) {
+                if (user.isRestaurantOwner > 0) {
+                    restID = user.isRestaurantOwner;
+                }
+                else {
+                    this.currentUsernameSource.next(user.username);
+                    return;
+                }
+            }
+        })
+
+        if (restID != null && restID > 0) {
+            var restName = await this.getRestaurantNameByID(restID);
+            this.currentUsernameSource.next(restName);
+        }
     }
 
 

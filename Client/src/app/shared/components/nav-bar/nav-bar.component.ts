@@ -12,11 +12,13 @@ export class NavBarComponent implements OnInit {
 
     showLoginOverlay: Boolean
     userProfBlobBaseURL = "https://salver.blob.core.windows.net/userprof/";
+    resProfBlobBaseURL = "https://salver.blob.core.windows.net/resprof/";
 
     profileImageURL = this.userProfBlobBaseURL;
+    resProfileImageURL = this.resProfBlobBaseURL;
     useSVG: boolean = false;
 
-    constructor(public accountService: AccountService, public orderService: OrdersService) {
+    constructor(public accountService: AccountService, public orderService: OrdersService,) {
         this.showLoginOverlay = false
     }
 
@@ -25,13 +27,17 @@ export class NavBarComponent implements OnInit {
             if (user == null) {
                 this.useSVG = true;
                 this.profileImageURL = "";
+                this.resProfileImageURL = "";
             }
             else {
                 this.useSVG = false;
                 this.profileImageURL = this.userProfBlobBaseURL + user.id + ".webp";
+                this.resProfileImageURL = this.resProfBlobBaseURL + user.isRestaurantOwner + ".webp";
             }
         })
     }
+
+
 
     noProfileImage: boolean = false
 

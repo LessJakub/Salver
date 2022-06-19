@@ -406,10 +406,12 @@ namespace API.Controllers
                                     ToList();
 
             var resReviews = restaurant.Res_Review.
+                                    Where(e => e.MarkedAsSpam == false).
                                     OrderByDescending(d => d.Id).
                                     ToList();
             var dishReviews = await context.DishReviews.
                                     Where(r => r.Dish.AppRestaurantId == restaurant.Id).
+                                    Where(e => e.MarkedAsSpam == false).
                                     OrderByDescending(r => r.CreationDate).
                                     ToListAsync();
 

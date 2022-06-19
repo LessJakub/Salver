@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class SpamController : BaseAuthController
+    public class AdminController : BaseAuthController
     {
-        public SpamController(DataContext context) : base(context)
+        public AdminController(DataContext context) : base(context)
         {
         }
 
@@ -36,8 +36,11 @@ namespace API.Controllers
             if(dishReview is null) return NoContent();
 
             dishReview.SpamMarkedDate = DateTime.Now;
+            dishReview.MarkedAsSpam = true;
 
-            return await AddRequesterToSpamList(dishReview.MarkedAsSpam);
+            await context.SaveChangesAsync();
+
+            return Ok();
         }
 
 
@@ -62,16 +65,7 @@ namespace API.Controllers
             if(restReview is null) return NoContent();
 
             restReview.SpamMarkedDate = DateTime.Now;
-
-            return await AddRequesterToSpamList(restReview.MarkedAsSpam);
-        }
-
-        private async Task<ActionResult> AddRequesterToSpamList(bool spamMark)
-        {
-
-            if(spamMark == true) return BadRequest($"Review already marked as spam");
-
-            spamMark = true;
+            restReview.MarkedAsSpam = true;
 
             await context.SaveChangesAsync();
 

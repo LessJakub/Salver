@@ -346,6 +346,7 @@ namespace API.Controllers
 
             foreach(var dish_review in context.DishReviews.
                                 Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
+                                Where(e => e.MarkedAsSpam == false).
                                 OrderByDescending(p => p.CreationDate).
                                 ToList())
             {
@@ -354,6 +355,7 @@ namespace API.Controllers
 
             foreach(var rest_review in context.RestaurantReviews.
                                 Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
+                                Where(e => e.MarkedAsSpam == false).
                                 OrderByDescending(p => p.CreationDate).
                                 ToList())
             {
@@ -413,12 +415,14 @@ namespace API.Controllers
             }
 
             foreach(var dr in user.Dish_Review.OrderByDescending(e => e.CreationDate).
+                                            Where(e => e.MarkedAsSpam == false).
                                             ToList())
             {
                 listToRet.Add(new ActivityDTO(dr));
             }
             
             foreach(var rr in user.Res_Review.OrderByDescending(e => e.CreationDate).
+                                            Where(e => e.MarkedAsSpam == false).
                                             ToList())
             {
                 listToRet.Add(new ActivityDTO(rr));

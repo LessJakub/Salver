@@ -30,13 +30,16 @@ export class LoginOverlayComponent implements OnInit {
             this.closeOverlayAction();
 
             if (this.service.ownerID != 0) {
-                this.router.navigate(['overview']);
+                this.redirectTo('overview')
             }
             else {
-                this.router.navigate(['activity']);
+                if (this.service.IsAdmin()) {
+                    this.redirectTo('spam')
+                }
+                else {
+                    this.redirectTo('activity')
+                }
             }
-
-
         }, (error: HttpErrorResponse) => {
             this.handleError(error)
         })
@@ -48,13 +51,16 @@ export class LoginOverlayComponent implements OnInit {
             this.closeOverlayAction();
 
             if (this.service.ownerID != 0) {
-                this.router.navigate(['overview']);
+                this.redirectTo('overview')
             }
             else {
-                this.router.navigate(['activity']);
+                if (this.service.IsAdmin()) {
+                    this.redirectTo('spam')
+                }
+                else {
+                    this.redirectTo('activity')
+                }
             }
-
-
         }, (error: HttpErrorResponse) => {
             this.handleError(error)
         })
@@ -75,6 +81,11 @@ export class LoginOverlayComponent implements OnInit {
             this.error.push(error.error)
         }
         
+    }
+
+    redirectTo(url: string){
+        this.router.navigateByUrl('*', {skipLocationChange: true}).then(()=>
+        this.router.navigate([url]));
     }
 
 }

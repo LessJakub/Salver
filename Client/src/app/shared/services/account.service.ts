@@ -54,7 +54,7 @@ export class AccountService {
                     this.currentUserSource.next(localUser);
                     this.loggedInStatus = true;
                     this.ownerID = localUser.isRestaurantOwner;
-                    this.evaluateUsername();
+                    this.evaluateUsername(null);
                 }
             }
             catch{
@@ -80,7 +80,7 @@ export class AccountService {
                     this.currentUserSource.next(user);
                     this.loggedInStatus = true;
                     this.ownerID = user.isRestaurantOwner;
-                    this.evaluateUsername();
+                    this.evaluateUsername(null);
                 }
                 console.log(user);
             })
@@ -97,7 +97,7 @@ export class AccountService {
                     this.currentUserSource.next(user);
                     this.loggedInStatus = true;
                     this.ownerID = user.isRestaurantOwner;
-                    this.evaluateUsername();
+                    this.evaluateUsername(null);
                 }
                 console.log(user);
             })
@@ -132,7 +132,7 @@ export class AccountService {
         return restaurant.name;
     }
 
-    async evaluateUsername() {
+    async evaluateUsername(username: string) {
         console.log("Evaluating username")
         var restID: number = 0;
         this.currentUser$.subscribe((user) => {
@@ -141,8 +141,14 @@ export class AccountService {
                     restID = user.isRestaurantOwner;
                 }
                 else {
-                    this.currentUsernameSource.next(user.username);
-                    return;
+                    if (username != null) {
+                        user.username = username;
+                        this.currentUserSource.next(user);
+                        localStorage.setItem("user", JSON.stringify(user));
+                    }
+                    else {
+                        this.currentUsernameSource.next(user.username);
+                    }
                 }
             }
         })

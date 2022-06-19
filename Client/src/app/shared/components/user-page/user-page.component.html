@@ -1,4 +1,4 @@
-<div class="basis-1/4 min-w-[25rem] max-w-1/4 h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
+<div *ngIf="this.editMode == false" class="basis-1/4 min-w-[25rem] max-w-1/4 h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
     <div *ngIf="profileModel != null"  class="h-full w-full pt-4 flex flex-col justify-start absolute gap-4 top-0">
         
         <div class="min-w-full aspect-square flex justify-center items-center">
@@ -33,7 +33,7 @@
         </div>
 
         <div *ngIf="this.isProfileOwner == true" class="w-full h-fit flex flex-col items-center justify-start px-8 gap-2">
-            <button class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+            <button (click)="this.editAction()" class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                 Edit
             </button>
             <button class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
@@ -47,6 +47,78 @@
 
     </div>
 </div>
+
+
+
+
+<form *ngIf="this.editMode" class="basis-1/4 min-w-[25rem] max-w-1/4 h-full shadow-xl shadow-green-900/50 overflow-y-auto relative">
+    <div *ngIf="profileModel != null"  class="h-full w-full pt-4 flex flex-col justify-start absolute gap-4 top-0">
+        
+        <input hidden #fileInput type="file" requiredFileType="image/webp" id="file" (change)="this.fileUploadAction()"/>
+
+        <div class="min-w-full aspect-square flex justify-center items-center">
+            <button (click)="fileInput.click()" class="w-5/6 aspect-square rounded-full shadow-2xl overflow-hidden">
+                <svg *ngIf="this.fileUploaded == false" class="stroke-2 stroke-green-900 animate-pulse" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.121 17.804C7.21942 16.6179 9.58958 15.9963 12 16C14.5 16 16.847 16.655 18.879 17.804M15 10C15 10.7956 14.6839 11.5587 14.1213 12.1213C13.5587 12.6839 12.7956 13 12 13C11.2044 13 10.4413 12.6839 9.87868 12.1213C9.31607 11.5587 9 10.7956 9 10C9 9.20435 9.31607 8.44129 9.87868 7.87868C10.4413 7.31607 11.2044 7 12 7C12.7956 7 13.5587 7.31607 14.1213 7.87868C14.6839 8.44129 15 9.20435 15 10ZM21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+                <svg *ngIf="this.fileUploaded" class="stroke-2 stroke-green-900" viewBox="0 0 24 24"
+                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 12L11 14L15 10M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                        
+            </button>
+        </div>
+
+        <div class="w-full h-fit -mt-5">
+            <div class="w-full px-8 h-fit">
+                <textarea matInput [(ngModel)]="this.editModel.username" rows="1" minlength="1" maxlength="20" name="username"
+                    required
+                    class="flex w-full h-fit resize-none appearance-none border rounded-xl bg-gray-200 focus:outline-none focus:bg-gray-200 focus:border-green-700 invalid:border-red-800 invalid:placeholder-red-800 invalid:text-red-800
+                    focus:invalid:border-red-800 focus:invalid:ring-red-800 text-center px-4 text-3xl font-light text-gray-900"
+                    placeholder="{{this.editModel.username}}">
+                </textarea>
+            </div>
+            
+
+            <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Followers: {{profileModel.followers}}</p>
+
+            <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Follows: {{profileModel.followedUsers}} User{{this.countEndings[0]}}</p>
+            <p class="text-base font-thin text-gray-900 uppercase mx-4 text-center">Follows: {{profileModel.followedRestaurants}} Restaurant{{this.countEndings[1]}}</p>
+        </div>
+
+        <div *ngIf="this.isProfileOwner == false" class="w-full h-fit flex items-center justify-start px-4 gap-2">
+            <button (click)='this.followButtonAction()' *ngIf="(this.isFollowing == false)"
+                class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">{{
+                this.followButtonText }}
+            </button>
+            <button (click)='this.followButtonAction()' *ngIf="(this.isFollowing)"
+                class="w-full py-2 rounded-xl text-gray-50 border bg-green-900 hover:bg-red-800 hover:text-gray-50 border-green-900 hover:border-red-900">{{
+                this.followButtonText }}
+            </button>
+        </div>
+
+        <div *ngIf="this.isProfileOwner == true" class="w-full h-fit flex flex-col items-center justify-start px-8 gap-2">
+            <button (click)="this.submitEditAction(fileInput)" class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                Apply
+            </button>
+            <button (click)="this.cancelEditAction(fileInput)" class="w-full py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
+                Cancel
+            </button>
+        </div>
+
+        <div class="flex flex-col gap-2 w-full h-fit px-6">
+           
+        </div>
+
+    </div>
+</form>
+
+
+
+
 
 
 <!-- Main area -->

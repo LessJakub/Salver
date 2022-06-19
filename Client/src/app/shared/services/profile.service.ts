@@ -15,6 +15,7 @@ export class ProfileService {
 
     private baseURL: string = "http://" + location.hostname;
     private usersURL: string = this.baseURL + ":8080/api/Users/"
+    private accountURL: string = this.baseURL + ":8080/api/Account/"
 
     constructor(private accountService: AccountService,
         private http: HttpClient) { }
@@ -37,6 +38,25 @@ export class ProfileService {
 
         var url = this.usersURL + id;
         return await this.http.get<UserProfileDTO>(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
+    }
+
+    /**
+     * Method used to edit public data for user identified with ID.
+     * @param id ID of the user of interest
+     * @returns Promise of UserProfileDTO.
+     */
+     async editUserProfile(id: number, model: any): Promise<UserProfileDTO> {
+
+        // Obtain user token for authentication
+        var userToken;
+        this.accountService.currentUser$.subscribe((user: User) => {
+            if (user != null) {
+                userToken = user.token;
+            }
+        })
+
+        var url = this.accountURL + id;
+        return await this.http.put<any>(url, model, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
     }
 
 
@@ -207,4 +227,6 @@ export class ProfileService {
             return await this.http.delete(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
         }
     }
+
+
 }

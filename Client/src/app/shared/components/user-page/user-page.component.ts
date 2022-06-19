@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivityDTO, ActivityType } from '../../models/ActivityDTO';
-import { DishDTO } from '../../models/DishDTO';
-import { PostDTO } from '../../models/PostDTO';
 import { AccountService } from '../../services/account.service';
 import { ActivityService } from '../../services/activity.service';
 import { BlobUploadService } from '../../services/blob-upload.service';
-import { ReviewsService } from '../../services/reviews.service';
-import { SearchService } from '../../services/search.service';
 import { POST_TYPE } from '../posts/adjustable-post/adjustable-post.component';
 
 import { UserProfileDTO } from "../../models/UserProfileDTO"
@@ -16,6 +12,9 @@ import { ADD_POST_TYPE } from '../posts/add-rest-post/add-rest-post.component';
 import { OrderDTO } from '../../models/OrderDTO';
 import { OrdersManagementService } from '../../services/orders-management.service';
 
+interface UserModel {
+    username: string
+}
 
 @Component({
     selector: 'app-user-page',
@@ -33,6 +32,10 @@ export class UserPageComponent implements OnInit {
     profileImageURL: string;
 
     useSVG: boolean = false;
+
+    editMode = false;
+    fileUploaded = false;
+    editModel: UserModel = {} as UserModel;
 
     fetchedActivity: ActivityDTO[] = null;
     fetchedOrders: Array<OrderDTO> = new Array<OrderDTO>();
@@ -53,6 +56,29 @@ export class UserPageComponent implements OnInit {
         if (eventFlag == true) {
             this.selectNewTab(this.selectedTabID);
         }
+    }
+
+    editAction() {
+        this.editModel.username = this.profileModel.username;
+        this.editMode = true;
+    }
+
+    async submitEditAction(fileInput) {
+        if (fileInput.files[0]) {
+            this.uploadFiles(fileInput.files, "userprof");
+        }
+
+        await this.profileService.editUserProfile(this.profileModel.id, this.editModel).then((response) => {
+            console.log("Updated model");
+            console.log(response);
+
+            this.cancelEditAction(fileInput);
+            this.getProfileDetails();
+            this.updateData(true);
+            this.accountService.evaluateUsername(response.username);
+        }).catch((error) =>{
+            console.log(error);
+        });
     }
 
     updateUrlWithDefault() {
@@ -83,6 +109,12 @@ export class UserPageComponent implements OnInit {
         this.getProfileDetails();
     }
 
+    cancelEditAction(fileInput) {
+        fileInput.files = null;
+        this.editMode = false;
+        this.fileUploaded = false;
+    }
+
     selectNewTab(selectedID: number) {
         this.selectedTabID = selectedID;
         switch (this.selectedTabID) {
@@ -95,12 +127,16 @@ export class UserPageComponent implements OnInit {
         }
     }
 
+    fileUploadAction() {
+        this.fileUploaded = true;
+    }
+
     private async getActivity() {
         console.log("Restaurant - Activity Getter")
         this.fetchedActivity = await this.profileService.getUserActivity(this.userPageID);
     }
 
-    uploadFiles(files) {
+    uploadFiles(files, container: string) {
         console.log("Upload service - Upload files")
         const formData = new FormData();
 
@@ -109,7 +145,7 @@ export class UserPageComponent implements OnInit {
             console.log(filename)
             formData.append(files[0].filename, files[0]);
             formData.append("fileID", filename)
-            formData.append("blobContainer", "resprof");
+            formData.append("blobContainer", container);
 
             this.uploadService
                 .upload(formData)
@@ -182,5 +218,4 @@ export class UserPageComponent implements OnInit {
 
         await this.getProfileDetails();
     }
-
 }

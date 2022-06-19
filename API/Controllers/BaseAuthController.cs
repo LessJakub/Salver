@@ -34,7 +34,7 @@ namespace API.Controllers
             var principal = HttpContext.User;
             if (principal?.Claims == null) return StatusCodes.Status400BadRequest;
 
-            var idClaim = principal.FindFirst("Id");
+            var idClaim = principal.FindFirst("UserId");
 
             if (idClaim == null || idClaim.Value != id.ToString()) return StatusCodes.Status401Unauthorized;
 

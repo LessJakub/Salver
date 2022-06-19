@@ -196,6 +196,7 @@ export class RestaurantPageComponent implements OnInit {
     async submitEditAction() {
         console.log("Restaurant edit - Submit action.");
         this.editModel = await this.restaurantService.editDetails(this.model.id, this.editModel);
+        this.accountService.evaluateUsername();
         this.cancelEditAction();
         this.getDetails();
     }

@@ -32,6 +32,8 @@ export class UserPageComponent implements OnInit {
 
     profileImageURL: string;
 
+    useSVG: boolean = false;
+
     fetchedActivity: ActivityDTO[] = null;
     fetchedOrders: Array<OrderDTO> = new Array<OrderDTO>();
 

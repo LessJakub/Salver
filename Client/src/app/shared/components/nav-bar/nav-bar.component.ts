@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AccountService } from '../../services/account.service';
 import { OrdersService } from '../../services/orders.service';
 
@@ -18,7 +19,8 @@ export class NavBarComponent implements OnInit {
     resProfileImageURL = this.resProfBlobBaseURL;
     useSVG: boolean = false;
 
-    constructor(public accountService: AccountService, public orderService: OrdersService,) {
+    constructor(public accountService: AccountService, public orderService: OrdersService,
+                public router: Router) {
         this.showLoginOverlay = false
     }
 
@@ -37,6 +39,38 @@ export class NavBarComponent implements OnInit {
         })
     }
 
+    redirectToUser() {
+        var url: string;
+        var userID = this.accountService.currentUser$.subscribe((user) => {
+            if (user == null) {
+                url = "/*"
+            }
+            else {
+                url = "/user/" + user.id;
+            }
+        })
+
+        this.redirectTo(url);
+    }
+
+    redirectToRestaurant() {
+        var url: string;
+        var userID = this.accountService.currentUser$.subscribe((user) => {
+            if (user == null) {
+                url = "/*"
+            }
+            else {
+                url = "/restaurant/" + user.isRestaurantOwner;
+            }
+        })
+
+        this.redirectTo(url);
+    }
+
+    redirectTo(url: string){
+        this.router.navigateByUrl('*', {skipLocationChange: true}).then(()=>
+        this.router.navigate([url]));
+    }
 
 
     noProfileImage: boolean = false

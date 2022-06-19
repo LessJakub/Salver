@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
+import { DishDTO } from 'src/app/shared/models/DishDTO';
 import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
+import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 
 @Component({
     selector: 'app-add-dish-post',
@@ -7,20 +10,28 @@ import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
 })
 export class AddDishPostComponent implements OnInit {
 
-    constructor() { }
+    constructor(private restaurantService: RestaurantService,
+                private uploadService: BlobUploadService) { }
 
     @Input() model: RestaurantDTO;
     @Output() reloadEventEmitter = new EventEmitter();
 
+    editModel: DishDTO = {} as DishDTO;
+
+    extended = false;
+    fileUploaded = false;
+
     ngOnInit(): void {
+        this.editModel = {} as DishDTO;
     }
 
-    invertOverlayFlag() {
-        this.showOverlay = !this.showOverlay;
+    fileUploadAction() {
+        this.fileUploaded = true;
     }
-    
-    disableLoginOverlay(eventFlag: boolean) {
-        this.showOverlay = eventFlag;
+
+    enableAction() {
+        this.editModel = {} as DishDTO;
+        this.extended = true;
     }
 
     handleReload(flag: boolean) {
@@ -30,9 +41,48 @@ export class AddDishPostComponent implements OnInit {
         }
     }
 
-    showOverlay: boolean = false;
+    cancelEditAction(fileInput) {
+        fileInput.files = null;
+        this.editModel = {} as DishDTO;
+        this.fileUploaded = false;
+        console.log("Menu post - Edit mode disabled.");
+        this.extended = false;
+    }
 
-    adderAction() {
-        console.log("Add new dish action");
+
+    submitAction(files) {
+        if (this.editModel.name != null && this.editModel.name != "") {
+            if (this.editModel.description != null && this.editModel.description != "") {
+                if (this.editModel.price != null && this.editModel.price != NaN) {
+                    if (this.editModel.ingredients != null && this.editModel.ingredients != "") {
+                        if (files[0]) {
+                            var response = this.restaurantService.addDish(this.model.id, this.editModel).toPromise().then((model: DishDTO) => {
+                                var filename = model.id + ".webp";
+                                this.uploadFiles(files, filename);
+
+                                this.extended = false;
+                                this.reloadEventEmitter.emit(true);
+                            }).catch((error) => {
+                                console.log(error);
+                            });  
+                        }
+                    }
+                }
+            } 
+        }
+    }
+
+    uploadFiles(files, filename: string) {
+        const formData = new FormData();
+
+        if (files[0]) {
+            formData.append(files[0].filename, files[0]);
+            formData.append("fileID", filename)
+            formData.append("blobContainer", "dishimages");
+        }
+
+        this.uploadService
+            .upload(formData)
+            .subscribe(({ path }) => (console.log(path)));
     }
 }

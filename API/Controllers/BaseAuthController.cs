@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,7 @@ namespace API.Controllers
             //Get claims present in the token
             var principal = HttpContext.User;
             if (principal?.Claims == null) return StatusCodes.Status400BadRequest;
-            var roleClaim = principal.FindFirst("Role");
+            var roleClaim = principal.FindFirst(ClaimTypes.Role);
 
             if(roleClaim == null || roleClaim.Value != Role) return StatusCodes.Status401Unauthorized;
             return StatusCodes.Status200OK;

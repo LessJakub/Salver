@@ -17,6 +17,7 @@ import { UserPageComponent } from './shared/components/user-page/user-page.compo
 import { SearchPageComponent } from './regular-user/components/search-page/search-page.component';
 import { ActivityPageComponent } from './regular-user/components/activity-page/activity-page.component';
 import { SpamBrowserComponent } from './admin/components/spam-browser/spam-browser.component';
+import { IsAdminGuard } from './guards/is-admin.guard';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
@@ -32,15 +33,17 @@ const routes: Routes = [
     // canActivate: [LoggedInGuard]
   },
   { path: 'activity', component: ActivityPageComponent,
-    //canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard]
   },
   { path: 'restaurant/:id', component: RestaurantPageComponent,
     //canActivate: [LoggedInGuard]
   },
   { path: 'user/:id', component: UserPageComponent,
-    //canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard]
   },
-  { path: 'spam', component: SpamBrowserComponent},
+  { path: 'spam', component: SpamBrowserComponent,
+    canActivate: [IsAdminGuard]
+  },
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route
   { path: '**', component: ErrorPageComponent},               // wildcard for any other path
   

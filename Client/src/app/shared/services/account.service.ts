@@ -34,11 +34,12 @@ export class AccountService {
                 token = user.token;
                 }
             })
+        if(token == null) return false;
         
         var decoded = jwtDecode(token)
         var role = decoded["role"];
 
-        return role === "Admin";
+        return (role === "Admin")?true: false;
     }
 
     private init(){

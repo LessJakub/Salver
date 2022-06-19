@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { ActivityDTO } from '../models/ActivityDTO';
+import { ActivityDTO, ActivityType } from '../models/ActivityDTO';
 import { User } from '../models/UserDTO';
 import { AccountService } from './account.service';
 
@@ -61,15 +61,15 @@ export class AdminService {
 
   public async DeleteDishReview(id: number)
   {
-    return await this.DeleteReview(id, ReviewType.DISH_REVIEW);
+    return await this.DeleteReview(id, ActivityType.DISH_REVIEW);
   }
 
   public async DeleteRestaurantReview(id: number)
   {
-    return await this.DeleteReview(id, ReviewType.RESTAURANT_REVIEW);
+    return await this.DeleteReview(id, ActivityType.RESTAURANT_REVIEW);
   }
 
-  public async DeleteReview(id: number, type: ReviewType)
+  public async DeleteReview(id: number, type: ActivityType)
   {
     var token;
     this.accountService.currentUser$.subscribe((user: User) => {
@@ -79,8 +79,8 @@ export class AdminService {
     }})
 
     var url = "";
-    if(type == ReviewType.DISH_REVIEW) url = this.dishReviews;
-    else if(type == ReviewType.RESTAURANT_REVIEW) url = this.restReviews;
+    if(type == ActivityType.DISH_REVIEW) url = this.dishReviews;
+    else if(type == ActivityType.RESTAURANT_REVIEW) url = this.restReviews;
     else return;
 
     
@@ -124,15 +124,15 @@ export class AdminService {
   
   public async markDishReviewAsSpam(id: number)
   {
-    return await this.markAsSpam(id, ReviewType.DISH_REVIEW);
+    return await this.markAsSpam(id, ActivityType.DISH_REVIEW);
   }
 
   public async markRestaurantReviewAsSpam(id: number)
   {
-    return await this.markAsSpam(id, ReviewType.RESTAURANT_REVIEW);
+    return await this.markAsSpam(id, ActivityType.RESTAURANT_REVIEW);
   }
 
-  private async markAsSpam(id: number, type: ReviewType)
+  private async markAsSpam(id: number, type: ActivityType)
   {
     var token;
     this.accountService.currentUser$.subscribe((user: User) => {
@@ -142,8 +142,8 @@ export class AdminService {
     }})
 
     var url = "";
-    if(type == ReviewType.DISH_REVIEW) url = this.dishReviews;
-    else if(type == ReviewType.RESTAURANT_REVIEW) url = this.restReviews;
+    if(type == ActivityType.DISH_REVIEW) url = this.dishReviews;
+    else if(type == ActivityType.RESTAURANT_REVIEW) url = this.restReviews;
     else return;
 
     var params = new HttpParams()

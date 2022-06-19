@@ -99,7 +99,7 @@
                         </button>
 
 
-                        <button [routerLink]="['/user', (accountService.currentUser$ | async).id]"
+                        <button (click)="this.redirectToUser()"
                             *ngIf="(accountService.currentUser$ | async) != null && (accountService.currentUser$ | async).isRestaurantOwner == 0"
                             class="group py-2 rounded-md text-base font-light flex items-center space-x-2">
 
@@ -123,7 +123,7 @@
                         </button>
 
 
-                        <button [routerLink]="['/restaurant', (accountService.currentUser$ | async).isRestaurantOwner]"
+                        <button (click)="this.redirectToRestaurant()"
                             *ngIf="(accountService.currentUser$ | async) != null && (accountService.currentUser$ | async).isRestaurantOwner > 0"
                             class="group py-2 rounded-md text-base font-light flex items-center space-x-2">
 

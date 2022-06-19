@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
+import { OrdersService } from 'src/app/shared/services/orders.service';
 import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-overlay.component';
 
 @Component({
@@ -12,12 +13,34 @@ import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-ov
 
 export class MenuPostComponent implements OnInit {
 
-    constructor(private restaurantService: RestaurantService) { 
+    constructor(private restaurantService: RestaurantService,
+                private orderService: OrdersService) { 
     }
 
     showDeleteOverlay: boolean = false;
     showNewDishOverlay: boolean = false;
     showNewReviewOverlay: boolean = false;
+
+    orderCount: number = 0;
+
+    incrementCount() {
+        this.orderCount += 1;
+    }
+
+    decrementCount() {
+        if (this.orderCount - 1 >= 0) {
+            this.orderCount -= 1;
+        }
+    }
+
+    takeOrder() {
+        if(this.orderService.setDishAmount(this.model, this.orderCount)) {} 
+        else
+        {
+            this.orderCount = 0
+            console.log("Error while taking order.");
+        }
+    }
 
     public deletionTypes = DELETION_TYPE;
 

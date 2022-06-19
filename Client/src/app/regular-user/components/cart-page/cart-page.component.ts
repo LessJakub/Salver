@@ -6,7 +6,6 @@ import { SearchService } from 'src/app/shared/services/search.service';
 @Component({
   selector: 'app-cart-page',
   templateUrl: './cart-page.component.html',
-  styleUrls: ['./cart-page.component.css'],
   host: { 'class': 'flex-auto flex justify-center items-center' } // ! Styling host container to fill all avialable space
 })
 export class CartPageComponent implements OnInit {

@@ -18,6 +18,8 @@ import { SearchPageComponent } from './regular-user/components/search-page/searc
 import { ActivityPageComponent } from './regular-user/components/activity-page/activity-page.component';
 import { SpamBrowserComponent } from './admin/components/spam-browser/spam-browser.component';
 import { IsAdminGuard } from './guards/is-admin.guard';
+import { CartComponent } from './regular-user/components/cart/cart.component';
+import { CartPageComponent } from './regular-user/components/cart-page/cart-page.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
@@ -43,6 +45,9 @@ const routes: Routes = [
   },
   { path: 'spam', component: SpamBrowserComponent,
     canActivate: [IsAdminGuard]
+  },
+  { path: 'cart', component: CartPageComponent,
+    canActivate: [LoggedInGuard]
   },
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route
   { path: '**', component: ErrorPageComponent},               // wildcard for any other path

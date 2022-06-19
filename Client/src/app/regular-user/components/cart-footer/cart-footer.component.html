@@ -1,0 +1,27 @@
+<footer class="bg-gray-50  w-full h-32 inset-x-0 bottom-0 rounded-t-2xl shadow-inner shadow-green-900/50">
+
+    <div class="w-full flex h-full items-center px-5">
+        <form class="flex w-full gap-8 it" action="#" method="POST">
+            <div class="flex w-full justify-end gap-2">
+                <div class="flex w-fit">
+                    <p
+                        class="group relative w-fit flex justify-center px-3 py-4 border text-md font-medium rounded-xl text-green-900 bg-gray-50 hover:bg-green-900 hover:text-gray-50 border-green-900">
+                        Total: {{orderService.currentPrice}}$
+                    </p>
+                </div>
+                <input type="hidden" name="remember" value="true">
+                <div class="flex-col h-flex w-fit">
+                    <input [(ngModel)]="orderService.address" id="address" name="address" type="text" autocomplete="address" required class="appearance-none rounded-xl relative block w-fit w-min-100 px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-900 focus:z-10 text-md invalid:border-red-800 invalid:placeholder-red-800 invalid:text-red-800
+                        focus:invalid:border-red-800 focus:invalid:ring-red-800" placeholder="My address">
+                </div>
+
+                <button type="submit" (click)="orderService.order()"
+                    class="group relative w-1/3 flex justify-center px-3 py-4 border text-md font-medium rounded-xl text-green-900 bg-gray-50 hover:bg-green-900 hover:text-gray-50 border-green-900">
+                    Order
+                </button>
+            </div>
+        </form>
+
+
+    </div>
+</footer>

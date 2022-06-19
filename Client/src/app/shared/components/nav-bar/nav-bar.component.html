@@ -65,6 +65,14 @@
                             Search
                         </a>
                     </div>
+
+                    <div class="flex gap-6"
+                        *ngIf="(accountService.currentUser$ | async) != null && accountService.IsAdmin()">
+                        <a [routerLink]="['/spam']"
+                            class="hover:text-green-700 py-2 rounded-md text-base font-light uppercase">
+                            Spam Requests
+                        </a>
+                    </div>
                 </div>
 
                 <div class="flex w-1/2">

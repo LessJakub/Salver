@@ -62,8 +62,6 @@ export class OrdersManagementService {
         if (user.isRestaurantOwner == 0) url += 'user'
         else url += 'restaurant'
 
-        console.log("HELLOOOOOOOOO")
-        console.log(url);
         await this.http.get<Array<OrderDTO>>(url, { headers: head, params: params }).toPromise().then(response => {
             arrayToReturn = response;
         }, error => {

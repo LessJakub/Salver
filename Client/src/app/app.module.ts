@@ -9,10 +9,12 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { RegularUserModule } from './regular-user/regular-user.module';
 import { RestaurantOwnerModule } from './restaurant-owner/restaurant-owner.module';
+import { SpamBrowserComponent } from './admin/components/spam-browser/spam-browser.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SpamBrowserComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,6 +27,9 @@ import { RestaurantOwnerModule } from './restaurant-owner/restaurant-owner.modul
     RestaurantOwnerModule,
   ],
   providers: [Meta],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [
+    SpamBrowserComponent
+  ]
 })
 export class AppModule { }

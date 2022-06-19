@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRouteReuseStrategy } from '@angular/router';
+import jwtDecode from 'jwt-decode';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RestaurantDTO } from '../models/RestaurantDTO';
@@ -23,6 +24,21 @@ export class AccountService {
 
     constructor(private http: HttpClient) {
         this.init();
+    }
+
+    public IsAdmin(): boolean
+    {
+        var token: string;
+        this.currentUser$.subscribe((user: User) => {
+            if (user != null) {
+                token = user.token;
+                }
+            })
+        
+        var decoded = jwtDecode(token)
+        var role = decoded["role"];
+
+        return role === "Admin";
     }
 
     private init(){

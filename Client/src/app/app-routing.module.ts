@@ -16,6 +16,7 @@ import { UserPageComponent } from './shared/components/user-page/user-page.compo
 // Imports from User module
 import { SearchPageComponent } from './regular-user/components/search-page/search-page.component';
 import { ActivityPageComponent } from './regular-user/components/activity-page/activity-page.component';
+import { SpamBrowserComponent } from './admin/components/spam-browser/spam-browser.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
@@ -39,8 +40,10 @@ const routes: Routes = [
   { path: 'user/:id', component: UserPageComponent,
     //canActivate: [LoggedInGuard]
   },
+  { path: 'spam', component: SpamBrowserComponent},
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route
-  { path: '**', component: ErrorPageComponent}               // wildcard for any other path
+  { path: '**', component: ErrorPageComponent},               // wildcard for any other path
+  
 ];
 
 @NgModule({

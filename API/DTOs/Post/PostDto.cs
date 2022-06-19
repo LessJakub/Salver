@@ -15,6 +15,8 @@ namespace API.DTOs
         public PostDto(Post post)
         {
             Id = post.Id;
+            if(post.AppUser is not null) Username = post.AppUser.UserName;
+            if(post.AppRestaurant is not null)Name = post.AppRestaurant.Name;
             Date = post.Date;
             Likes = post.Likes;
             Description = post.Description;
@@ -23,6 +25,10 @@ namespace API.DTOs
         }
 
         public int Id { get; set; }
+
+        public string? Username { get; set; } = null;
+
+        public string? Name { get; set; } = null;
         public DateTime Date { get; set; }
         public int Likes { get; set; }
         public string Description { get; set; }

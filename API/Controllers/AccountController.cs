@@ -58,6 +58,7 @@ namespace API.Controllers
 
             return new UserDto
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
@@ -96,13 +97,14 @@ namespace API.Controllers
             //var restaurants = await GetRestaurantsOfUser(user);
             
             var restaurants = await GetRestaurantsIdsOfUser(user);
+            var resId = (restaurants.Count() > 0)?(restaurants.First()):(0);
 
             return new UserDto
             {
+                Id = user.Id,
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user, restaurants),
-                //UsersRestaurants = (await GetRestaurantsOfUser(user)).Count()
-                IsRestaurantOwner = (restaurants.Count() > 0)?(restaurants[0]):(0) 
+                Token = _tokenService.CreateToken(user, resId),
+                IsRestaurantOwner = resId
             };
         }
 
@@ -148,6 +150,7 @@ namespace API.Controllers
 
             return new UserDto
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
@@ -173,18 +176,40 @@ namespace API.Controllers
         {
             var idCode = AuthorizedById(id);
             var roleCode = AuthorizedByRole("Admin");
-            if(roleCode == StatusCodes.Status200OK) {   }
+            if(roleCode == StatusCodes.Status200OK) {}
             else if (idCode != StatusCodes.Status200OK) return StatusCode(idCode);
 
             var user = await _context.Users.FindAsync(id);
 
-            if(user != null)
+            if(user is null) return NoContent();
+            
+            foreach(var f in user.FollowedRestaurants.ToList())
             {
-                _context.Remove(user);
-                await _context.SaveChangesAsync();
-                return Ok();
+                f.Follower = null;
+                f.FollowerId = 0;
+                f.Followed = null;
+                f.FollowedId = 0;
+                _context.Remove(f);
             }
-            return NoContent();
+
+            foreach(var f in user.FollowedUsers.ToList())
+            {
+                f.Follower = null;
+                f.FollowerId = 0;
+                f.Followed = null;
+                f.FollowedId = 0;
+                _context.Remove(f);
+            }
+
+            foreach(var r in user.User_Res_Relation.ToList())
+            {
+                context.Remove(r.AppRestaurant);
+                context.Remove(r);
+            }
+
+            _context.Remove(user);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         private async Task<bool> UserExists(string username)
@@ -209,7 +234,10 @@ namespace API.Controllers
 
         private async Task<List<int>> GetRestaurantsIdsOfUser(AppUser appUser)
         {
+            if(appUser is null) return null;
             var relations = appUser.User_Res_Relation.ToList();
+
+
             List<int> restaurants = new List<int>();
 
             foreach(var relation in relations)

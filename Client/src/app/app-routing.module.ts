@@ -11,10 +11,15 @@ import { TeamPageComponent } from './shared/components/team-page/team-page.compo
 import { LandingPageComponent } from './shared/components/landing-page/landing-page.component';
 import { RestaurantPageComponent } from './shared/components/restaurant-page/restaurant-page.component';
 import { DebugUploadPageComponent } from './shared/components/debug-upload-page/debug-upload-page.component';
+import { UserPageComponent } from './shared/components/user-page/user-page.component';
 
 // Imports from User module
 import { SearchPageComponent } from './regular-user/components/search-page/search-page.component';
 import { ActivityPageComponent } from './regular-user/components/activity-page/activity-page.component';
+import { SpamBrowserComponent } from './admin/components/spam-browser/spam-browser.component';
+import { IsAdminGuard } from './guards/is-admin.guard';
+import { CartComponent } from './regular-user/components/cart/cart.component';
+import { CartPageComponent } from './regular-user/components/cart-page/cart-page.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
@@ -30,13 +35,23 @@ const routes: Routes = [
     // canActivate: [LoggedInGuard]
   },
   { path: 'activity', component: ActivityPageComponent,
-    //canActivate: [LoggedInGuard]
+    // canActivate: [LoggedInGuard]
   },
   { path: 'restaurant/:id', component: RestaurantPageComponent,
     //canActivate: [LoggedInGuard]
   },
+  { path: 'user/:id', component: UserPageComponent,
+    canActivate: [LoggedInGuard]
+  },
+  { path: 'spam', component: SpamBrowserComponent,
+    canActivate: [IsAdminGuard]
+  },
+  { path: 'cart', component: CartPageComponent,
+    canActivate: [LoggedInGuard]
+  },
   { path: '', redirectTo: '/landing-page', pathMatch: 'full'},  // default route
-  { path: '**', component: ErrorPageComponent}               // wildcard for any other path
+  { path: '**', component: ErrorPageComponent},               // wildcard for any other path
+  
 ];
 
 @NgModule({

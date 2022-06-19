@@ -11,6 +11,12 @@ namespace API.Entities
         public int ServiceRating { get; set; }
 
         public string Description { get; set; }
+        
+        public bool MarkedAsSpam { get; set; }
+
+        public DateTime? SpamMarkedDate { get; set; }
+
+        public DateTime CreationDate { get; set; }
 
         public virtual AppRestaurant AppRestaurant { get; set; }
 

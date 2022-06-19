@@ -16,6 +16,7 @@ namespace API.DTOs
         {
             Id = dish.Id;
             Name = dish.Name;
+            RestaurantName = dish.AppRestaurant.Name;
             Description = dish.Description;
             Ingredients = dish.Ingredients;
             AppRestaurantId = dish.AppRestaurantId;
@@ -28,6 +29,8 @@ namespace API.DTOs
 
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public string RestaurantName { get; set; }
 
         public string Description { get; set; }
 

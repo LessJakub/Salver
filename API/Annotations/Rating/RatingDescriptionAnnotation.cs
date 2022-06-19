@@ -8,7 +8,7 @@ namespace API.Annotations
 {
     public class RatingDescriptionAnnotation : CustomAnnotation
     {
-        public RatingDescriptionAnnotation(int minLength = 0, int maxLength = 250)
+        public RatingDescriptionAnnotation(int minLength = 0, int maxLength = 550)
         {
             ErrorMessage = $"Rating must have between {minLength}-{maxLength} characters";
 

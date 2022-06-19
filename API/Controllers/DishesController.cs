@@ -26,7 +26,7 @@ namespace API.Controllers
         /// <returns>DishDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPost("Restaurants/{restaurantId}/dishes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,6 +85,26 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Get one specific dish
+        /// </summary>
+        /// <param name="id">Id of the dish</param>
+        /// <remarks>Status codes not documnted</remarks>
+        /// <returns>DishDTO from requested dish</returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<DishDto>> Read(int id)
+        {
+            var dish = await context.Dishes.FindAsync(id);
+            if(dish == null) return BadRequest($"Dish with {id} id does not exist");
+
+            return new DishDto(dish);
+        }
+
+        /// <summary>
         /// Updates selected dish of certain restaurant
         /// </summary>
         /// <param name="restaurantId">Id of the restaurant</param>
@@ -94,7 +114,7 @@ namespace API.Controllers
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPut("Restaurants/{restaurantId}/dishes/{dishId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -128,7 +148,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpDelete("Restaurants/{restaurantId}/dishes/{dishId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

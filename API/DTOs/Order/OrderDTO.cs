@@ -26,7 +26,7 @@ namespace API.DTOs
             DishesIds = new List<int>();
             foreach(var d in order.DishesInOrder)
             {
-               DishesIds.Add(d.DishId);
+               DishesIds.Add((int)d.DishId);
             }
         }
 

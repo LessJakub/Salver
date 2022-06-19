@@ -28,6 +28,19 @@ namespace API.Data
                 .OnDelete(DeleteBehavior.Restrict);
                 }
                 );
+
+            modelBuilder.Entity<RestaurantFollower>(entity => {
+                entity.HasOne(hf => hf.Follower)
+                .WithMany(h => h.FollowedRestaurants)
+                .HasForeignKey(hf => hf.FollowerId)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+                entity.HasOne(hf => hf.Followed)
+                .WithMany(h => h.Followers)
+                .HasForeignKey(hf => hf.FollowedId)
+                .OnDelete(DeleteBehavior.Restrict);
+                }
+                );
         }
         
         public DbSet<AppUser> Users { get; set; }
@@ -40,6 +53,8 @@ namespace API.Data
         public DbSet<Dish_Review> DishReviews { get; set; }
 
         public DbSet<Order> Orders { get; set; }
+
+        public DbSet<Post> Posts { get; set; }
 
         public DbSet<UserFollower> Follows { get; set; }
     }

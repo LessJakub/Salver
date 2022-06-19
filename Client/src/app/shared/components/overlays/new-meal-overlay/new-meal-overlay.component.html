@@ -47,7 +47,7 @@
                                 <button class="w-1/2 h-fit px-5 py-2 bg-green-900 text-gray-50 shadow-md rounded-2xl"
                                         type="button" (click)="fileInput.click()">Upload file</button>
 
-                                <button class="w-1/2 h-fit px-5 py-2 bg-green-900 text-gray-50 shadow-md rounded-2xl" [ngClass]="imageProvided ? 'opacity-100' : 'opacity-50'" type="button" (click)="submitAction(fileInput.files)">Submit</button>
+                                <button class="w-1/2 h-fit px-5 py-2 bg-green-900 text-gray-50 shadow-md rounded-2xl" type="button" (click)="submitAction(fileInput.files)">Submit</button>
                             </div>
                         </div>
 

@@ -25,7 +25,7 @@ namespace API.Controllers
         /// <returns>PostDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPost("Restaurants/{restaurantId}/posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -61,7 +61,7 @@ namespace API.Controllers
         /// <returns>PostDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("Users/{userId}/posts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -107,7 +107,7 @@ namespace API.Controllers
             if(restaurant == null) return BadRequest($"Restaurant with {restaurantId} id does not exist");
 
             var resPosts = new List<PostDto>();
-            foreach(var post in restaurant.Posts.ToList()) resPosts.Add(new PostDto(post));
+            foreach(var post in restaurant.Posts.OrderByDescending(p => p.Date).ToList()) resPosts.Add(new PostDto(post));
 
             return resPosts;
         }
@@ -130,7 +130,7 @@ namespace API.Controllers
             if(user == null) return BadRequest($"User with {userId} id does not exist");
 
             var usrPosts = new List<PostDto>();
-            foreach(var post in user.Posts.ToList()) usrPosts.Add(new PostDto(post));
+            foreach(var post in user.Posts.OrderByDescending(p => p.Date).ToList()) usrPosts.Add(new PostDto(post));
 
             return usrPosts;
         }
@@ -145,7 +145,7 @@ namespace API.Controllers
         /// <returns>Returns PostDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPut("Restaurants/{restaurantId}/posts/{postId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -175,7 +175,7 @@ namespace API.Controllers
         /// <returns>PostDto from updated post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPut("Users/{userId}/posts/{postId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -205,7 +205,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner, Admin")]
         [HttpDelete("Restaurants/{restaurantId}/posts/{postId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -234,7 +234,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpDelete("Users/{userId}/posts/{postId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -40,7 +40,9 @@ export class SearchService {
      */
     async getRestaurantNameByID(id: number) {
         var restaurant: RestaurantDTO;
-        restaurant = await this.http.get<RestaurantDTO>(this.restaurantDetailURL + id).toPromise();
+        this.http.get<RestaurantDTO>(this.restaurantDetailURL + id).toPromise().then((restModel) => {
+            restaurant = restModel;
+        });
 
         return restaurant.name;
     }
@@ -97,7 +99,11 @@ export class SearchService {
             return [];
         }
         else {
-            return await this.http.get<DishDTO[]>(this.dishSearchByIDURL + id + "/dishes").toPromise();
+            var res;
+            await this.http.get<DishDTO[]>(this.dishSearchByIDURL + id + "/dishes").toPromise().then(Response => {
+                res = Response;
+            });
+            return res;
         }
     }
 }

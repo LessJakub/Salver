@@ -27,7 +27,7 @@ namespace API.Controllers
         /// <response code="200">New review was created</response>
         /// <response code="400">Nothing created, proper messeage should appear with error.</response>
         /// <response code="401">User does not exist in the database.</response>
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("Restaurants/{restaurantId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -54,7 +54,8 @@ namespace API.Controllers
                 AppRestaurantId = restaurantId,
                 AppRestaurant = restaurant,
                 AppUserId = userId,
-                AppUser = user
+                AppUser = user,
+                CreationDate = DateTime.Now
             };
             
 
@@ -109,7 +110,7 @@ namespace API.Controllers
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpPut("Restaurants/{restaurantId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -130,6 +131,7 @@ namespace API.Controllers
             rev.Description = newReviewDto.Description;
             rev.AtmosphereRating = newReviewDto.AtmosphereRating;
             rev.ServiceRating = newReviewDto.ServiceRating;
+            rev.CreationDate = DateTime.Now;
 
             var restaurant = context.Restaurants.FirstOrDefault(r => r.Id == rev.AppRestaurantId);
             if(restaurant is null) return BadRequest($"Restaurant with id {rev.AppRestaurantId} does not exist.");
@@ -149,7 +151,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpDelete("Restaurants/{restaurantId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -190,7 +192,7 @@ namespace API.Controllers
         /// <returns>DishReviewDto from created dish review</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("dishes/{dishId}/reviews")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -217,7 +219,8 @@ namespace API.Controllers
                 Dish = dish,
                 DishId = dishId,
                 AppUserId = userId,
-                AppUser = user
+                AppUser = user,
+                CreationDate = DateTime.Now
             };
 
 
@@ -266,7 +269,7 @@ namespace API.Controllers
         /// <returns>Returns ReviewDto from created post</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpPut("dishes/{dishId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -285,6 +288,7 @@ namespace API.Controllers
             rev.ServiceRating = newReviewDto.ServiceRating;
             rev.TasteRating = newReviewDto.TasteRating;
             rev.Description = newReviewDto.Description;
+            rev.CreationDate = DateTime.Now;
 
 
             var dish = await context.Dishes.FindAsync(rev.DishId);
@@ -305,7 +309,7 @@ namespace API.Controllers
         /// <returns>Status code</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpDelete("dishes/{dishId}/reviews/{reviewId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -20,12 +20,18 @@ namespace API.DTOs
             UserId = rev.AppUserId;
             AtmosphereRating = rev.AtmosphereRating;
             ServiceRating = rev.ServiceRating;
+            RestaurantId = rev.AppRestaurantId;
+            Date = rev.CreationDate;
         }
 
         public int Id { get; set; }
         public string Description { get; set; }
         public int AtmosphereRating { get; set; }
         public int ServiceRating { get; set; }
+
+        public DateTime Date { get; set; }
         public int UserId { get; set; }
+
+        public int RestaurantId { get; set; }
     }
 }

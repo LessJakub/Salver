@@ -19,6 +19,7 @@ namespace API.DTOs
             Verified = user.Verified;
             Followers = user.UserFollowers.Count();
             FollowedUsers = user.FollowedUsers.Count();
+            FollowedRestaurants = user.FollowedRestaurants.Count();
         }
 
         public int Id { get; set; }
@@ -28,6 +29,8 @@ namespace API.DTOs
         public int Followers { get; set; } = 0;
 
         public int FollowedUsers { get; set; } = 0;
+
+        public int FollowedRestaurants { get; set; } = 0;
 
     }
 }

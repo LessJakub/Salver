@@ -13,6 +13,12 @@ namespace API.Entities
 
         public string Description { get; set; }
 
+        public bool MarkedAsSpam { get; set; }
+
+        public DateTime? SpamMarkedDate { get; set; }
+
+        public DateTime CreationDate { get; set; }
+
         public virtual AppUser AppUser { get; set; }
 
         public int AppUserId { get; set; }

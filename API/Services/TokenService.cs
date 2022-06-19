@@ -16,24 +16,28 @@ namespace API.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
 
-        public string CreateToken(AppUser user, IEnumerable<int> restaurants = null)
+        public string CreateToken(AppUser user, int restaurant = 0)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
                 new Claim("UserId", user.Id.ToString()),
                 //new Claim(user.Role.ToString(), "true") 
-                new Claim("Role", user.Role.ToString()) 
+                //new Claim(ClaimTypes.Role, user.Role.ToString()) 
             };
 
-            if(restaurants != null)
+            if(restaurant != 0)
             {
-                foreach(var res in restaurants.Select((value, i) => new { i, value}))
-                {
-                    
-                    claims.Add(new Claim($"RestaurantId{res.i}", res.value.ToString()));
-                }
-                
+                Console.WriteLine("Restaurant");
+                claims.Add(new Claim("Restaurant", restaurant.ToString()));
+                claims.Add(new Claim(ClaimTypes.Role, "RestaurantOwner"));
+            }
+            else if(user.Role == Roles.Admin){
+                claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
+            }
+            else{
+                Console.WriteLine("Customer");
+                claims.Add(new Claim(ClaimTypes.Role, "Customer"));
             }
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

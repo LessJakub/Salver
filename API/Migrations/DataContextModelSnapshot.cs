@@ -134,17 +134,26 @@ namespace API.Migrations
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DishId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("MarkedAsSpam")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PriceRating")
                         .HasColumnType("int");
 
                     b.Property<int>("ServiceRating")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("SpamMarkedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("TasteRating")
                         .HasColumnType("int");
@@ -166,7 +175,7 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("DishId")
+                    b.Property<int?>("DishId")
                         .HasColumnType("int");
 
                     b.Property<int>("OrderId")
@@ -294,11 +303,20 @@ namespace API.Migrations
                     b.Property<int>("AtmosphereRating")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("MarkedAsSpam")
+                        .HasColumnType("bit");
+
                     b.Property<int>("ServiceRating")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("SpamMarkedDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -317,10 +335,10 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("FollowedId")
+                    b.Property<int?>("FollowedId")
                         .HasColumnType("int");
 
-                    b.Property<int>("FollowerId")
+                    b.Property<int?>("FollowerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -369,7 +387,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.Dish_Review", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "AppUser")
-                        .WithMany()
+                        .WithMany("Dish_Review")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -389,9 +407,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entities.Dish", "Dish")
                         .WithMany("DishesInOrder")
-                        .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DishId");
 
                     b.HasOne("API.Entities.Order", "Order")
                         .WithMany("DishesInOrder")
@@ -481,14 +497,12 @@ namespace API.Migrations
                     b.HasOne("API.Entities.AppRestaurant", "Followed")
                         .WithMany("Followers")
                         .HasForeignKey("FollowedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.Entities.AppUser", "Follower")
                         .WithMany("FollowedRestaurants")
                         .HasForeignKey("FollowerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Followed");
 
@@ -531,6 +545,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
+                    b.Navigation("Dish_Review");
+
                     b.Navigation("FollowedRestaurants");
 
                     b.Navigation("FollowedUsers");

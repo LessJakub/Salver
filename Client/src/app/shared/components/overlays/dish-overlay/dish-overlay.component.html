@@ -10,9 +10,9 @@
             <!-- Upper half content -->
             <div class="flex h-1/2 w-full rounded-2xl overflow-hidden p-4">
                 <!-- Left half width content -->
-                <div class="w-1/2 h-full rounded-2xl overflow-hidden flex overflow-x-scroll snap-x snap-mandatory">
+                <div class="w-1/2 h-full rounded-2xl overflow-hidden flex">
                     <!-- Image carousel -->
-                    <img class="min-w-full object-fit resize snap-start snap-always" [src]="this.modelImageURL" (error)="updateUrlWithDefault()">   
+                    <img class="min-w-full object-cover resize snap-start snap-always" [src]="this.modelImageURL" (error)="updateUrlWithDefault()">   
                 </div>
 
                 <!-- Right half width content -->
@@ -26,7 +26,7 @@
                             </div>
 
                             <a [routerLink]="['/restaurant/', model.appRestaurantId]" class="group w-full h-1/2 flex content-center text-right justify-end space-x-2">
-                                <div class="text-xl font-thin break-words text-green-900 mb-3 group-hover:animate-pulse"> {{ this.restaurantName }}</div>
+                                <div class="text-xl font-thin break-words text-green-900 mb-3 group-hover:animate-pulse"> {{ this.model.restaurantName }}</div>
 
                                 <svg class="fill-gray-50 stroke-green-900" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M17.657 16.657L13.414 20.9C13.2284 21.0857 13.0081 21.2331 12.7656 21.3336C12.523 21.4342 12.2631 21.4859 12.0005 21.4859C11.738 21.4859 11.478 21.4342 11.2354 21.3336C10.9929 21.2331 10.7726 21.0857 10.587 20.9L6.343 16.657C5.22422 15.5382 4.46234 14.1127 4.15369 12.5609C3.84504 11.009 4.00349 9.40051 4.60901 7.93873C5.21452 6.47694 6.2399 5.22754 7.55548 4.3485C8.87107 3.46947 10.4178 3.00029 12 3.00029C13.5822 3.00029 15.1289 3.46947 16.4445 4.3485C17.7601 5.22754 18.7855 6.47694 19.391 7.93873C19.9965 9.40051 20.155 11.009 19.8463 12.5609C19.5377 14.1127 18.7758 15.5382 17.657 16.657V16.657Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -37,7 +37,7 @@
 
                         <div class="w-full h-1/2 overflow-hidden">
                             <div class="w-full h-1/4">
-                                <app-grade-tile [grade]="this.model.tasteGrade" [name]="'Taste'"></app-grade-tile>
+                                <app-grade-tile [grade]="this.model.tasteGrade" [name]="'taste'"></app-grade-tile>
                             </div>
                                  
                             <div class="w-full h-1/4">
@@ -49,7 +49,7 @@
                             </div>
                             
                             <div class="w-full h-1/4">
-                                <app-grade-tile [grade]="this.model.totalGrade" [name]="'Total Score'" [significant]="true"></app-grade-tile>
+                                <app-grade-tile [grade]="this.model.totalGrade" [name]="'Total Grade'" [significant]="true"></app-grade-tile>
                             </div>
           
                         </div>
@@ -101,62 +101,47 @@
 
                 <div class="h-1/5 w-full px-4 py-1">
                     <div class="w-full h-full">
-                        <app-tab-switcher [tabNames]="this.tabs" (tabSelectEvent)="selectNewTab($event)"></app-tab-switcher>
+                        <app-tab-switcher [default]="this.selectedTabID" [tabNames]="this.tabs" (tabSelectEvent)="selectNewTab($event)"></app-tab-switcher>
                     </div>
                 </div>
 
                 <!-- Overview contents -->
                 <div *ngIf="(this.selectedTabID) == 0" class="h-4/5 w-full px-4">
+                    
                     <div class="w-full h-1/2 break-words overflow-clip overflow-y-scroll">
                         <p class="text-lg font-bold text-gray-900 py-2">Description</p>
 
                         <p class="text-base font-light text-gray-900">{{model.description}}</p>
                     </div>
 
-                    <div class="w-full h-1/2 break-words">
-                        <p class="text-lg font-bold text-gray-900 py-2">Details</p>
+                    <div class="w-full h-1/2 flex">
+                        <div class="w-1/2 h-full flex flex-col break-words">
+                            <p class="text-lg font-bold text-gray-900 py-2">Details</p>
 
-                        <p class="text-base font-light text-gray-900">{{ model.ingredients }}</p>
+                            <p class="text-base font-light text-gray-900">{{ model.ingredients }}</p>
+                        </div>
+
+                        <div class="w-1/2 h-full flex flex-col break-words">
+                            <p class="text-lg font-bold text-gray-900 py-2">Price</p>
+
+                            <p class="text-base font-light text-gray-900">{{ model.price }} $</p>
+                        </div>
+                        
                     </div>
                 </div>
 
                 <!-- Reviews contents -->
-                <div *ngIf="(this.selectedTabID) == 1" class="h-4/5 w-full px-4 overflow-hidden overflow-y-scroll">
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
+                <div *ngIf="(this.selectedTabID) == 1 && this.reviews.length != 0" class="flex flex-col gap-4 h-4/5 w-full px-4 overflow-hidden overflow-y-scroll">
+                    <div class="w-full h-fit" *ngFor="let rev of this.reviews">
+                        <app-adjustable-post [type]="this.postTypes.DISH_REVIEW" [model]="rev" [isOwner]="this.isOwner"></app-adjustable-post>
                     </div>
                 </div>
 
-
-
-
-                <!-- Review posts -->
-                <!-- <div class="h-fit w-full p-4 overflow-y-scroll snap-y snap-proximity space-y-10">
-                    
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
+                <div *ngIf="(this.selectedTabID) == 1 && this.reviews.length == 0" class="flex flex-col gap-4 h-4/5 w-full px-4 overflow-hidden overflow-y-scroll">
+                    <div class="flex items-center justify-center w-full h-full">
+                        <p class="text-center text-2xl font-light">No reviews.</p>
                     </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-
-                    <div class="w-full h-72 snap-start">
-                        <app-review-post></app-review-post>
-                    </div>
-                </div> -->
+                </div>
             </div>
            
 

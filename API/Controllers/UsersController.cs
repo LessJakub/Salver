@@ -26,14 +26,19 @@ namespace API.Controllers
         /// <response code="400">Bard request, invalid input </response>
         /// <response code="401">Unauthorized, wrong credentials </response>
         [HttpGet]
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserProfileDto>>> GetUsers()
         {
-            return await context.Users.ToListAsync();
+            var listToRet = new List<UserProfileDto>();
+            foreach(var u in await context.Users.OrderByDescending(e => e.Id).ToListAsync())
+            {
+                listToRet.Add(new UserProfileDto(u));
+            }
+            return listToRet;
         }
 
         // Finding user by Id i.e. with api/users/3
@@ -59,12 +64,7 @@ namespace API.Controllers
 
             if(user == null) return NoContent();
 
-            return new UserProfileDto {
-                Id = user.Id,
-                Username = user.UserName,
-                Verified = user.Verified,
-                Followers = 0 //Should be implemented properly after follow table is implemented
-            };
+            return new UserProfileDto(user);
         }
 
 
@@ -84,14 +84,41 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<Boolean>> UserFollows([FromQuery] int id)
+        public async Task<ActionResult<Boolean>> UserFollowsRestaurant([FromQuery] int id)
+        {
+            var userId = GetRequesterId();
+            var user = await context.Users.FindAsync(userId);
+            if(user is null) return false;
+
+            var restaurant = user.FollowedRestaurants.FirstOrDefault(f => f.FollowedId == id);
+            if(restaurant is null) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        /// <response code="401"></response>
+        [HttpGet("follows-user")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<Boolean>> UserFollowsUser([FromQuery] int id)
         {
             var userId = GetRequesterId();
             var user = await context.Users.FindAsync(userId);
             if(user == null) return BadRequest($"There is no user with id {userId}");
 
-            var restaurant = user.FollowedUsers.FirstOrDefault(f => f.FollowedId == id);
-            if(restaurant is null) return false;
+            var followed = user.FollowedUsers.FirstOrDefault(f => f.FollowedId == id);
+            if(followed is null) return false;
             return true;
         }
 
@@ -108,7 +135,7 @@ namespace API.Controllers
         /// <response code="400"></response>
         /// <response code="401"></response>
         [HttpPost("{id}/follow")]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -154,7 +181,7 @@ namespace API.Controllers
         /// <response code="204"></response>
         /// <response code="400"></response>
         /// <response code="401"></response>
-        [HttpGet("{id}/followed")]
+        [HttpGet("{id}/followed-users")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -217,7 +244,7 @@ namespace API.Controllers
         /// <response code="400"></response>
         /// <response code="401"></response>
         [HttpDelete("{id}/unfollow")]
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -265,6 +292,146 @@ namespace API.Controllers
                 usersToReturn.Add(new UserProfileDto(user));
             }
             return usersToReturn;
+        }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        [Authorize]
+        [HttpGet("activity")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<ActivityDTO>>> GetActivitiesOfUser(int startingIndex = 0, int endIndex = 20)
+        {
+            var userId = GetRequesterId();
+            if(userId == -1) return BadRequest("You be signed in to get you activities");
+
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if(user is null) return BadRequest($"User with id {userId} does not exist");
+
+            var activities = new List<Tuple<ActivityDTO, DateTime>>();
+
+            foreach(var post in context.Posts.
+                                Where(p => user.FollowedRestaurants.Select(f => f.FollowedId).Contains((int)p.AppRestaurantId)).
+                                OrderByDescending(p => p.Date).
+                                ToList())
+            {
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(post), post.Date));
+            }
+           
+            foreach(var post in context.Posts.
+                                Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
+                                OrderByDescending(p => p.Date).
+                                ToList())
+            {
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO{
+                                                                        Id = post.Id,
+                                                                        Type = ActivityType.USER_POST,
+                                                                        Date = post.Date,
+                                                                        Description = post.Description,
+                                                                        Likes = post.Likes,
+                                                                        CreatorId = (int)post.AppUserId },
+                                                                        post.Date));
+            }
+
+            foreach(var dish_review in context.DishReviews.
+                                Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
+                                Where(e => e.MarkedAsSpam == false).
+                                OrderByDescending(p => p.CreationDate).
+                                ToList())
+            {
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(dish_review), dish_review.CreationDate));
+            }
+
+            foreach(var rest_review in context.RestaurantReviews.
+                                Where(p => user.FollowedUsers.Select(f => f.FollowedId).Contains((int)p.AppUserId)).
+                                Where(e => e.MarkedAsSpam == false).
+                                OrderByDescending(p => p.CreationDate).
+                                ToList())
+            {
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(rest_review), rest_review.CreationDate));
+            }
+
+            var listToRet = new List<ActivityDTO>();
+
+            foreach(var activity in activities.
+                                    OrderByDescending(a => a.Item2).
+                                    Skip(startingIndex).
+                                    Take(endIndex).
+                                    ToList())
+            {
+                listToRet.Add(activity.Item1);
+            }            
+
+            
+
+            return listToRet;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        /// <response code="401"></response>
+        [HttpGet("{id}/activity")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<List<ActivityDTO>>> GetActivityOfUserWithId(int id, int startingIndex = 0, int endIndex = 12)
+        {
+            var user = await context.Users.FindAsync(id);
+            if(user is null) return NoContent();
+
+            var listToRet = new List<ActivityDTO>();
+
+            foreach(var p in user.Posts.OrderByDescending(e => e.Date).
+                                        ToList())
+            {
+                listToRet.Add(new ActivityDTO{
+                    Id = p.Id,
+                    Type = ActivityType.USER_POST,
+                    Date = p.Date,
+                    Description = p.Description,
+                    Likes = p.Likes,
+                    CreatorId = (int)p.AppUserId
+                });
+            }
+
+            foreach(var dr in user.Dish_Review.OrderByDescending(e => e.CreationDate).
+                                            Where(e => e.MarkedAsSpam == false).
+                                            ToList())
+            {
+                listToRet.Add(new ActivityDTO(dr));
+            }
+            
+            foreach(var rr in user.Res_Review.OrderByDescending(e => e.CreationDate).
+                                            Where(e => e.MarkedAsSpam == false).
+                                            ToList())
+            {
+                listToRet.Add(new ActivityDTO(rr));
+            }
+
+            return listToRet.OrderByDescending(a => a.Date).
+                            Skip(startingIndex).
+                            Take(endIndex).
+                            ToList();
         }
     }
 }

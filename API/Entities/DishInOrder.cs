@@ -11,8 +11,8 @@ namespace API.Entities
 
         public int OrderId { get; set; }
 
-        public virtual Dish Dish { get; set; }
+        public virtual Dish? Dish { get; set; }
 
-        public int DishId { get; set; }
+        public int? DishId { get; set; }
     }
 }

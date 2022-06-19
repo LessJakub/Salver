@@ -16,7 +16,7 @@ export class SearchPageComponent implements OnInit {
 
     filteredSearchResults: any[];
     searchResultsType: string = "Dish";
-
+    /*
     dishSearchResults: Dish[] = [
         { name: "Hosomaki", imageURL: ["/assets/images/3W2A0606@0.5x.webp", "/assets/images/3W2A0606@0.5x.webp"], grade: [4, 2, 3, 3], description: "With fresh mango or tuna. 6 pcs", price: 15, restaurant: "Japan Sun" },
         { name: "Uramaki", imageURL: ["/assets/images/3W2A0699@0.5x.webp", "/assets/images/3W2A0699@0.5x.webp"], grade: [5, 3, 5, 4], description: "Avocado uramaki with soy sauce.", price: 20, restaurant: "Japan Sun" },
@@ -33,7 +33,7 @@ export class SearchPageComponent implements OnInit {
         { name: "Wakame Salad", imageURL: ["/assets/images/3W2A0956@0.5x.webp"], grade: [5, 4, 5, 5], description: "Seaweed, sesame seeds, cucumber, rice vinegar", price: 29, restaurant: "Japan Sun" },
         { name: "Tom Yam Kung ", imageURL: ["/assets/images/3W2A0925@0.5x.webp"], grade: [5, 3, 4, 4], description: "Thai soup with shrimps, coconut milk and vegetables", price: 26, restaurant: "Japan Sun" },
     ]
-
+*/
     constructor(private searchService: SearchService) { }
 
     ngOnInit(): void {
@@ -46,6 +46,7 @@ export class SearchPageComponent implements OnInit {
     }
 
     updateFilteredArray() {
+        this.filteredSearchResults = []
         if (this.searchForm == null) {
             this.filterDishes();
             this.searchResultsType = "Dish";
@@ -103,5 +104,4 @@ export class SearchPageComponent implements OnInit {
 
         this.filteredSearchResults = tempArray;
     }
-
 }

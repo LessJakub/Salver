@@ -6,7 +6,7 @@ import { Post } from 'src/app/models/post';
     host: { 'class': 'flex grow justify-center h-full w-full' }, // ! Styling host container to fill all avialable space
     template: `
     <!-- Main card div - rows for expanding: by default one row -->
-    <div class="rounded-2xl shadow-xl flex flex-col w-full max-w-3xl bg-white">
+    <div class="rounded-2xl shadow-xl flex flex-col w-full h-96 max-w-3xl bg-white">
       <!-- Not expanded card contents -->
       <div class="grow flex w-full h-96">
         <!-- Post image -->
@@ -19,7 +19,7 @@ import { Post } from 'src/app/models/post';
               <h3 class="text-xl">{{ model.user }}</h3>
               <p> {{ prettyTimeFromDate(model.date) }}</p>
             </div>
-            <a [routerLink]="['/restaurant']" class="text-green-600 font-medium mb-3 hover:animate-pulse"> {{ model.taggedRestaurant }}</a>
+            <a [routerLink]="['/restaurant/' + model.taggedRestaurantId ]" class="text-green-600 font-medium mb-3 hover:animate-pulse"> {{ model.taggedRestaurant }}</a>
             <p #thisElem *ngIf="!expanded" (click)="toggleExpansion(thisElem)" class="grow overflow-hidden relative after:absolute after:bottom-0 after:left-0 after:h-10 after:w-full after:bg-gradient-to-t after:from-white">
               {{ model.description }} <!-- Too long desc just overflow and are hidden, there is a fade out effect on the bottom of the desc. text area -->
             </p>
@@ -55,6 +55,7 @@ export class ActivityPostComponent implements OnInit {
     }
 
     prettyTimeFromDate(time: Date): string {
+        time = new Date(time)
         return time.toLocaleDateString(navigator.language, {
             year: '2-digit',
             month: '2-digit',

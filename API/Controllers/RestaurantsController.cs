@@ -26,7 +26,7 @@ namespace API.Controllers
         /// <response code="200"> Ok, new restaurant is created. </response>
         /// <response code="204"> NoContent, id in users token is invalid. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -47,7 +47,6 @@ namespace API.Controllers
                 Name = restaurantRegisterDto.Name,
                 Description = restaurantRegisterDto.Description,
                 Address = restaurantRegisterDto.Address,
-                //Price = 0.0f
                 PhoneNumber = restaurantRegisterDto.PhoneNumber,
                 Email = restaurantRegisterDto.Email
             };
@@ -108,7 +107,7 @@ namespace API.Controllers
         /// <response code="200"></response>
         /// <response code="204"></response>
         /// <response code="400"></response>
-        [AllowAnonymous]
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id}/follow")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -256,7 +255,7 @@ namespace API.Controllers
         /// <response code="200"> Ok, new restaurant is created. </response>
         /// <response code="204"> NoContent, id in users token is invalid. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -276,6 +275,8 @@ namespace API.Controllers
             restaurant.Name = restaurantUpdateDto.Name;
             restaurant.Description = restaurantUpdateDto.Description;
             restaurant.Address = restaurantUpdateDto.Address;
+            restaurant.Email = restaurantUpdateDto.Email;
+            restaurant.PhoneNumber = restaurantUpdateDto.PhoneNumber;
 
             await context.SaveChangesAsync();
 
@@ -291,7 +292,7 @@ namespace API.Controllers
         /// <response code="200"> Ok, new restaurant is created. </response>
         /// <response code="204"> NoContent, id in users token is invalid. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        [Authorize]
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -305,6 +306,24 @@ namespace API.Controllers
 
             var adminCheckStatusCode = AuthorizedByRole(Roles.Admin.ToString());
             if(owner == null && adminCheckStatusCode != StatusCodes.Status200OK) return Unauthorized("User is not an admin or does not own the restaurant");
+
+            foreach(var o in restaurant.Orders.ToList())
+            {
+                foreach(var dio in o.DishesInOrder.ToList())
+                {
+                    dio.Dish = null;
+                    dio.DishId = 0;
+                }
+            }
+
+            foreach(var f in restaurant.Followers.ToList())
+            {
+                f.Follower = null;
+                f.FollowerId = 0;
+                f.Followed = null;
+                f.FollowedId = 0;
+                context.Remove(f);
+            }
 
             context.Remove(restaurant);
 
@@ -356,6 +375,74 @@ namespace API.Controllers
                 restaurantsToReturn.Add(new RestaurantDto(res));
             }
             return restaurantsToReturn;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="startingIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="204"></response>
+        /// <response code="400"></response>
+        [AllowAnonymous]
+        [HttpGet("{id}/activity")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<ActivityDTO>>> GetActivitiesOfRestaurant(int id, int startingIndex = 0, int endIndex = 20)
+        {
+            var restaurant = await context.Restaurants.FirstOrDefaultAsync(r => r.Id == id);
+            if(restaurant is null) return BadRequest($"Restaurant with id {id} does not exist");
+
+            var activities = new List<Tuple<ActivityDTO, DateTime>>();
+            Post pinnedPost = null;
+
+            var posts = restaurant.Posts.
+                                    OrderByDescending(p => p.Date).
+                                    ToList();
+
+            var resReviews = restaurant.Res_Review.
+                                    Where(e => e.MarkedAsSpam == false).
+                                    OrderByDescending(d => d.Id).
+                                    ToList();
+            var dishReviews = await context.DishReviews.
+                                    Where(r => r.Dish.AppRestaurantId == restaurant.Id).
+                                    Where(e => e.MarkedAsSpam == false).
+                                    OrderByDescending(r => r.CreationDate).
+                                    ToListAsync();
+
+            foreach(var p in posts)
+            {
+                if(pinnedPost is null) pinnedPost = p;
+                else activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(p), p.Date));
+            }
+            
+            foreach(var r in resReviews)
+            {
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(r), r.CreationDate));
+            }
+
+            foreach(var r in dishReviews)
+            {
+                 activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(r), r.CreationDate));
+            }
+
+            var listToRet = new List<ActivityDTO>();
+            if(pinnedPost is not null) listToRet.Add(new ActivityDTO(pinnedPost));
+            foreach(var a in activities.
+                            OrderByDescending(a => a.Item2).
+                            Skip(startingIndex).
+                            Take(endIndex).
+                            ToList())
+            {
+                listToRet.Add(a.Item1);
+            }
+
+            return listToRet;
         }
         
     }

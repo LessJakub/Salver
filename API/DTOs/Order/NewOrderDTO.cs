@@ -16,15 +16,6 @@ namespace API.DTOs
         public int[] Dishes { get; set; }
 
         [Required]
-        public Status Status { get; set; }
-
-        [Required]
-        public DateTime SubmitTime { get; set; }
-
-        [Required]
-        public TimeSpan ExpectedTime { get; set; }
-
-        [Required]
         public int RestaurantId { get; set; }
     }
 }

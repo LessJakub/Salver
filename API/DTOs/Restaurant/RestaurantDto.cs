@@ -19,17 +19,17 @@ namespace API.DTOs
             Description = appRestaurant.Description;
             Address = appRestaurant.Address;
             //Price = appRestaurant.Price;
-            Followers = appRestaurant.Followers.Count();
+            if(appRestaurant.Followers is not null)Followers = appRestaurant.Followers.Count();
             PhoneNumber = appRestaurant.PhoneNumber;
             Email = appRestaurant.Email;
-            if(appRestaurant.Dishes.Count() > 0) 
+            if(appRestaurant.Dishes is not null && appRestaurant.Dishes.Count() > 0) 
             {
                 MinPrice = appRestaurant.Dishes.Min(d => d.Price);
                 MaxPrice = appRestaurant.Dishes.Max(d => d.Price);
                 //PriceRange = (MinPrice != MaxPrice)?($"{MinPrice}-{MaxPrice}"):(null);
                 Price = appRestaurant.Dishes.Average(d => d.Price);
             }
-            if(appRestaurant.Res_Review.Count() > 0)
+            if(appRestaurant.Res_Review is not null && appRestaurant.Res_Review.Count() > 0)
             {
                 AtmosphereRating = appRestaurant.Res_Review.Average(r => r.AtmosphereRating);
                 ServiceRating = appRestaurant.Res_Review.Average(r => r.ServiceRating);

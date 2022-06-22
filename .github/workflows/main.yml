@@ -29,12 +29,19 @@ jobs:
         # Otherwise, defaults to `master`.
           ref: 'azuredeploy'
           
-      - name: edit connection string
+      - name: Edit DB connection string
         uses: benday-inc/edit-dbconnstr-in-appsettings@main
         with:
           pathtosettingsfile: '${{ github.workspace }}/API/appsettings.Development.json'
           name: "DefaultConnection"
           connectionstring: ${{ secrets.DEFAULTCONNECTION }}
+          
+      - name: Edit Blob connection string
+        uses: benday-inc/edit-dbconnstr-in-appsettings@main
+        with:
+          pathtosettingsfile: '${{ github.workspace }}/API/appsettings.Development.json'
+          name: "AzureBlobStorage"
+          connectionstring: ${{ secrets.AZUREBLOBSTORAGE }}
         
       - uses: azure/docker-login@v1
         name: Login with docker into ACR

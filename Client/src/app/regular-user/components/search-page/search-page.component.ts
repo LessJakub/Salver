@@ -86,10 +86,6 @@ export class SearchPageComponent implements OnInit {
 
         this.filteredSearchResults = [...this.filteredSearchResults, ...tempArray];
 
-        var unique = this.filteredSearchResults.filter(function(elem, index, self) {
-            return index === self.indexOf(elem);
-        })
-
         if (this.searchForm != null && this.searchForm.price != null) {
             if (this.searchForm.price == "Lowest") {
                 this.filteredSearchResults = this.filteredSearchResults.sort((res1, res2) => res1.price - res2.price);
@@ -109,10 +105,6 @@ export class SearchPageComponent implements OnInit {
 
         let tempArray: DishDTO[] = this.searchService.dishes;
         this.filteredSearchResults = [...this.filteredSearchResults, ...tempArray];
-
-        var unique = this.filteredSearchResults.filter(function(elem, index, self) {
-            return index === self.indexOf(elem);
-        })
 
         if (this.searchForm != null && this.searchForm.price != null) {
             if (this.searchForm.price == "Lowest") {

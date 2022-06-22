@@ -26,7 +26,7 @@ namespace API
             services.AddIdentityServices(_config);
             services.AddSwaggerService(_config);
 
-            services.AddScoped(x => new BlobServiceClient(_config.GetValue<string>("AzureBlobStorage")));
+            services.AddScoped(x => new BlobServiceClient(_config.GetConnectionString("AzureBlobStorage")));
             services.AddScoped<IBlobService, BlobService>();
             services.AddSingleton<DiagnosticObserver>();
         }

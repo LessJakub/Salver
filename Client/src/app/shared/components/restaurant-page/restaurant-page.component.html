@@ -156,7 +156,7 @@
         </div>
     </div>
 
-    <div class="overflow-y-auto relative w-full grow">
+    <div (scroll)="onScroll($event)" class="overflow-y-auto relative w-full grow">
         <!-- Menu -->
         <div *ngIf="(this.selectedTabID) == 0"
             class="w-full flex flex-col space-y-5 absolute top-0 left-0 justify-center content-center items-center align-middle">

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SearchForm } from 'src/app/models/SearchForm';
 import { DishDTO } from '../models/DishDTO';
@@ -53,16 +53,19 @@ export class SearchService {
      * After fetching, data is available under `restaurant` property.
      * @param model Form model with input string
      */
-    async searchRestaurant(model: SearchForm) {
+    async searchRestaurant(model: SearchForm, skipCount: number = 0, itemsCount: number = 10) {
+        var params = new HttpParams();
+        params = params.append("startingIndex", skipCount);
+        params = params.append("endIndex", itemsCount);
 
         if (model == null) {
-            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl).toPromise();
+            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl, {params: params}).toPromise();
         }
         if (model.input == null || model.input.length == 0) {
-            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl).toPromise();
+            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl, {params: params}).toPromise();
         }
         else {
-            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl + "?restaurantName=" + model.input).toPromise();
+            this.restaurants = await this.http.get<RestaurantDTO[]>(this.restaurantSearchUrl + "?restaurantName=" + model.input, {params: params}).toPromise();
         }
     }
 
@@ -73,17 +76,21 @@ export class SearchService {
      * After fetching, data is available under `dishes` property.
      * @param model Form model with input string
      */
-    async searchDishes(model: SearchForm) {
+    async searchDishes(model: SearchForm, skipCount: number = 0, itemsCount: number = 10) {
 
+        var params = new HttpParams();
+        params = params.append("startingIndex", skipCount);
+        params = params.append("endIndex", itemsCount);
+        
         if (model == null) {
-            this.dishes = await this.http.get<DishDTO[]>(this.dishSearchUrl).toPromise();
+            this.dishes = await this.http.get<DishDTO[]>(this.dishSearchUrl, {params: params}).toPromise();
         }
         else {
             if (model.input == null || model.input.length == 0) {
-                this.dishes = await this.http.get<DishDTO[]>(this.dishSearchUrl).toPromise();
+                this.dishes = await this.http.get<DishDTO[]>(this.dishSearchUrl,  {params: params}).toPromise();
             }
             else {
-                this.dishes = await this.http.get<DishDTO[]>(this.dishSearchUrl + "?dishName=" + model.input).toPromise();
+                this.dishes = await this.http.get<DishDTO[]>(this.dishSearchUrl + "?dishName=" + model.input,  {params: params}).toPromise();
             }
         }
     }

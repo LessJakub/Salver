@@ -1,21 +1,34 @@
-<div class="w-full h-full px-16 pb-5 bg-gray-50">
+<!-- <div class="w-full h-full px-16 pb-5  overflow-hidden bg-orange-500"> -->
 
-    <div class="flex w-full h-fit content-center justify-center items-center">
+    <!-- <div class="flex w-full h-[10%] content-center justify-center items-center">
         <app-search-bar (modelEvent)="updateSearchForm($event)"></app-search-bar>
-    </div>
+    </div> -->
 
     <!-- Search content -->
-    <div class="w-full h-fit items-center">
-        <div class="w-full h-full flex flex-grow">
-            <div class="w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-items-center">
-                <ng-container *ngFor="let result of filteredSearchResults">
+    <!-- <div (scroll)="onScroll($event)" class="w-full h-[90%] max-h-[50%] items-center bg-green-500 overflow-y-auto overflow-hidden">
+            <div  class="w-full h-fit grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-items-center bg-blue-500">
+                <div *ngFor="let result of filteredSearchResults">
                     <app-dish-tile [model]="result" *ngIf="(this.searchResultsType) === 'Dish'"></app-dish-tile>
+
+                    <app-restaurant-tile [model]="result" *ngIf="(this.searchResultsType) === 'Restaurant'"></app-restaurant-tile>
+                </div>
+                
+            </div>
+    </div> -->
+
+<!-- </div> -->
+
+<div class="w-full h-full">
     
-                    <app-restaurant-tile [model]="result" *ngIf="(this.searchResultsType) === 'Restaurant'">
-                    </app-restaurant-tile>
-                </ng-container>
+    <app-search-bar class="fixed w-full px-16" (modelEvent)="updateSearchForm($event)"></app-search-bar>
+
+    <div class="w-full h-full pt-20">
+        <div (scroll)="onScroll($event)" class="w-full fixed pb-36 h-full overflow-y-auto overflow-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-items-center">
+            <div class="w-fit h-fit" *ngFor="let result of filteredSearchResults">
+                <app-dish-tile [model]="result" *ngIf="(this.searchResultsType) == 'Dish'"></app-dish-tile>
+
+                <app-restaurant-tile [model]="result" *ngIf="(this.searchResultsType) == 'Restaurant'"></app-restaurant-tile>
             </div>
         </div>
     </div>
-
 </div>

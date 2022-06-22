@@ -2,8 +2,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,visualstudio,angular,aspnetcore,macos
 
 # MOST IMPORTANT
-appsettings.Development.json
-appsettings.json
+# appsettings.Development.json
+# appsettings.json
 
 
 ### Angular ###

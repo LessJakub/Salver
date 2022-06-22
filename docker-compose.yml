@@ -3,29 +3,24 @@
 version: '3.9'
 
 services:
-  API:
-    image: sp-api
-    build:
-      context: ./API
-      dockerfile: ./Dockerfile
-    ports:
-      - 8080:80
-      - 443:443
-
-
   Client:
-    image: sp-client
+    image: salveracr.azurecr.io/sp-client-compose
     environment:
-      - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=development
     build:
       context: ./Client
       dockerfile: ./Dockerfile
     ports:
       - 4200:4200
-    volumes:
-      - "./Client:/app"
-      - "/app/node_modules"
-    command: ng serve --host 0.0.0.0 --poll=2000
+    # command: ng serve --host 0.0.0.0 --disable-host-check
+
+  API:
+    image: salveracr.azurecr.io/sp-api-compose
+    build:
+      context: ./API
+      dockerfile: ./Dockerfile
+
+
+  
 
 

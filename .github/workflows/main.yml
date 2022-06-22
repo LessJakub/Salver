@@ -28,6 +28,13 @@ jobs:
         # triggered a workflow, this defaults to the reference or SHA for that event.
         # Otherwise, defaults to `master`.
           ref: 'azuredeploy'
+          
+      - name: edit connection string
+        uses: benday-inc/edit-dbconnstr-in-appsettings@main
+        with:
+          pathtosettingsfile: '${{ github.workspace }}/API/appsettings.Development.json'
+          name: "DefaultConnection"
+          connectionstring: ${{ secrets.DEFAULTCONNECTION }}
         
       - uses: azure/docker-login@v1
         name: Login with docker into ACR

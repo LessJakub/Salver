@@ -23,6 +23,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        with:
+        # The branch, tag or SHA to checkout. When checking out the repository that
+        # triggered a workflow, this defaults to the reference or SHA for that event.
+        # Otherwise, defaults to `master`.
+          ref: 'azuredeploy'
         
       - uses: azure/docker-login@v1
         name: Login with docker into ACR

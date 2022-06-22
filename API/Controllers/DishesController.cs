@@ -201,7 +201,6 @@ namespace API.Controllers
                     ToListAsync())
                 {
                     dishesAll.Add(new DishDto(dish));
-                    if(dishesAll.Count() >= 10) break;
                 }
                 
                 return dishesAll;

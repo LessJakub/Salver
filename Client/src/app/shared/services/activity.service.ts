@@ -13,8 +13,8 @@ export class ActivityService {
   constructor(private http: HttpClient, private accountService: AccountService) { }
 
   private baseUrl: string = "http://" + location.hostname;
-  private restaurantUrl: string = this.baseUrl + ":8080/api/Restaurants/"
-  private userUrl: string = this.baseUrl + ":8080/api/Users/"
+  private restaurantUrl: string = this.baseUrl + "/api/Restaurants/"
+  private userUrl: string = this.baseUrl + "/api/Users/"
 
 
   public async getRestaurantActivities(id : number) : Promise<ActivityDTO[]>

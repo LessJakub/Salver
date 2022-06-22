@@ -3,23 +3,14 @@
 version: '3.9'
 
 services:
-  Client:
-    image: salveracr.azurecr.io/sp-client-compose
-    environment:
-      - NODE_ENV=development
-    build:
-      context: ./Client
-      dockerfile: ./Dockerfile
-    ports:
-      - 4200:4200
-    # command: ng serve --host 0.0.0.0 --disable-host-check
-
+ 
   API:
-    image: salveracr.azurecr.io/sp-api-compose
+    image: salveracr.azurecr.io/sp-api-mix
     build:
       context: ./API
       dockerfile: ./Dockerfile
-
+    ports:
+      - 8080:80
 
   
 

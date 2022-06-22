@@ -23,8 +23,8 @@ export class OrdersService {
   dishesInCartLength = this.dishesInCartLengthSource.asObservable();
 
   private baseUrl: string = "http://" + location.hostname;
-  private ordersUrl: string = this.baseUrl + ":8080/api/Orders/"
-  private dishesUrl: string = this.baseUrl + ":8080/api/Dishes/"
+  private ordersUrl: string = this.baseUrl + "/api/Orders/"
+  private dishesUrl: string = this.baseUrl + "/api/Dishes/"
 
   constructor(private http: HttpClient, private accountService: AccountService) 
   { 
@@ -69,7 +69,7 @@ export class OrdersService {
       dishesIds.dishesIds.push(d.id)
     })
 
-    await this.http.post<DishDTO[]>(this.baseUrl + ':8080/dishes', dishesIds).toPromise().then((Response: DishDTO[]) => {
+    await this.http.post<DishDTO[]>(this.baseUrl + '/dishes', dishesIds).toPromise().then((Response: DishDTO[]) => {
         this.Cart = new Array<[DishDTO, number]>();
         Response.forEach((dish:DishDTO) => {
             this.Cart.push([dish, this.dishAmountInOrder(dish)])

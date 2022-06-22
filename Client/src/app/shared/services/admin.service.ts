@@ -18,7 +18,7 @@ export class AdminService {
   constructor(private http: HttpClient, private accountService: AccountService) { }
 
   private baseUrl: string = "http://" + location.hostname;
-  private adminUrl: string = this.baseUrl + ":8080/api/admin/"
+  private adminUrl: string = this.baseUrl + "/api/admin/"
   private spamUrl: string = this.adminUrl + "spam"
 
   private dishReviews: string = this.spamUrl + "/dish-reviews"

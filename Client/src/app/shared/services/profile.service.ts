@@ -14,8 +14,8 @@ import { AccountService } from './account.service';
 export class ProfileService {
 
     private baseURL: string = "http://" + location.hostname;
-    private usersURL: string = this.baseURL + ":8080/api/Users/"
-    private accountURL: string = this.baseURL + ":8080/api/Account/"
+    private usersURL: string = this.baseURL + "/api/Users/"
+    private accountURL: string = this.baseURL + "/api/Account/"
 
     constructor(private accountService: AccountService,
         private http: HttpClient) { }
@@ -88,7 +88,7 @@ export class ProfileService {
             }
         })
 
-        var url = this.baseURL + ":8080/api/Posts/Users/" + id + "/posts"
+        var url = this.baseURL + "/api/Posts/Users/" + id + "/posts"
         return this.http.post<PostDTO>(url, model, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).pipe(
             map((Response: PostDTO) => {
                 return Response;
@@ -115,7 +115,7 @@ export class ProfileService {
                 }
         })
 
-        var url = this.baseURL + ":8080/api/Posts/Users/" + id + "/posts/" + postID
+        var url = this.baseURL + "/api/Posts/Users/" + id + "/posts/" + postID
         return this.http.put<PostDTO>(url, model, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
             map((Response: PostDTO) => {
                 return Response;
@@ -140,7 +140,7 @@ export class ProfileService {
                 }
         })
 
-        var url = this.baseURL + ":8080/api/Posts/Users/" + id + "/posts/" + postID
+        var url = this.baseURL + "/api/Posts/Users/" + id + "/posts/" + postID
         return this.http.delete(url, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).pipe(
             map((Response: PostDTO) => {
                 return Response;
@@ -242,7 +242,7 @@ export class ProfileService {
                 }
         })
 
-        var url = this.baseURL + ":8080/api/Reviews/dishes/" + dishID + "/reviews/" + reviewID
+        var url = this.baseURL + "/api/Reviews/dishes/" + dishID + "/reviews/" + reviewID
         return this.http.delete(url, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).toPromise();
     }
 
@@ -260,7 +260,7 @@ export class ProfileService {
                 }
         })
 
-        var url = this.baseURL + ":8080/api/Reviews/Restaurants/" + dishID + "/reviews/" + reviewID
+        var url = this.baseURL + "/api/Reviews/Restaurants/" + dishID + "/reviews/" + reviewID
         return this.http.delete(url, {headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken)}).toPromise();
     }
 

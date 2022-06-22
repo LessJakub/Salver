@@ -15,8 +15,8 @@ import { AccountService } from './account.service';
 export class ReviewsService {
 
     private baseUrl: string = "http://" + location.hostname;
-    private dishReviewURL: string = this.baseUrl + ":8080/api/Reviews/dishes/"
-    private restReviewURL: string = this.baseUrl + ":8080/api/Reviews/Restaurants/"
+    private dishReviewURL: string = this.baseUrl + "/api/Reviews/dishes/"
+    private restReviewURL: string = this.baseUrl + "/api/Reviews/Restaurants/"
 
     constructor(private accountService: AccountService,
                 private http: HttpClient) { }
@@ -82,7 +82,7 @@ export class ReviewsService {
      * @returns Response as a promise
      */
     async getDishReviews(id: number) {
-        var url = this.baseUrl + ":8080/api/Reviews/dishes/" + id + "/reviews";
+        var url = this.baseUrl + "/api/Reviews/dishes/" + id + "/reviews";
         return await this.http.get<DishReviewDTO[]>(url).toPromise();
     }
 
@@ -93,7 +93,7 @@ export class ReviewsService {
      * @returns Response as a promise
      */
      async getRestaurantPosts(id: number) {
-        var url = this.baseUrl + ":8080/api/Posts/Restaurants/" + id + "/posts";
+        var url = this.baseUrl + "/api/Posts/Restaurants/" + id + "/posts";
         return await this.http.get<PostDTO[]>(url).toPromise();
     }
 
@@ -104,7 +104,7 @@ export class ReviewsService {
      * @returns Promise of DishDTO.
      */
     async getDishNameFromID(id: number) {
-        var url = this.baseUrl + ":8080/api/Dishes/" + id;
+        var url = this.baseUrl + "/api/Dishes/" + id;
         return await this.http.get<DishDTO>(url).toPromise();
     }
 
@@ -124,7 +124,7 @@ export class ReviewsService {
             }
         })
 
-        var url = this.baseUrl + ":8080/api/Users/" + id;
+        var url = this.baseUrl + "/api/Users/" + id;
         return await this.http.get<User>(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
     }
 
@@ -144,7 +144,7 @@ export class ReviewsService {
             }
         })
 
-        var url = this.baseUrl + ":8080/api/Restaurants/" + id;
+        var url = this.baseUrl + "/api/Restaurants/" + id;
         return await this.http.get<RestaurantDTO>(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
     }
 }

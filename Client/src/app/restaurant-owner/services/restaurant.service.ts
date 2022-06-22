@@ -16,9 +16,9 @@ export class RestaurantService {
 
     // Obtain true hostname URL (fixes issue where we need to connect to API on non-local host)
     private baseUrl: string = "http://" + location.hostname;
-    private addDishURL: string = this.baseUrl + ":8080/api/Dishes/Restaurants/"
-    private restaurantsURL: string = this.baseUrl + ":8080/api/Restaurants/"
-    private postURL: string = this.baseUrl + ":8080/api/Posts/Restaurants/"
+    private addDishURL: string = this.baseUrl + "/api/Dishes/Restaurants/"
+    private restaurantsURL: string = this.baseUrl + "/api/Restaurants/"
+    private postURL: string = this.baseUrl + "/api/Posts/Restaurants/"
 
     constructor(private http: HttpClient, private accountService: AccountService) { }
 

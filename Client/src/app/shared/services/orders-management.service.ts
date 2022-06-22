@@ -14,7 +14,7 @@ export class OrdersManagementService {
     constructor(private http: HttpClient, private accountService: AccountService) { }
 
     private baseUrl: string = "http://" + location.hostname;
-    private ordersUrl: string = this.baseUrl + ":8080/api/Orders/"
+    private ordersUrl: string = this.baseUrl + "/api/Orders/"
 
     public dishAmountInOrder(dish: DishDTO, list: Array<number>): number
     {
@@ -28,7 +28,7 @@ export class OrdersManagementService {
 
         var toReturnTuples = new Array<[DishDTO, number]>();
 
-        await this.http.post<DishDTO[]>(this.baseUrl + ':8080/dishes', dishesIds).toPromise().then((Response: DishDTO[]) => {
+        await this.http.post<DishDTO[]>(this.baseUrl + '/dishes', dishesIds).toPromise().then((Response: DishDTO[]) => {
             Response.forEach((dish:DishDTO) => {
                 toReturnTuples.push([dish, this.dishAmountInOrder(dish, list)])
             });

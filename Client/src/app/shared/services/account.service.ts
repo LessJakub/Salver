@@ -14,10 +14,10 @@ export class AccountService {
 
     // Obtain true hostname URL (fixes issue where we need to connect to API on non-local host)
     private baseUrl: string = "http://" + location.hostname;
-    private loginUrl: string = this.baseUrl + ":8080/api/account/login"
-    private registerUrl: string = this.baseUrl + ":8080/api/account/register"
-    private followURL: string = this.baseUrl + ":8080/api/Restaurants/"
-    private restaurantDetailURL: string = this.baseUrl + ":8080/api/Restaurants/"
+    private loginUrl: string = this.baseUrl + "/api/account/login"
+    private registerUrl: string = this.baseUrl + "/api/account/register"
+    private followURL: string = this.baseUrl + "/api/Restaurants/"
+    private restaurantDetailURL: string = this.baseUrl + "/api/Restaurants/"
 
     private loggedInStatus: boolean = false;
     ownerID: number = 0;
@@ -225,7 +225,7 @@ export class AccountService {
                 }
                 
             })
-            var response = await this.http.get<boolean>(this.baseUrl + ":8080/api/Users/follows-restaurant?id=" + id, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise().then((resp : boolean) => {
+            var response = await this.http.get<boolean>(this.baseUrl + "/api/Users/follows-restaurant?id=" + id, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise().then((resp : boolean) => {
                 returnedFlag = resp;
             })
             return returnedFlag;

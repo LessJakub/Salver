@@ -7,7 +7,7 @@ export class BlobUploadService {
     constructor(private http: HttpClient) {}
 
     private baseURL: string = "http://" + location.hostname;
-    private uploadURL: string = this.baseURL + ":8080/api/Upload";
+    private uploadURL: string = this.baseURL + "/api/Upload";
     
     private baseBlobURL = "https://salver.blob.core.windows.net";
     private resProfURL = this.baseBlobURL + "/resprof/";

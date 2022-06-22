@@ -11,11 +11,11 @@ import { RestaurantDTO } from '../models/RestaurantDTO';
 export class SearchService {
 
     private baseUrl: string = "http://" + location.hostname;
-    private restaurantSearchUrl: string = this.baseUrl + ":8080/api/Restaurants/search"
-    private restaurantDetailURL: string = this.baseUrl + ":8080/api/Restaurants/"
+    private restaurantSearchUrl: string = this.baseUrl + "/api/Restaurants/search"
+    private restaurantDetailURL: string = this.baseUrl + "/api/Restaurants/"
 
-    private dishSearchByIDURL: string = this.baseUrl + ":8080/api/Dishes/Restaurants/"
-    private dishSearchUrl: string = this.baseUrl + ":8080/api/Dishes/search"
+    private dishSearchByIDURL: string = this.baseUrl + "/api/Dishes/Restaurants/"
+    private dishSearchUrl: string = this.baseUrl + "/api/Dishes/search"
     restaurants: RestaurantDTO[] = []
     dishes: DishDTO[] = []
     constructor(private http: HttpClient) { }

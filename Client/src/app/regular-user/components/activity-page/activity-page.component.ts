@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Post } from 'src/app/models/post';
 import { POST_TYPE } from 'src/app/shared/components/posts/adjustable-post/adjustable-post.component';
@@ -16,6 +16,18 @@ import { SearchService } from 'src/app/shared/services/search.service';
 export class ActivityPageComponent implements OnInit {
 
     constructor(private searchService: SearchService, private activityService: ActivityService) { }
+
+    itemsCount: number = 6;
+
+    @HostListener("window:scroll", [])
+    async onScroll() {
+        if ((window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 1)) {
+            if (this.fetchedActivity != null && this.fetchedActivity.length > 0) {
+                var newActivity = await this.activityService.getUserActivities(this.fetchedActivity.length, this.itemsCount);
+                this.fetchedActivity = [...this.fetchedActivity, ...newActivity];
+            }
+        }
+    }
 
     fetchedActivity: ActivityDTO[] | null;
     recommendations: DishDTO[] = [];

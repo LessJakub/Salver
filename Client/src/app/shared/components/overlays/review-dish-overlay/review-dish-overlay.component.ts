@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
@@ -49,30 +50,25 @@ export class ReviewDishOverlayComponent implements OnInit {
     }
 
     submitAction(files) {
-        console.log("Review Overlay - Submit action:");
-        console.log(this.reviewModel);
-
         if (this.reviewModel.priceRating > 0 && this.reviewModel.serviceRating > 0 && this.reviewModel.tasteRating > 0) {
             this.error = "";
-            
-            var reponse = this.reviewsService.addDishReview(this.model.id, this.reviewModel).toPromise().then((review) => {
-                console.log("Review Service - Positive response. Added:");
-                console.log(review);
 
-                if (files[0]) {
-                    console.log("Review - Files for upload present.")
-                    var filename = review.id + ".webp";
-                    this.uploadFiles(files, filename);
-                }
+               
+                var reponse = this.reviewsService.addDishReview(this.model.id, this.reviewModel).toPromise().then((review) => {
+                var filename = review.id + ".webp";
+                if (files[0] != null) {
+                    this.uploadFiles(files, filename); }
                 else {
                     console.log("Review - No files uploaded.");
                 }
+                }, (error) => {
+                    console.log("Review - Error:");
+                    console.error(error);
+                })
+                
+                
                 this.reloadEventEmitter.emit(true);
                 this.closeOverlayEventEmitter.emit(false);
-            }).catch((error) => {
-                console.log("Review - Error:");
-                console.log(error);
-            })
         }
         else {
             this.error = "Please fill all grades.";
@@ -90,7 +86,9 @@ export class ReviewDishOverlayComponent implements OnInit {
 
         this.uploadService
             .upload(formData)
-            .subscribe(({ path }) => (console.log(path)));
+            .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+            });
     }
 
     

@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <div class="overflow-y-auto relative w-full grow mb-1">
+    <div (scroll)="onScroll($event)" class="overflow-y-auto relative w-full grow mb-1">
 
         <!-- Activity -->
         <div *ngIf="(this.selectedTabID) == 0"

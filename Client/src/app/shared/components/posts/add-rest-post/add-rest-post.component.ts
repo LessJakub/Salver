@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { RestaurantService } from "src/app/restaurant-owner/services/restaurant.service";
 import { PostDTO } from "src/app/shared/models/PostDTO";
@@ -44,26 +45,27 @@ export class AddRestPostComponent implements OnInit {
 
         if (this.editModel.description != null && this.editModel.description != "") {
             
-            var choosenService = (this.postType == ADD_POST_TYPE.RESTAURANT) ? this.restaurantService : this.profileService;
-            var response = choosenService.addPost(this.model.id, this.editModel).toPromise().then((newPost) => {
-                console.log("Add Post - Positive response. Added:");
-                console.log(newPost);
+            
 
                 if (files[0]) {
-                    console.log("Add Post - Files for upload present.")
-                    var filename = newPost.id + ".webp";
-                    this.uploadFiles(files, filename);
+                    var choosenService = (this.postType == ADD_POST_TYPE.RESTAURANT) ? this.restaurantService : this.profileService;
+                    var response = choosenService.addPost(this.model.id, this.editModel).toPromise().then((newPost) => {
+                        console.log("Add Post - Files for upload present.")
+                        var filename = newPost.id + ".webp";
+                        this.uploadFiles(files, filename);
+                    }, (error : HttpErrorResponse) =>{
+                        console.error(error.message);
+                        alert(error.message)
+                    });  
                 }
                 else {
                     console.log("Review - No files uploaded.");
+                    alert("You must add image to create post.")
                 }
 
                 this.reloadEventEmitter.emit(true);
                 this.cancelAction(files);
-            }).catch((error) => {
-                console.log("Add Post - Error:");
-                console.log(error);
-            })
+           
         }
         else {
             console.log("Add Post - Description can't be null or empty");
@@ -81,7 +83,9 @@ export class AddRestPostComponent implements OnInit {
 
         this.uploadService
             .upload(formData)
-            .subscribe(({ path }) => (console.log(path)));
+            .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+            });
     }
 
     currentDate = new Date();

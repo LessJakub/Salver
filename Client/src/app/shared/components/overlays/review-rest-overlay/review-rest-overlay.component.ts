@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { RestaurantDTO } from 'src/app/shared/models/RestaurantDTO';
@@ -86,7 +87,9 @@ export class ReviewRestOverlayComponent implements OnInit {
 
         this.uploadService
             .upload(formData)
-            .subscribe(({ path }) => (console.log(path)));
+            .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+            });
     }
 
 

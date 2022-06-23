@@ -156,7 +156,7 @@
         </div>
     </div>
 
-    <div class="overflow-y-auto relative w-full grow">
+    <div (scroll)="onScroll($event)" class="overflow-y-auto relative w-full grow">
         <!-- Menu -->
         <div *ngIf="(this.selectedTabID) == 0"
             class="w-full flex flex-col space-y-5 absolute top-0 left-0 justify-center content-center items-center align-middle">
@@ -234,14 +234,25 @@
             </mat-form-field>
         </div>
 
-        <div class="h-56 flex justify-center px-4">
-            <input (change)="this.uploadFiles(fileInput.files)" hidden #fileInput type="file" requiredFileType="image/webp" id="file"/>
-            <img [src]="this.profileImageURL" (error)="updateUrlWithDefault()" (click)="fileInput.click()"
-                class="w-fit object-cover aspect-square rounded-2xl hover:animate-pulse cursor-pointer">
+        <div (click)="fileInput.click()" class="h-full flex justify-center px-4 cursor-pointer">
+            <input hidden (change)="this.uploadImage()" #fileInput type="file" requiredFileType="image/webp" id="file"/>
+            <svg *ngIf="this.imageUploaded == false" class="stroke-green-900 stroke-1 w-full h-full aspect-square"
+                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M20 20H16M4 8V4V8ZM4 4H8H4ZM4 4L9 9L4 4ZM20 8V4V8ZM20 4H16H20ZM20 4L15 9L20 4ZM4 16V20V16ZM4 20H8H4ZM4 20L9 15L4 20ZM20 20L15 15L20 20ZM20 20V16V20Z"
+                            stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+
+            <svg *ngIf="this.imageUploaded == true" class="stroke-green-900 stroke-1 w-full h-full flex aspect-square" viewBox="0 0 24 24"
+                fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M9 12L11 14L15 10M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
         </div>
 
         <div *ngIf="this.confirmLogout == false" class="w-full h-fit flex items-center justify-start px-4 gap-2">
-            <button (click)='this.newRestCreateAction()'
+            <button (click)='this.newRestCreateAction(fileInput.files)'
                 class="w-1/2 py-2 rounded-xl text-green-900 border bg-gray-50 hover:bg-green-800 hover:text-gray-50 border-green-900">
                 Create
             </button>

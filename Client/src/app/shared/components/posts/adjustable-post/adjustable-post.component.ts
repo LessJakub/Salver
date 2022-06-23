@@ -8,6 +8,7 @@ import { DELETION_TYPE } from '../../overlays/delete-dish-overlay/delete-dish-ov
 import { ActivityDTO, ActivityType } from 'src/app/shared/models/ActivityDTO';
 import { ProfileService } from 'src/app/shared/services/profile.service';
 import { AdminService } from 'src/app/shared/services/admin.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export enum POST_TYPE {
     REST_REVIEW = 0,
@@ -40,8 +41,12 @@ export class AdjustablePostComponent implements OnInit {
     postImageURL: string = "";
     creatorName: string = '';
 
-    updateUrlWithDefault() {
+    defaultIMG = "/assets/images/dishHldr.webp";
 
+    updateUrlWithDefault() {
+        this.postImageURL = this.defaultIMG;
+        this.dishReviewImageURL = this.defaultIMG;
+        this.restReviewImageURL = this.defaultIMG;
     }
 
     async markAsSpam() {
@@ -230,7 +235,9 @@ export class AdjustablePostComponent implements OnInit {
 
         this.uploadService
             .upload(formData)
-            .subscribe(({ path }) => (console.log(path)));
+            .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+            });
     }
 
     cancelEditRegular(files) {

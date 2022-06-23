@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Dish } from 'src/app/models/Dish';
 import { SearchForm } from 'src/app/models/SearchForm';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
@@ -8,13 +8,13 @@ import { SearchService } from 'src/app/shared/services/search.service';
 @Component({
     selector: 'app-search-page',
     templateUrl: './search-page.component.html',
-    host: { 'class': 'flex-auto flex justify-center items-center' } // ! Styling host container to fill all avialable space
+    host: { 'class': 'justify-center items-center' } // ! Styling host container to fill all avialable space
 })
 export class SearchPageComponent implements OnInit {
 
     searchForm: SearchForm;
 
-    filteredSearchResults: any[];
+    filteredSearchResults: any[] = [];
     searchResultsType: string = "Dish";
     /*
     dishSearchResults: Dish[] = [
@@ -36,28 +36,41 @@ export class SearchPageComponent implements OnInit {
 */
     constructor(private searchService: SearchService) { }
 
-    ngOnInit(): void {
-        this.updateFilteredArray();
+    fetchItemCount = 12;
+
+
+    @HostListener("window:scroll", [])
+    async onScroll() {
+        if ((window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 1)) {
+            if (this.filteredSearchResults.length != 0) {
+                await this.updateFilteredArray();
+            }
+        }
     }
 
-    updateSearchForm(newForm: SearchForm) {
+
+    async ngOnInit() {
+        await this.updateFilteredArray();
+    }
+
+    async updateSearchForm(newForm: SearchForm) {
         this.searchForm = newForm;
-        this.updateFilteredArray();
+        this.filteredSearchResults = []
+        await this.updateFilteredArray();
     }
 
-    updateFilteredArray() {
-        this.filteredSearchResults = []
+    async updateFilteredArray() {
         if (this.searchForm == null) {
-            this.filterDishes();
+            await this.filterDishes();
             this.searchResultsType = "Dish";
         }
         else {
             if (this.searchForm.type == "Restaurant") {
-                this.filterRestaurants();
+                await this.filterRestaurants();
                 this.searchResultsType = "Restaurant";
             }
-            else {
-                this.filterDishes();
+            else if (this.searchForm.type == "Dish") {
+                await this.filterDishes();
                 this.searchResultsType = "Dish";
             }
         }
@@ -67,21 +80,20 @@ export class SearchPageComponent implements OnInit {
     // Filtering restaurants
     private async filterRestaurants() {
         // Obtain restaurants from search service, returned restaurants are filtered with name (if not empty / null)
-        await this.searchService.searchRestaurant(this.searchForm)
+        await this.searchService.searchRestaurant(this.searchForm, this.filteredSearchResults.length, this.fetchItemCount)
 
-        let tempRestaurants: RestaurantDTO[] = this.searchService.restaurants;
+        let tempArray: RestaurantDTO[] = this.searchService.restaurants;
 
-        if (this.searchForm.price != null) {
+        this.filteredSearchResults = [...this.filteredSearchResults, ...tempArray];
+
+        if (this.searchForm != null && this.searchForm.price != null) {
             if (this.searchForm.price == "Lowest") {
-                tempRestaurants.sort((res1, res2) => res1.price - res2.price);
+                this.filteredSearchResults = this.filteredSearchResults.sort((res1, res2) => res1.price - res2.price);
             }
-
             else if (this.searchForm.price == "Highest") {
-                tempRestaurants.sort((res1, res2) => res1.price - res2.price);
+                this.filteredSearchResults = this.filteredSearchResults.sort((res1, res2) => res2.price - res1.price);
             }
         }
-
-        this.filteredSearchResults = tempRestaurants;
     }
 
 
@@ -89,19 +101,18 @@ export class SearchPageComponent implements OnInit {
     private async filterDishes() {
 
         // Obtain restaurants from search service, returned restaurants are filtered with name (if not empty / null)
-        await this.searchService.searchDishes(this.searchForm)
+        await this.searchService.searchDishes(this.searchForm, this.filteredSearchResults.length, this.fetchItemCount);
 
         let tempArray: DishDTO[] = this.searchService.dishes;
+        this.filteredSearchResults = [...this.filteredSearchResults, ...tempArray];
 
         if (this.searchForm != null && this.searchForm.price != null) {
             if (this.searchForm.price == "Lowest") {
-                tempArray.sort((dish1, dish2) => dish1.price - dish2.price);
+                this.filteredSearchResults = this.filteredSearchResults.sort((dish1, dish2) => dish1.price - dish2.price);
             }
             else if (this.searchForm.price == "Highest") {
-                tempArray.sort((dish1, dish2) => dish2.price - dish1.price);
+                this.filteredSearchResults = this.filteredSearchResults.sort((dish1, dish2) => dish2.price - dish1.price);
             }
         }
-
-        this.filteredSearchResults = tempArray;
     }
 }

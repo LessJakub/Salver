@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, IterableDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
@@ -29,13 +30,44 @@ export class RestaurantPageComponent implements OnInit {
     newRestError: string = null;
     confirmLogout = false;
 
-    newRestCreateAction() {
+    fetchItemCount = 10;
+
+    async onScroll(event: any) {
+        // visible height + pixel scrolled >= total height
+        if (this.selectedTabID == 2) {
+            if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) {
+                if (this.fetchedActivity.length != null && this.fetchedActivity.length != NaN) {
+                    var newData = await this.activityService.getRestaurantActivities(this.restaurantID, this.fetchedActivity.length, this.fetchItemCount);
+                    this.fetchedActivity = [...this.fetchedActivity, ...newData];
+                }
+            }
+        }
+        else if (this.selectedTabID == 3) {
+            if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) {
+                if (this.fetchedOrders.length != null && this.fetchedOrders.length != NaN) {
+                    var newOrders = await await this.managementService.GetOrders(this.fetchedOrders.length, this.fetchItemCount);
+                    this.fetchedOrders = [...this.fetchedOrders, ...newOrders];
+                }
+            }
+        }
+    }
+
+    imageUploaded = false;
+
+    uploadImage()
+    {
+        this.imageUploaded = true;
+    }
+
+    newRestCreateAction(files: any) {
         console.log(this.newRestModel);
 
         this.accountService.createNewRestaurant(this.newRestModel).toPromise().then((response) => {
             this.newRestError = "New restaurant created. Confirm reload.";
             this.confirmLogout = true;
-        },((error) => {
+            this.model = response
+            this.uploadFiles(files)
+        }, ((error) => {
             console.log("NEW REST");
             console.log(error);
             this.newRestError = error.description;
@@ -43,13 +75,11 @@ export class RestaurantPageComponent implements OnInit {
     }
 
     newRestCancelAction() {
-        if(this.accountService.currentUser$ != null)
-        {
+        if (this.accountService.currentUser$ != null) {
             this.accountService.currentUser$.subscribe((usr) => {
-                if(usr != null)
-                {
+                if (usr != null) {
                     this.router.navigate(['/user/' + usr.id]);
-                }   
+                }
             });
         }
     }
@@ -61,8 +91,8 @@ export class RestaurantPageComponent implements OnInit {
     // --------------------------------
 
     public postTypes = POST_TYPE;
-    public activityTypes = ActivityType;  
-    public addPostTypes = ADD_POST_TYPE;      
+    public activityTypes = ActivityType;
+    public addPostTypes = ADD_POST_TYPE;
 
     restaurantID: number = null;
     model: RestaurantDTO | null;
@@ -84,17 +114,17 @@ export class RestaurantPageComponent implements OnInit {
     followButtonText = this.isFollowing ? "Unfollow" : "Follow";
 
     constructor(private activatedRoute: ActivatedRoute,
-                private searchService: SearchService,
-                private uploadService: BlobUploadService,
-                public accountService: AccountService,
-                private restaurantService: RestaurantService,
-                private reviewsService: ReviewsService,
-                public activityService: ActivityService,
-                private router: Router,
-                private managementService: OrdersManagementService) { 
+        private searchService: SearchService,
+        private uploadService: BlobUploadService,
+        public accountService: AccountService,
+        private restaurantService: RestaurantService,
+        private reviewsService: ReviewsService,
+        public activityService: ActivityService,
+        private router: Router,
+        private managementService: OrdersManagementService) {
 
-                    this.editModel = {...this.model};
-                }
+        this.editModel = { ...this.model };
+    }
 
     user = this.accountService.currentUser$;
 
@@ -110,7 +140,7 @@ export class RestaurantPageComponent implements OnInit {
     }
 
     updateUrlWithDefault() {
-        this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
+        //this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
     }
 
     reviewRestaurantAction() {
@@ -140,9 +170,9 @@ export class RestaurantPageComponent implements OnInit {
             // }).catch((error) => {
             //     console.log(error);
             // })
-            await this.accountService.followRestaurant(this.restaurantID).then((Response : boolean) =>{
+            await this.accountService.followRestaurant(this.restaurantID).then((Response: boolean) => {
                 this.isFollowing = Response;
-            }   
+            }
             );
         }
         this.getDetails();
@@ -173,8 +203,7 @@ export class RestaurantPageComponent implements OnInit {
     private async getDetails() {
         // Obtain restaurant from DB based on ID.
         await this.searchService.searchRestaurantByID(this.restaurantID).then((restaurant) => {
-            if(restaurant != null)
-            {
+            if (restaurant != null) {
                 this.model = restaurant;
             }
             //console.log(this.restaurant)
@@ -204,12 +233,12 @@ export class RestaurantPageComponent implements OnInit {
 
     private async getActivity() {
         console.log("Restaurant - Activity Getter")
-        this.fetchedActivity = await this.activityService.getRestaurantActivities(this.restaurantID);
+        this.fetchedActivity = await this.activityService.getRestaurantActivities(this.restaurantID, 0, this.fetchItemCount);
     }
 
     private async getOrders() {
         console.log("Restaurant - Orders Getter")
-        this.fetchedOrders = await this.managementService.GetOrders(0, 99);
+        this.fetchedOrders = await this.managementService.GetOrders(0, this.fetchItemCount);
     }
 
     private userID;
@@ -218,9 +247,9 @@ export class RestaurantPageComponent implements OnInit {
     editModel: RestaurantDTO;
     editMode: boolean = false;
     editDetailsAction() {
-        console.log("Menu post - Edit button action.");  
+        console.log("Menu post - Edit button action.");
         if (this.isOwner == true) {
-            this.editModel = {...this.model};
+            this.editModel = { ...this.model };
             this.editMode = true;
         }
         else {
@@ -253,8 +282,10 @@ export class RestaurantPageComponent implements OnInit {
             formData.append("blobContainer", "resprof");
 
             this.uploadService
-            .upload(formData)
-            .subscribe(({ path }) => (console.log(path)));
+                .upload(formData)
+                .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                    alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+                });
         }
         else {
             console.log("Upload service - Files empty");
@@ -267,17 +298,15 @@ export class RestaurantPageComponent implements OnInit {
         // Obtain restaurant ID from ActivatedRouter.
         this.restaurantID = this.activatedRoute.snapshot.params['id'];
 
-        if(this.accountService.currentUser$ != null)
-        {
+        if (this.accountService.currentUser$ != null) {
             this.accountService.currentUser$.subscribe((usr) => {
-                if(usr != null)
-                {
+                if (usr != null) {
                     this.userID = usr.isRestaurantOwner;
                 }
-                
+
             });
         }
-        
+
 
         this.isOwner = (this.userID == this.restaurantID);
 
@@ -292,7 +321,7 @@ export class RestaurantPageComponent implements OnInit {
 
         // Obtain restaurant based on fetched ID.
         this.getDetails();
-        
+
         // Fetch dishes data.
         this.getDishes();
 

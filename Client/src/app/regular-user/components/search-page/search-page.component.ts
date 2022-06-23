@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Dish } from 'src/app/models/Dish';
 import { SearchForm } from 'src/app/models/SearchForm';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
@@ -8,7 +8,7 @@ import { SearchService } from 'src/app/shared/services/search.service';
 @Component({
     selector: 'app-search-page',
     templateUrl: './search-page.component.html',
-    host: { 'class': 'flex-auto flex justify-center items-center' } // ! Styling host container to fill all avialable space
+    host: { 'class': 'justify-center items-center' } // ! Styling host container to fill all avialable space
 })
 export class SearchPageComponent implements OnInit {
 
@@ -38,16 +38,16 @@ export class SearchPageComponent implements OnInit {
 
     fetchItemCount = 12;
 
-    async onScroll(event: any) {
-        if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) {
-            // This check fixes duplicate issue when switching search from while having container scrolled down.
-            // This function runs together with the one from changing form, so it leads to duplicates for first fetch batch.
-            // By checking if length == 0 we detect if new search was ran.
+
+    @HostListener("window:scroll", [])
+    async onScroll() {
+        if ((window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 10)) {
             if (this.filteredSearchResults.length != 0) {
                 await this.updateFilteredArray();
             }
         }
     }
+
 
     async ngOnInit() {
         await this.updateFilteredArray();
@@ -69,7 +69,7 @@ export class SearchPageComponent implements OnInit {
                 await this.filterRestaurants();
                 this.searchResultsType = "Restaurant";
             }
-            else if (this.searchForm.type == "Dish")  {
+            else if (this.searchForm.type == "Dish") {
                 await this.filterDishes();
                 this.searchResultsType = "Dish";
             }

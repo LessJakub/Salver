@@ -399,7 +399,6 @@ namespace API.Controllers
             if(restaurant is null) return BadRequest($"Restaurant with id {id} does not exist");
 
             var activities = new List<Tuple<ActivityDTO, DateTime>>();
-            Post pinnedPost = null;
 
             var posts = restaurant.Posts.
                                     OrderByDescending(p => p.Date).
@@ -417,8 +416,7 @@ namespace API.Controllers
 
             foreach(var p in posts)
             {
-                if(pinnedPost is null) pinnedPost = p;
-                else activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(p), p.Date));
+                activities.Add(new Tuple<ActivityDTO, DateTime>(new ActivityDTO(p), p.Date));
             }
             
             foreach(var r in resReviews)
@@ -432,7 +430,6 @@ namespace API.Controllers
             }
 
             var listToRet = new List<ActivityDTO>();
-            if(pinnedPost is not null) listToRet.Add(new ActivityDTO(pinnedPost));
             foreach(var a in activities.
                             OrderByDescending(a => a.Item2).
                             Skip(startingIndex).

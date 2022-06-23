@@ -51,6 +51,21 @@ export class UserPageComponent implements OnInit {
         private profileService: ProfileService,
         private managementService: OrdersManagementService) { }
 
+
+    itemsCount: number = 5;
+
+    async onScroll(event: any) {
+        // visible height + pixel scrolled >= total height
+        if (this.selectedTabID == 0) {
+            if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight) {
+                if (this.fetchedActivity != null && this.fetchedActivity.length != null && this.fetchedActivity.length > 0) {
+                    var newData = await this.profileService.getUserActivity(this.userPageID, this.fetchedActivity.length, this.itemsCount);
+                    this.fetchedActivity = [...this.fetchedActivity, ...newData];
+                }
+            }
+        }
+    }
+
     updateData(eventFlag: boolean) {
         console.log("Obtained event:", eventFlag);
         if (eventFlag == true) {
@@ -77,7 +92,7 @@ export class UserPageComponent implements OnInit {
             this.updateData(true);
             this.accountService.evaluateUsername(response.username);
 
-        }).catch((error) =>{
+        }).catch((error) => {
             console.log(error);
         });
     }
@@ -86,7 +101,7 @@ export class UserPageComponent implements OnInit {
         this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
     }
 
-    
+
     async followButtonAction() {
         console.log("Is following: " + this.isFollowing);
         if (!this.isFollowing) {
@@ -134,7 +149,7 @@ export class UserPageComponent implements OnInit {
 
     private async getActivity() {
         console.log("Restaurant - Activity Getter")
-        this.fetchedActivity = await this.profileService.getUserActivity(this.userPageID);
+        this.fetchedActivity = await this.profileService.getUserActivity(this.userPageID, 0, this.itemsCount);
     }
 
     uploadFiles(files, container: string) {
@@ -211,13 +226,11 @@ export class UserPageComponent implements OnInit {
             this.router.navigate(['*']);
         }
 
-        if(this.accountService.currentUser$ != null)
-        {
+        if (this.accountService.currentUser$ != null) {
             this.accountService.currentUser$.subscribe((usr) => {
-                if(usr != null)
-                {
+                if (usr != null) {
                     this.loggedUserID = usr.id;
-                } 
+                }
             });
         }
 

@@ -41,7 +41,7 @@ export class SearchPageComponent implements OnInit {
 
     @HostListener("window:scroll", [])
     async onScroll() {
-        if ((window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 10)) {
+        if ((window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 1)) {
             if (this.filteredSearchResults.length != 0) {
                 await this.updateFilteredArray();
             }

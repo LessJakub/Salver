@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ActivityDTO } from '../models/ActivityDTO';
@@ -65,8 +65,12 @@ export class ProfileService {
      * @param id ID of the user of interest
      * @returns Promise of UserProfileDTO.
      */
-    async getUserActivity(id: number) {
+    async getUserActivity(id: number, skipCount: number = 0, itemsCount: number = 5) {
 
+        var params = new HttpParams();
+        params = params.append("startingIndex", skipCount);
+        params = params.append("endIndex", itemsCount);
+        
         // Obtain user token for authentication
         var userToken;
         this.accountService.currentUser$.subscribe((user: User) => {
@@ -76,7 +80,7 @@ export class ProfileService {
         })
 
         var url = this.usersURL + id + "/activity";
-        return await this.http.get<ActivityDTO[]>(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken) }).toPromise();
+        return await this.http.get<ActivityDTO[]>(url, { headers: new HttpHeaders().set('Authorization', 'Bearer ' + userToken), params: params }).toPromise();
     }
 
     addPost(id: number, model: PostDTO) {

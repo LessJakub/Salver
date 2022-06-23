@@ -32,7 +32,12 @@ export class ActivityService {
         return act;
     }
 
-    public async getUserActivities(): Promise<ActivityDTO[]> {
+    public async getUserActivities(skipCount: number = 0, itemsCount: number = 5): Promise<ActivityDTO[]> {
+
+        var params = new HttpParams();
+        params = params.append("startingIndex", skipCount);
+        params = params.append("endIndex", itemsCount);
+
         var user: User;
         this.accountService.currentUser$.subscribe((usr: User) => {
             if (usr != null) {
@@ -45,7 +50,7 @@ export class ActivityService {
         var head = new HttpHeaders().set('Authorization', 'Bearer ' + user.token);
 
         var act;
-        await this.http.get<Array<ActivityDTO>>(this.userUrl + 'activity', { headers: head }).toPromise().then((response: Array<ActivityDTO>) => {
+        await this.http.get<Array<ActivityDTO>>(this.userUrl + 'activity', { headers: head, params: params }).toPromise().then((response: Array<ActivityDTO>) => {
             act = response;
         }, error => {
             console.error(error);

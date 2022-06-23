@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
@@ -66,6 +67,10 @@ export class AddDishPostComponent implements OnInit {
                                 console.log(error);
                             });  
                         }
+                        else
+                        {
+                            alert("You must upload image file to add dish.")
+                        }
                     }
                 }
             } 
@@ -83,6 +88,8 @@ export class AddDishPostComponent implements OnInit {
 
         this.uploadService
             .upload(formData)
-            .subscribe(({ path }) => (console.log(path)));
+            .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+            });
     }
 }

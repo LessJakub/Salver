@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { DishDTO } from 'src/app/shared/models/DishDTO';
 import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
@@ -104,7 +105,9 @@ export class DishTileComponent implements OnInit {
 
             this.uploadService
             .upload(formData)
-            .subscribe(({ path }) => (console.log(path)));
+            .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+            });
         }
         else {
             console.log("Upload service - Files empty");

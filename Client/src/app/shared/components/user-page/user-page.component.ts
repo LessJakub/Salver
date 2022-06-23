@@ -11,6 +11,7 @@ import { ProfileService } from "../../services/profile.service"
 import { ADD_POST_TYPE } from '../posts/add-rest-post/add-rest-post.component';
 import { OrderDTO } from '../../models/OrderDTO';
 import { OrdersManagementService } from '../../services/orders-management.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 interface UserModel {
     username: string
@@ -165,7 +166,9 @@ export class UserPageComponent implements OnInit {
 
             this.uploadService
                 .upload(formData)
-                .subscribe(({ path }) => (console.log(path)));
+                .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                    alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+                });
         }
         else {
             console.log("Upload service - Files empty");

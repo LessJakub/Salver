@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, IterableDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
@@ -51,12 +52,21 @@ export class RestaurantPageComponent implements OnInit {
         }
     }
 
-    newRestCreateAction() {
+    imageUploaded = false;
+
+    uploadImage()
+    {
+        this.imageUploaded = true;
+    }
+
+    newRestCreateAction(files: any) {
         console.log(this.newRestModel);
 
         this.accountService.createNewRestaurant(this.newRestModel).toPromise().then((response) => {
             this.newRestError = "New restaurant created. Confirm reload.";
             this.confirmLogout = true;
+            this.model = response
+            this.uploadFiles(files)
         }, ((error) => {
             console.log("NEW REST");
             console.log(error);
@@ -130,7 +140,7 @@ export class RestaurantPageComponent implements OnInit {
     }
 
     updateUrlWithDefault() {
-        this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
+        //this.profileImageURL = this.uploadService.defaultRestaurantImageURL();
     }
 
     reviewRestaurantAction() {
@@ -273,7 +283,9 @@ export class RestaurantPageComponent implements OnInit {
 
             this.uploadService
                 .upload(formData)
-                .subscribe(({ path }) => (console.log(path)));
+                .subscribe(({ path }) => (console.log(path)), (error : HttpErrorResponse) => {
+                    alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+                });
         }
         else {
             console.log("Upload service - Files empty");

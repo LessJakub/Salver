@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { DishDTO } from '../models/DishDTO';
 import { AccountService } from './account.service';
 import { User } from '../models/UserDTO';
@@ -100,8 +100,9 @@ export class OrdersService {
     await this.http.post<OrderDTO>(this.ordersUrl , model, {headers: head}).pipe(
             map((Response:OrderDTO) =>{
               const order = Response;
-            }, error => {
-              console.log(error)
+            }, (error : HttpErrorResponse) => {
+              console.error(error)
+              alert(error.message)
             }
           )).toPromise();
 
@@ -163,7 +164,8 @@ export class OrdersService {
     if(this.currentRestaurant == 0) this.currentRestaurant = dish.appRestaurantId
     if(this.currentRestaurant != dish.appRestaurantId)
     {
-      console.log("Dish id and current restaurant id differs");
+      console.log("Dish id and current restaurant id differs.");
+      alert("Sorry but this dish is from another restaurant than rest of the order.")
       return false;
     }
     resId = this.currentRestaurant

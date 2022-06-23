@@ -6,6 +6,7 @@ import { BlobUploadService } from 'src/app/shared/services/blob-upload.service';
 import { SearchService } from 'src/app/shared/services/search.service';
 
 import { RestaurantService } from 'src/app/restaurant-owner/services/restaurant.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-new-meal-overlay',
@@ -62,9 +63,11 @@ export class NewMealOverlayComponent implements OnInit {
                                 this.closeOverlayEventEmitter.emit(false);
                             }).catch((error) => {
                                 console.log(error);
-                            });
-
-                            
+                            }); 
+                        }
+                        else
+                        {
+                            alert("You must upload image first.")
                         }
                     }
                 }
@@ -83,7 +86,10 @@ export class NewMealOverlayComponent implements OnInit {
 
         this.uploadService
             .upload(formData)
-            .subscribe(({ path }) => (this.imageSource = path));
+            .subscribe(({ path }) => (this.imageSource = path), 
+            (error : HttpErrorResponse) => {
+                alert("Error occured while uploding the file. Try with smaller image or wait a few minutes.")
+            });
 
         console.log(this.imageSource);
     }
